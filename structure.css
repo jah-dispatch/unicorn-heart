@@ -1,0 +1,98 @@
+/* structure.css */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { overflow-x: hidden; }
+
+/* Sticky Header Layout */
+.main-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 15px 0;
+}
+
+.logo-container { padding-bottom: 10px; }
+.brand-logo { max-width: 150px; height: auto; display: block; margin: 0 auto; }
+
+/* Desktop Navigation Grid */
+.main-nav { width: 100%; }
+.nav-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    list-style: none;
+}
+
+.nav-grid li { position: relative; }
+
+/* Dropdown Logic */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    list-style: none;
+    min-width: 200px;
+    text-align: center;
+}
+.has-dropdown:hover .dropdown { display: block; }
+
+/* Mobile Menu Logic (< 768px) */
+.menu-toggle { display: none; }
+.menu-icon { display: none; cursor: pointer; font-size: 2rem; position: absolute; top: 15px; right: 20px; }
+
+@media (max-width: 768px) {
+    .menu-icon { display: block; }
+    .main-nav { display: none; width: 100%; }
+    .nav-grid { flex-direction: column; gap: 15px; align-items: center; padding: 20px 0; }
+    .dropdown { position: relative; left: 0; transform: none; padding-top: 10px; }
+    /* Checkbox hack to open menu */
+    .menu-toggle:checked ~ .main-nav { display: block; }
+}
+
+/* Mobile-Optimized Parallax Logic */
+.parallax-pane {
+    position: relative;
+    min-height: 555px; /* Your requested minimum height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.parallax-pane::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: var(--bg-image);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed; /* Native for desktop */
+    z-index: -1;
+}
+
+/* iOS Parallax Fix */
+@supports (-webkit-touch-callout: none) {
+    .parallax-pane::before {
+        background-attachment: scroll; /* Prevents iOS visual glitch */
+    }
+}
+
+.standard-pane {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pane-content {
+    text-align: center;
+    padding: 20px;
+    z-index: 1;
+}
+
+.main-footer { text-align: center; padding: 40px 20px; width: 100%; }

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unicorn Heart Brand Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="structure.css">
+    <link rel="stylesheet" href="looks.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo-container">
+    <div class="logo-container">
+    <div class="logo-wrapper">
+        <img src="/assets/images/UHBM_Gold_Embossed.png" alt="Unicorn Heart Brand Management" class="brand-logo-img">
+        
+        <div class="sparkle" style="top: 0%; left: 17%; animation-delay: 0s;">✦</div>
+        <div class="sparkle" style="top: 14%; left: 98%; animation-delay: 1.2s;">✦</div>
+        <div class="sparkle" style="top: 80%; left: 51%; animation-delay: 0.8s;">✦</div>
+    </div>
+</div>
+
+<style>
+    .logo-container {
+        padding: 20px 0;
+    }
+
+    /* The wrapper must be relative so the absolute sparkles stay inside it */
+    .logo-wrapper {
+        position: relative;
+        display: inline-block; /* Hugs tightly to the image width */
+        max-width: 600px;
+    }
+
+    .brand-logo-img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* The Sparkle CSS */
+    .sparkle {
+        position: absolute;
+        color: #FCF6BA; /* Bright gold/white */
+        font-size: 1.5rem;
+        user-select: none; /* Prevents users from highlighting the star */
+        pointer-events: none;
+        
+        /* Start invisible */
+        opacity: 0; 
+        transform: scale(0) rotate(0deg);
+        
+        /* The animation: runs for 3s, loops infinitely */
+        animation: twinkle 4s ease-in-out infinite;
+        
+        /* Optional: Adds a tiny glow to the sparkle itself */
+        filter: drop-shadow(0 0 8px rgba(252, 246, 186, 1));
+    }
+
+    @keyframes twinkle {
+        0% {
+            opacity: 0;
+            transform: scale(0) rotate(0deg);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.5) rotate(90deg); /* Peaks in brightness and size */
+        }
+        100% {
+            opacity: 0;
+            transform: scale(0) rotate(180deg); /* Fades out while spinning */
+        }
+    }
+</style>
+</div>
+        
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
+
+        <nav class="main-nav">
+            <ul class="nav-grid">
+                <li><a href="#home" class="glow-text">Home</a></li>
+                <li class="has-dropdown">
+                    <a href="#services" class="glow-text">Services &#x25BC;</a>
+                    <ul class="dropdown">
+                        <li><a href="#sustaining">Sustaining Plan</a></li>
+                        <li><a href="#growth">Growth Plan</a></li>
+                        <li><a href="#architect">Architect Plan</a></li>
+                    </ul>
+                </li>
+                <li><a href="#about" class="glow-text">The Framework</a></li>
+                <li><a href="#contact" class="glow-text">Consultation</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="parallax-pane" style="--bg-image: url('https://images.unsplash.com/photo-1604079628040-94301bb21b91?q=80&w=2000&auto=format&fit=crop');">
+            <div class="pane-content">
+                <h1>Brand Architecture</h1>
+                <p>Establishing digital dominance for the modern SMB.</p>
+            </div>
+        </section>
+
+        <section class="standard-pane">
+            <div class="pane-content">
+                <h2>The Strategy</h2>
+                <p>We replace administrative bloat with streamlined, high-value reputation engineering.</p>
+            </div>
+        </section>
+
+        <section class="parallax-pane" style="--bg-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop');">
+            <div class="pane-content">
+                <h2>The Standard</h2>
+                <p>Prestigious execution. Measurable growth.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 Unicorn Heart Brand Management. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
