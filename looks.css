@@ -416,3 +416,24 @@ a {
 .faq-item.active .faq-answer {
     max-height: 300px; /* Expands smoothly */
 }
+/* Update this inside your @media (max-width: 768px) block at the bottom of looks.css */
+    
+    /* 1. Scale down general page text */
+    .content-wrapper p {
+        font-size: 0.95rem; 
+        line-height: 1.6; 
+    }
+
+    /* 2. Fix the "Jagged Kerning" Bio Layout */
+    .bio-photo {
+        float: none; /* Stops the text from trying to squeeze next to the photo */
+        display: block;
+        margin: 0 auto 25px auto; /* Centers the photo perfectly above the text */
+        width: 100%;
+        max-width: 220px; /* Slightly smaller for phone screens */
+    }
+
+    /* Ensure the bio text stays clean and readable */
+    .bio-container p {
+        text-align: left; 
+    }
