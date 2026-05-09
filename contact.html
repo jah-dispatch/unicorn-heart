@@ -15,8 +15,7 @@
 
     <header class="main-header">
         <div class="logo-container">
-    <div class="logo-container">
-    <div class="logo-wrapper">
+        <div class="logo-wrapper">
         <img src="assets/images/uhbm-site-logo.png" alt="Unicorn Heart Brand Management" class="brand-logo-img">
         
         <div class="sparkle" style="top: 0%; left: 17%; animation-delay: 0s;">✦</div>
@@ -94,7 +93,7 @@
                     </ul>
                 </li>
                 <li><a href="#about" class="glow-text">The Framework</a></li>
-                <li><a href="/contact.html" class="glow-text">Consultation</a></li>
+                <li><a href="contact.html" class="glow-text">Consultation</a></li>
             </ul>
         </nav>
     </header>
@@ -107,17 +106,56 @@
     <div class="bio-container clearfix">
                 <img src="assets/images/jack-aspen-harper.jpg" alt="Jack Aspen Harper" class="bio-photo">
                 
-                <p>Welcome to the architecture of your brand's future. I'm Jack Aspen Harper, and I don't believe in transactional marketing. I believe in establishing a digital moat around your business.</p>
+                <p>Welcome to the architecture of your brand's future. I'm Jack A. Harper, and I don't believe in transactional marketing. I believe in establishing a digital moat around your business.</p>
                 
                 <p>Whether you are looking to protect your current reputation from administrative bloat, or you are ready to aggressively capture local search traffic in the Grand Junction market, the first step is understanding your current baseline.</p>
                 
                 <p>During our consultation, we will identify the specific operational bottlenecks in your current strategy, analyze your competitor landscape, and map out which of our retainers aligns with your growth targets. We replace the guesswork with data, and we replace the bloat with execution.</p>
                 
-                <p><strong>Use the portal below to request your Strategy Audit.</strong></p>
             </div>
+            <div class="faq-container">
+                <h2 class="glow-text" style="text-align: center; margin-bottom: 5%;">Why Trust Unicorn Heart?</h2>
 
-            <div style="margin-top: 50px; padding: 40px; border: 1px solid #BF953F; text-align: center; border-radius: 8px;">
-                <p style="color: #BF953F;"><em>[HoneyBook / Dubsado Consultation Form Will Be Embedded Here]</em></p>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>[Question 1: What makes your approach to brand management different?]</span>
+                        <span class="faq-icon">✦</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>[Answer 1: Detail your focus on building digital moats, data-driven execution, and your refusal to engage in bloated, transactional marketing.]</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>[Question 2: Who is the ideal client for a Unicorn Heart retainer?]</span>
+                        <span class="faq-icon">✦</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>[Answer 2: Explain that your models are built for ambitious SMBs and local Grand Junction businesses ready to transition from manual grinding to scaled authority.]</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>[Question 3: How do you measure the success of a campaign?]</span>
+                        <span class="faq-icon">✦</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>[Answer 3: Emphasize your use of elite software infrastructure, transparent reporting, and tracking metrics that actually translate to local dominance.]</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>[Question 4: What happens during the initial Strategy Audit?]</span>
+                        <span class="faq-icon">✦</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>[Answer 4: Outline the onboarding process, how you identify operational bottlenecks, and how you architect a custom growth plan before any commitments are signed.]</p>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -127,5 +165,25 @@
         <p>&copy; 2026 Unicorn Heart Brand Management. All Rights Reserved.</p>
     </footer>
 
+    <script>
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Optional: Close all other open answers when one is clicked
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // If the clicked item wasn't open, open it
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
 </body>
 </html>

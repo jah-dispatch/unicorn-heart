@@ -342,3 +342,77 @@ a {
         margin-bottom: 15px;
     }
 }
+/* --- AUTHORITY Q&A ACCORDION --- */
+.faq-container {
+    margin-top: 50px;
+    padding: 40px;
+    border: 1px solid #BF953F;
+    border-radius: 4px;
+    background: rgba(11, 14, 20, 0.4); /* Deep subtle backing */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.faq-item {
+    border-bottom: 1px solid rgba(191, 149, 63, 0.2);
+    margin-bottom: 10px;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #E2E8F0;
+    font-size: 1.15rem;
+    font-weight: 500;
+    font-family: 'Raleway', sans-serif;
+    text-align: left;
+    padding: 20px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+    color: #BF953F;
+}
+
+/* The Animated Star */
+.faq-icon {
+    color: #BF953F;
+    font-size: 1.5rem;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+}
+
+/* The Hidden Text Box */
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+}
+
+.faq-answer p {
+    padding-bottom: 20px;
+    margin: 0;
+    color: #A0AEC0;
+    font-size: 1rem;
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* --- THE ACTIVE (OPEN) STATE --- */
+.faq-item.active .faq-icon {
+    transform: rotate(180deg) scale(1.2); /* Spins and slightly enlarges */
+    color: #FCF6BA; /* Brightens */
+    text-shadow: 0 0 10px rgba(252, 246, 186, 0.8);
+}
+
+.faq-item.active .faq-answer {
+    max-height: 300px; /* Expands smoothly */
+}
