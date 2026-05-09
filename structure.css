@@ -57,21 +57,27 @@ body { overflow-x: hidden; }
 /* Mobile-Optimized Parallax Logic */
 .parallax-pane {
     position: relative;
-    min-height: 555px; /* Your requested minimum height */
+    min-height: 555px; 
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* FIX: Drops the text box to the bottom */
     justify-content: center;
+    padding-bottom: 60px; /* Gives it breathing room from the edge */
     overflow: hidden;
 }
 
+/* Update this in structure.css */
+/* Update this in structure.css */
 .parallax-pane::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background-image: var(--bg-image);
-    background-position: center;
+    
+    /* FIX: Set this back to exact center for Desktop */
+    background-position: center center; 
+    
     background-size: cover;
-    background-attachment: fixed; /* Native for desktop */
+    background-attachment: fixed; 
     z-index: -1;
 }
 

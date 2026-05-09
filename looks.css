@@ -259,3 +259,39 @@ a {
         width: 90%;
     }
 }
+/* Update this at the bottom of looks.css */
+@media (max-width: 768px) {
+    .parallax-pane {
+        min-height: 600px; 
+    }
+
+    .parallax-pane::before {
+        background-attachment: scroll !important; 
+        background-position: center center !important; /* Resets focal point */
+        background-size: cover; 
+    }
+    
+    .pane-content {
+        margin-top: 0; /* Removed the old hack */
+        width: 95%;
+    }
+}
+/* Add this to the BOTTOM of your CSS file */
+
+/* --- MOBILE SPECIFIC OVERRIDES --- */
+@media (max-width: 768px) {
+    .parallax-pane::before {
+        /* FIX: When on mobile, pull the image up so your face doesn't get cropped */
+        background-position: center 25% !important; 
+        
+        /* FIX: Disable 'fixed' parallax on mobile to prevent extreme zooming */
+        background-attachment: scroll !important; 
+    }
+}
+/* Update this inside your @media (max-width: 768px) block at the bottom of looks.css */
+    .pane-content {
+        margin-top: 0; 
+        width: 85%; /* Pulls the box away from the screen edges */
+        max-width: 555px; /* Ensures it stays a readable column on large phones/tablets */
+        padding: 25px 15px; /* Slightly tighter internal padding for mobile */
+    }
