@@ -295,4 +295,50 @@ a {
         max-width: 555px; /* Ensures it stays a readable column on large phones/tablets */
         padding: 25px 15px; /* Slightly tighter internal padding for mobile */
     }
+    /* --- MOBILE SPECIFIC OVERRIDES --- */
+@media (max-width: 768px) {
     
+    .parallax-pane {
+        /* Use viewport height so it adapts to different iPhone/Android sizes */
+        min-height: 75vh; 
+        padding-bottom: 20px; /* Pushes the text box closer to the bottom edge */
+    }
+
+    .parallax-pane::before {
+        background-attachment: scroll !important; 
+        
+        /* THE BUMP: 0% is the absolute top of the image. 
+           If it's still cutting off your head, change 10% to 5% or 0% */
+        background-position: center 10% !important; 
+        
+        background-size: cover; 
+    }
+    
+    /* Shrink the box footprint to clear the background action */
+    .pane-content {
+        width: 90%;
+        padding: 20px 15px;
+        margin-top: 0;
+        margin-bottom: 10px; /* Forces it to the floor of the pane */
+    }
+
+    /* Scale down the massive headers for mobile */
+    .pane-content h1, 
+    .pane-content h1.glow-text {
+        font-size: 2rem; 
+        margin-bottom: 15px;
+    }
+
+    .pane-content h2, 
+    .pane-content h2.glow-text {
+        font-size: 1.6rem; 
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    .pane-content p {
+        font-size: 0.95rem; 
+        line-height: 1.5; 
+        margin-bottom: 15px;
+    }
+}
