@@ -1,11 +1,14 @@
-/* looks.css */
+/* =========================================
+   looks.css | Unicorn Heart Brand Management
+   ========================================= */
+
 body {
     font-family: 'Raleway', sans-serif;
     background-color: #050505; /* Deep Black */
     color: #FFFFFF;
 }
 
-/* Custom Gold Scrollbar */
+/* --- CUSTOM GOLD SCROLLBAR --- */
 ::-webkit-scrollbar { width: 12px; }
 ::-webkit-scrollbar-track { background: #0B0E14; }
 ::-webkit-scrollbar-thumb {
@@ -14,7 +17,7 @@ body {
     border: 2px solid #0B0E14;
 }
 
-/* Header & Footer Styling */
+/* --- HEADER & FOOTER STYLING --- */
 .main-header {
     background-color: rgba(5, 5, 5, 0.95);
     border-bottom: 1px solid #BF953F;
@@ -23,9 +26,43 @@ body {
     background-color: rgba(5, 5, 5, 0.95);
     border-top: 1px solid #BF953F;
     color: #BF953F;
+    text-align: center;
+    padding: 40px 20px;
+    width: 100%;
 }
 
-/* Dropdown Aesthetics */
+/* --- PRESTIGE LOGO WRAPPER (MOBILE RESPONSIVE) --- */
+.logo-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 250px; /* Forces exact size across ALL pages */
+    margin: 0 auto;
+}
+.brand-logo-img { 
+    width: 100%; 
+    height: auto; 
+    display: block; 
+}
+
+/* --- THE SPARKLE LOGIC --- */
+.sparkle {
+    position: absolute;
+    color: #FCF6BA; /* Bright Gold Highlight */
+    font-size: 1.2rem;
+    pointer-events: none;
+    opacity: 0;
+    animation: twinkle 5s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(252, 246, 186, 0.8));
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+    20% { opacity: 1; transform: scale(1.2) rotate(45deg); }
+    40% { opacity: 0; transform: scale(0) rotate(90deg); }
+}
+
+/* --- NAVIGATION DROPDOWNS --- */
 .dropdown {
     background-color: #111;
     border: 1px solid #BF953F;
@@ -33,98 +70,168 @@ body {
 }
 .dropdown li a { padding: 10px; display: block; font-size: 0.9rem; }
 
-/* Metallic Silver Text with Pastel Glows */
-a { text-decoration: none; color: white; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; }
+/* --- THE MASTER METALLIC SILVER CLASS --- */
+a { 
+    text-decoration: none; 
+    color: white; 
+    font-weight: 500; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+}
 
+/* Attach class="glow-text" to ANY element to make it metallic */
 .glow-text {
-    /* Silver Metallic Base */
-    background: linear-gradient(to right, #8a8a8a, #ffffff, #8a8a8a);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: pastelPulse 8s infinite alternate;
+    background: linear-gradient(to right, #9ca3af, #ffffff, #9ca3af);
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+    transition: 0.5s;
+    animation: luxuryPulse 8s infinite alternate;
 }
 
-/* The Unicorn/Pride Glow Animation */
-@keyframes pastelPulse {
-    0%   { filter: drop-shadow(0 0 5px rgba(255, 182, 193, 0.6)); } /* Pink */
-    25%  { filter: drop-shadow(0 0 5px rgba(255, 218, 185, 0.6)); } /* Peach */
-    50%  { filter: drop-shadow(0 0 5px rgba(175, 238, 238, 0.6)); } /* Turquoise */
-    75%  { filter: drop-shadow(0 0 5px rgba(230, 230, 250, 0.6)); } /* Lavender */
-    100% { filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.6)); } /* Hot Pink */
+/* Rules to keep headings bold and centered when using glow-text */
+h1.glow-text, 
+h2.glow-text {
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-align: center;
 }
 
-/* Pane Typography Looks */
+h1.glow-text {
+    font-size: 2.8rem;
+    margin-bottom: 30px;
+}
+
+h2.glow-text {
+    font-size: 2.2rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+@keyframes luxuryPulse {
+    0%   { filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.5)); } /* Violet */
+    50%  { filter: drop-shadow(0 0 4px rgba(6, 182, 212, 0.5)); }  /* Turquoise */
+    100% { filter: drop-shadow(0 0 4px rgba(236, 72, 153, 0.5)); } /* Pink */
+}
+
+/* --- EDITORIAL TEXT CONTAINERS (For Non-Parallax Pages) --- */
+.content-wrapper {
+    max-width: 800px; /* Aesthetically pleasing reading width */
+    margin: 60px auto;
+    padding: 0 20px;
+    color: #E2E8F0;
+    font-size: 1.15rem;
+    line-height: 1.8;
+}
+
+.content-wrapper p { 
+    margin-bottom: 25px; 
+    font-weight: 300; 
+}
+
+/* --- THE BIO PHOTO WRAP (Editorial Style) --- */
+.bio-container {
+    margin-top: 40px;
+}
+
+.bio-photo {
+    float: left; /* Floats image left so text wraps around the right */
+    width: 250px; 
+    height: auto;
+    margin-right: 35px; 
+    margin-bottom: 15px;
+    border: 2px solid #BF953F;
+    border-radius: 4px;
+    box-shadow: 0 10px 25px rgba(191, 149, 63, 0.15); /* Subtle gold shadow */
+}
+
+/* Clears the float so it doesn't break the footer layout below it */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* --- PANE TYPOGRAPHY (For the Home Page Parallax) --- */
 .pane-content {
-    background: rgba(0, 0, 0, 0.6); /* Translucent box for readability */
-    border: 1px solid rgba(191, 149, 63, 0.3); /* Subtle gold border */
+    background: rgba(0, 0, 0, 0.6); 
+    border: 1px solid rgba(191, 149, 63, 0.3); 
     border-radius: 8px;
     backdrop-filter: blur(5px);
+    padding: 30px;
+    text-align: center;
 }
-.pane-content h1, .pane-content h2 {
+
+.pane-content h1, 
+.pane-content h2 {
     color: #FCF6BA;
     font-weight: 800;
     margin-bottom: 15px;
     letter-spacing: 3px;
+    /* Overrides the silver gradient so parallax headers stay pure gold */
+    background: none !important; 
+    -webkit-text-fill-color: #FCF6BA !important;
 }
 .pane-content p { color: #E2E8F0; font-weight: 300; font-size: 1.1rem; }
-/* --- THE UNICORN HEART LOGO TRACE --- */
-
-.brand-logo {
-    max-width: 250px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    overflow: visible;
+/* --- THE MASTER METALLIC SILVER CLASS --- */
+a { 
+    text-decoration: none; 
+    color: white; 
+    font-weight: 500; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
 }
 
-/* The sparkling comet tracing the outline */
-.comet-trace {
-    fill: transparent; /* Keep inside empty while tracing */
-    stroke: url(#goldGradient); /* Use the gold gradient we defined in the HTML */
-    stroke-width: 3px;
-    
-    /* The Magic: Creates a line 150px long, followed by a 3000px gap */
-    stroke-dasharray: 150 3000; 
-    stroke-dashoffset: 3000; /* Pushes the comet all the way to the start */
-    
-    /* Runs the trace over 3 seconds, then repeats */
-    animation: traceOutline 3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-    
-    /* The star sparkle glow around the comet */
-    filter: drop-shadow(0 0 10px rgba(252, 246, 186, 0.8)); 
+/* This targets BOTH nav links and any spans with the class */
+.glow-text {
+    background: linear-gradient(to right, #9ca3af, #ffffff, #9ca3af);
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+    transition: 0.5s;
+    animation: luxuryPulse 8s infinite alternate;
+    display: inline-block; /* Crucial for gradients on spans to work perfectly */
 }
 
-/* The embossed base filling in with a "boop" */
-.embossed-base {
-    /* Once the trace finishes, fill in the solid gold logo with a pop */
-    animation: traceOutline 3s forwards, fillBoop 1s 2.8s ease-out forwards;
+@keyframes luxuryPulse {
+    0%   { filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.5)); } /* Violet */
+    50%  { filter: drop-shadow(0 0 4px rgba(6, 182, 212, 0.5)); }  /* Turquoise */
+    100% { filter: drop-shadow(0 0 4px rgba(236, 72, 153, 0.5)); } /* Pink */
 }
 
-/* Animation 1: Moving the comet */
-@keyframes traceOutline {
-    0% {
-        stroke-dashoffset: 3000;
-    }
-    100% {
-        stroke-dashoffset: 0;
-    }
+/* --- EDITORIAL TEXT CONTAINERS (For Non-Parallax Pages) --- */
+.content-wrapper {
+    max-width: 800px; 
+    margin: 60px auto;
+    padding: 0 20px;
+    color: #E2E8F0;
+    font-size: 1.15rem;
+    line-height: 1.8;
 }
 
-/* Animation 2: The "Boop" fill-in flair */
-@keyframes fillBoop {
-    0% {
-        fill: transparent;
-        transform: scale(1);
-    }
-    50% {
-        fill: url(#goldGradient);
-        transform: scale(1.05); /* The expanding boop */
-        filter: drop-shadow(0 0 20px rgba(252, 246, 186, 1)); /* Bright flash */
-    }
-    100% {
-        fill: url(#goldGradient);
-        transform: scale(1); /* Settle back to normal */
-        filter: drop-shadow(0 0 5px rgba(191, 149, 63, 0.5)); /* Subtle resting glow */
-    }
+/* Layout for the structural headings */
+.content-wrapper h1, 
+.content-wrapper h2 {
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.content-wrapper h1 {
+    font-size: 2.8rem;
+    margin-bottom: 40px;
+}
+
+.content-wrapper h2 {
+    font-size: 2.2rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.content-wrapper p { 
+    margin-bottom: 25px; 
+    font-weight: 300; 
 }
