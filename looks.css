@@ -295,3 +295,34 @@ a {
         max-width: 555px; /* Ensures it stays a readable column on large phones/tablets */
         padding: 25px 15px; /* Slightly tighter internal padding for mobile */
     }
+    /* --- MOBILE SPECIFIC TYPOGRAPHY & BOX SIZING --- */
+@media (max-width: 768px) {
+    
+    /* 1. Shrink the box footprint */
+    .pane-content {
+        width: 85%;
+        padding: 20px 15px; /* Tighter internal spacing */
+        margin-top: 0;
+    }
+
+    /* 2. Scale down the massive headers */
+    .pane-content h1, 
+    .pane-content h1.glow-text {
+        font-size: 2rem; /* Scaled down from 2.8rem */
+        margin-bottom: 15px;
+    }
+
+    .pane-content h2, 
+    .pane-content h2.glow-text {
+        font-size: 1.6rem; /* Scaled down from 2.2rem */
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    /* 3. Make the paragraph text smaller and tighter */
+    .pane-content p {
+        font-size: 0.95rem; /* Scaled down from 1.15rem */
+        line-height: 1.5; /* Tighter spacing between lines of text */
+        margin-bottom: 15px;
+    }
+}
