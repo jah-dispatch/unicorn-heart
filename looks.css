@@ -235,3 +235,27 @@ a {
     margin-bottom: 25px; 
     font-weight: 300; 
 }
+/* --- MOBILE PARALLAX OPTIMIZATION --- */
+@media (max-width: 768px) {
+    .parallax-pane {
+        /* Increase the height on mobile so more of the image can "fit" */
+        min-height: 650px; 
+    }
+
+    .parallax-pane::before {
+        /* FIX: Disable 'fixed' on mobile to stop the "extreme zoom" bug */
+        background-attachment: scroll !important; 
+        
+        /* FIX: Focus on the top-center so your face stays in frame */
+        background-position: center top !important; 
+        
+        /* Ensure the image doesn't scale larger than the screen width */
+        background-size: cover; 
+    }
+    
+    .pane-content {
+        /* Pull the text box down slightly on mobile so it doesn't cover your face */
+        margin-top: 250px; 
+        width: 90%;
+    }
+}
