@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Unicorn Heart Brand Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="structure.css">
+    <link rel="stylesheet" href="looks.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo-container">
+        <div class="logo-wrapper">
+        <img src="assets/images/uhbm-site-logo.png" alt="Unicorn Heart Brand Management" class="brand-logo-img">
+        
+        <div class="sparkle" style="top: 0%; left: 17%; animation-delay: 0s;">✦</div>
+        <div class="sparkle" style="top: 14%; left: 98%; animation-delay: 1.2s;">✦</div>
+        <div class="sparkle" style="top: 80%; left: 51%; animation-delay: 0.8s;">✦</div>
+    </div>
+</div>
+
+<style>
+    .logo-container {
+        padding: 20px 0;
+    }
+
+    /* The wrapper must be relative so the absolute sparkles stay inside it */
+    .logo-wrapper {
+        position: relative;
+        display: inline-block; /* Hugs tightly to the image width */
+        max-width: 600px;
+    }
+
+    .brand-logo-img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* The Sparkle CSS */
+    .sparkle {
+        position: absolute;
+        color: #FCF6BA; /* Bright gold/white */
+        font-size: 1.5rem;
+        user-select: none; /* Prevents users from highlighting the star */
+        pointer-events: none;
+        
+        /* Start invisible */
+        opacity: 0; 
+        transform: scale(0) rotate(0deg);
+        
+        /* The animation: runs for 3s, loops infinitely */
+        animation: twinkle 4s ease-in-out infinite;
+        
+        /* Optional: Adds a tiny glow to the sparkle itself */
+        filter: drop-shadow(0 0 8px rgba(252, 246, 186, 1));
+    }
+
+    @keyframes twinkle {
+        0% {
+            opacity: 0;
+            transform: scale(0) rotate(0deg);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.5) rotate(90deg); /* Peaks in brightness and size */
+        }
+        100% {
+            opacity: 0;
+            transform: scale(0) rotate(180deg); /* Fades out while spinning */
+        }
+    }
+</style>
+</div>
+        
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
+
+       <nav class="main-nav">
+            <ul class="nav-grid">
+                <li><a href="index.html" class="glow-text">Home</a></li>
+                <li class="has-dropdown">
+                    <a href="#services" class="glow-text">Services &#x25BC;</a>
+                    <ul class="dropdown">
+                        <li><a href="services.html/#sustaining">Sustaining Plan</a></li>
+                        <li><a href="services.html/#growth">Growth Plan</a></li>
+                        <li><a href="services.html/#architect">Architect Plan</a></li>
+                    </ul>
+                </li>
+                <li><a href="#about" class="glow-text">The Framework</a></li>
+                <li><a href="contact.html" class="glow-text">Consultation</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main style="background-color: #050505;">
+        
+       <div class="content-wrapper" style="text-align: center; margin-top: 40px; margin-bottom: 40px;">
+            <h1><span class="glow-text">Retainer Tiers</span></h1>
+            <p>Our retainers are engineered for impact, not hourly tracking. When you partner with us, you're investing in applied expertise, data-driven software infrastructure, and measurable execution—not the administrative bloat of a traditional agency.</p>
+        </div>
+
+        <div class="metallic-divider divider-copper" id="sustaining"></div>
+        <section class="parallax-pane" style="--bg-image: url('assets/images/placeholder-copper.jpg');">
+            <div class="pane-content service-card">
+                <h2><span class="text-copper">The Sustaining Plan</span></h2>
+                <p class="price-tag"><strong>$850 / month</strong> <span class="hours-tag">| ~10 Hours/mo</span></p>
+                <p class="target-demo"><em>For businesses that want to protect their current reputation but don't need aggressive growth.</em></p>
+                <ul class="deliverables-list">
+                    <li>✦ Basic SE Ranking Monthly Report</li>
+                    <li>✦ Synup Listing Maintenance</li>
+                    <li>✦ 4 Social Media Posts/mo</li>
+                    <li>✦ Brand Mention Monitoring</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="metallic-divider divider-silver" id="growth"></div>
+        <section class="parallax-pane" style="--bg-image: url('assets/images/placeholder-silver.jpg');">
+            <div class="pane-content service-card">
+                <h2><span class="text-silver">The Growth Plan</span></h2>
+                <p class="price-tag"><strong>$1,700 / month</strong> <span class="hours-tag">| ~20 Hours/mo</span></p>
+                <p class="target-demo"><em>For SMBs actively trying to capture more local search traffic and engage their audience.</em></p>
+                <ul class="deliverables-list">
+                    <li>✦ Advanced Local SEO Strategy</li>
+                    <li>✦ 12 Social Media Posts/mo</li>
+                    <li>✦ Review Reply Management (Synup)</li>
+                    <li>✦ 1 Monthly Strategy Call</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="metallic-divider divider-gold" id="architect"></div>
+        <section class="parallax-pane" style="--bg-image: url('assets/images/placeholder-gold.jpg');">
+            <div class="pane-content service-card">
+                <h2><span class="text-gold">The Architect Plan</span></h2>
+                <p class="price-tag"><strong>$3,400 / month</strong> <span class="hours-tag">| ~40 Hours/mo</span></p>
+                <p class="target-demo"><em>For business owners who want to fully outsource their digital presence and brand strategy.</em></p>
+                <ul class="deliverables-list">
+                    <li>✦ Competitor Tracking (SE Ranking)</li>
+                    <li>✦ 3-4 Social Posts/week + Story Mgmt</li>
+                    <li>✦ Full Brand Reputation Mgmt</li>
+                    <li>✦ Bi-weekly Strategy Consulting</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-wrapper" style="margin-top: 80px; margin-bottom: 80px;">
+            <h2 style="text-align: center; margin-bottom: 40px;"><span class="text-shimmer-gold">A La Carte & Standalone Services</span></h2>
+            
+            <div class="standalone-card">
+                <h3 class="text-silver">The Tactile Integrity Audit</h3>
+                <p>A comprehensive, deep-dive brand alignment audit spanning from your digital footprint to the physical customer experience. We identify "Data Breaches of Trust" and operational bottlenecks before you scale.</p>
+                <p class="standalone-price"><strong>One-Time Fee: [Insert Price]</strong></p>
+            </div>
+            
+            <div class="standalone-card">
+                <h3 class="text-silver">[Placeholder Service: e.g., Pre-Launch Strategy]</h3>
+                <p>[Insert brief description of the standalone service. Highlight the specific value it brings to businesses who need consulting but aren't ready for a recurring monthly retainer.]</p>
+                <p class="standalone-price"><strong>One-Time Fee: [Insert Price]</strong></p>
+            </div>
+            
+            <div class="standalone-card">
+                <h3 class="text-silver">[Placeholder Service: e.g., Website Blueprinting]</h3>
+                <p>[Insert brief description. "Before you hire a developer, let us architect the wireframe and SEO structure so your site actually drives revenue rather than just looking pretty."]</p>
+                <p class="standalone-price"><strong>One-Time Fee: [Insert Price]</strong></p>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="contact.html" style="border: 1px solid #BF953F; padding: 15px 30px; font-weight: 800; color: #BF953F; border-radius: 4px; transition: 0.3s;">REQUEST A CONSULTATION</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 Unicorn Heart Brand Management. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

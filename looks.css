@@ -464,3 +464,117 @@ a {
     .bio-container p {
         text-align: left; 
     }
+    /* =========================================
+   SERVICES PAGE: METALLICS & PRICING
+   ========================================= */
+
+/* --- SLENDER METALLIC DIVIDERS --- */
+.metallic-divider {
+    width: 100%;
+    height: 6px; /* Slender cut */
+    position: relative;
+    z-index: 5;
+}
+
+.divider-copper {
+    background: linear-gradient(to right, #4a2e1b, #b87333, #e8a58a, #b87333, #4a2e1b);
+    box-shadow: 0 0 15px rgba(184, 115, 51, 0.4);
+}
+
+.divider-silver {
+    background: linear-gradient(to right, #4b5563, #9ca3af, #ffffff, #9ca3af, #4b5563);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.divider-gold {
+    background: linear-gradient(to right, #AA771C, #BF953F, #FCF6BA, #BF953F, #AA771C);
+    box-shadow: 0 0 15px rgba(252, 246, 186, 0.4);
+}
+
+/* --- TIER-SPECIFIC TEXT GRADIENTS --- */
+.text-copper {
+    background: linear-gradient(to right, #e8a58a, #b87333, #e8a58a);
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.text-silver {
+    background: linear-gradient(to right, #ffffff, #9ca3af, #ffffff);
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.text-gold {
+    background: linear-gradient(to right, #FCF6BA, #BF953F, #FCF6BA);
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* --- SERVICE CARD & LIST FORMATTING --- */
+.service-card {
+    text-align: center;
+}
+
+.price-tag {
+    font-size: 1.5rem !important;
+    color: #E2E8F0;
+    margin-bottom: 5px !important;
+}
+
+.hours-tag {
+    font-size: 1rem;
+    color: #9ca3af;
+    font-weight: 300;
+}
+
+.target-demo {
+    font-size: 1.05rem;
+    color: #A0AEC0;
+    margin-bottom: 25px !important;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.deliverables-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    display: inline-block; /* Keeps the left-aligned text centered in the box */
+}
+
+.deliverables-list li {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+/* --- STANDALONE SERVICES CARDS --- */
+.standalone-card {
+    border: 1px solid #BF953F; 
+    padding: 35px; 
+    border-radius: 4px; 
+    margin-bottom: 25px; 
+    background: rgba(11, 14, 20, 0.4);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.standalone-card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.standalone-price {
+    color: #BF953F; 
+    margin-top: 15px !important; 
+    font-size: 1.1rem;
+}
