@@ -1,0 +1,86 @@
+/* ==========================================================================
+   UHBM Interactive Diagnostic Quiz Styling
+   ========================================================================== */
+
+.diagnostic-container {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.diagnostic-header h2 {
+    color: #BF953F;
+    font-weight: 800;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.diagnostic-header p {
+    color: #cccccc;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+/* The Main Quiz Box */
+.quiz-box {
+    background-color: rgba(15, 15, 15, 0.9);
+    border: 1px solid #BF953F;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.question-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 30px;
+    color: #FFFFFF;
+}
+
+/* The Answer Buttons */
+.answer-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.quiz-btn {
+    background-color: transparent;
+    border: 1px solid #555;
+    color: #FFFFFF;
+    padding: 15px 20px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.quiz-btn:hover {
+    border-color: #BF953F;
+    background-color: rgba(191, 149, 63, 0.1);
+    transform: translateX(5px); /* Slight bump to the right on hover */
+}
+
+/* Results Section Styling */
+.results-container {
+    animation: fadeIn 1s ease-in;
+}
+
+.score-highlight {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #BF953F;
+    margin: 20px 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
