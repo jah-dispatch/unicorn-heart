@@ -105,6 +105,10 @@
             <p>Our retainers are engineered for impact, not hourly tracking. When you partner with us, you're investing in applied expertise, data-driven software infrastructure, and measurable execution—not the administrative bloat of a traditional agency.</p>
         </div>
 
+        <div style="text-align: center; margin-top: 20px; margin-bottom: 40px;">
+    <a href="#" id="mesaCountyTrigger" class="uhbm-text-link">Mesa County Business Owner? Click here for your regional advantage.</a>
+</div>
+
         <div class="metallic-divider divider-copper" id="sustaining"></div>
         <section class="service-tier-pane">
             <div class="pane-content service-card">
@@ -197,5 +201,56 @@
 <p>Grand Junction, CO | All Rights Reserved.</p>
     </footer>
 
+<div id="mesaCountyModal" class="uhbm-modal">
+    <div class="uhbm-modal-content">
+        <span class="uhbm-modal-close">&times;</span>
+        
+        <h3 style="color: #BF953F; font-size: 1.5rem; margin-bottom: 15px;">The Regional Advantage</h3>
+        <p style="margin-bottom: 20px; line-height: 1.6;">We believe in fortifying the local Western Slope economy. If your business is headquartered in Mesa County, Colorado, you automatically qualify for our local partnership rates.</p>
+        
+        <div class="discount-box">
+            <p><strong><span class="text-shimmer-gold">15% OFF</span></strong> All Monthly Retainers</p>
+            <p><strong><span class="text-shimmer-gold">10% OFF</span></strong> All A La Carte Services</p>
+        </div>
+        
+        <p class="text-silver" style="font-size: 0.9rem; margin-top: 20px; margin-bottom: 30px;">Mention your local status during your initial consultation to activate your regional pricing.</p>
+        
+        <div style="text-align: center;">
+            <a href="contact.html" class="uhbm-pill-button">
+                CLAIM YOUR DISCOUNT
+                <span class="sparkle top-left"></span>
+                <span class="sparkle bottom-right"></span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Mesa County Modal Logic ---
+    const modal = document.getElementById("mesaCountyModal");
+    const triggerBtn = document.getElementById("mesaCountyTrigger");
+    const closeBtn = document.querySelector(".uhbm-modal-close");
+
+    // Open the modal when the link is clicked
+    triggerBtn.onclick = function(event) {
+        event.preventDefault(); // Prevents the page from jumping to the top
+        modal.style.display = "block";
+    }
+
+    // Close the modal when the 'X' is clicked
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Close the modal if the user clicks anywhere in the dark background outside the box
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+
+    
 </body>
 </html>
