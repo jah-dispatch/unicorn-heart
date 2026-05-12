@@ -711,3 +711,239 @@ a {
     90% { opacity: 1; transform: scale(1.6) rotate(90deg); }
     95% { opacity: 0; transform: scale(0.5) rotate(135deg); }
 }
+/* ==========================================================================
+   Calendly Native Widget Override: Sovereign Pulse & Gold Halo
+   ========================================================================== */
+
+/* Target the specific "pill" inside the Calendly wrapper */
+.calendly-badge-widget .calendly-badge-content {
+    /* The !important tags force Calendly's native CSS to surrender to yours */
+    animation: sovereign-pulse 3.5s infinite ease-in-out !important;
+    transform-origin: center center !important;
+}
+
+/* The Animation: A breathing gold halo with a subtle attention-grabbing tilt */
+@keyframes sovereign-pulse {
+    0% {
+        transform: scale(1) rotate(0deg);
+        box-shadow: 0 0 0 0 rgba(191, 149, 63, 0.8) !important;
+    }
+    15% {
+        /* The widget breathes in and tilts slightly right */
+        transform: scale(1.04) rotate(1.5deg);
+        box-shadow: 0 0 15px 5px rgba(191, 149, 63, 0.6) !important;
+    }
+    30% {
+        /* Tilts slightly left while the halo expands and softens */
+        transform: scale(1.04) rotate(-1.5deg);
+        box-shadow: 0 0 25px 10px rgba(191, 149, 63, 0.2) !important;
+    }
+    45% {
+        /* Settles back to resting state */
+        transform: scale(1) rotate(0deg);
+        box-shadow: 0 0 0 0 rgba(191, 149, 63, 0) !important;
+    }
+    100% {
+        /* Long pause before the next pulse so it isn't annoying to the user */
+        transform: scale(1) rotate(0deg);
+        box-shadow: 0 0 0 0 rgba(191, 149, 63, 0) !important;
+    }
+}
+
+/* ==========================================================================
+   Floating Action Container (Image + Button)
+   ========================================================================== */
+
+/* The invisible box that holds everything in the bottom corner */
+.floating-widget-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column; /* Stacks the image on top of the button */
+    align-items: center;    /* Keeps the arrow perfectly centered */
+    gap: 0px;               /* Keeps them tight together. Adjust if you need more space */
+    pointer-events: none;   /* Allows users to click 'through' the invisible box */
+}
+
+/* Re-enable clicking specifically for the button */
+.floating-widget-container .uhbm-pill-button {
+    pointer-events: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* Depth shadow */
+}
+
+/* The Prompt Arrow Image */
+.floating-prompt-image {
+    width: 150px;
+    height: 90px;
+    object-fit: contain; /* Ensures the image doesn't stretch or warp */
+    pointer-events: none; /* Prevents the image from being accidentally highlighted/clicked */
+    
+    /* A gentle, continuous floating motion */
+    animation: gentle-bob 3.5s infinite ease-in-out;
+}
+
+@keyframes gentle-bob {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); } /* Bobs up slightly */
+}
+
+/* --- Mobile Optimization --- */
+@media (max-width: 768px) {
+    .floating-widget-container {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    /* Scales the image down slightly so it doesn't overwhelm smaller phone screens */
+    .floating-prompt-image {
+        width: 120px; 
+        height: 72px;
+    }
+    
+    /* Shrinks the button text slightly for mobile */
+    .floating-widget-container .uhbm-pill-button {
+        padding: 12px 25px;
+        font-size: 0.85rem;
+    }
+}
+/* ==========================================================================
+   1. UHBM Premium Pill Button (The Cosmetics & Animations)
+   ========================================================================== */
+
+.uhbm-pill-button {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #BF953F;
+    padding: 15px 35px;
+    font-weight: 800;
+    color: #BF953F;
+    background-color: transparent;
+    border-radius: 50px; /* Creates the pill shape */
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden; 
+    z-index: 1;
+    letter-spacing: 1px;
+    font-family: 'Raleway', sans-serif;
+}
+
+.uhbm-pill-button:hover {
+    background-color: #BF953F;
+    color: #000000; 
+    box-shadow: 0 0 15px rgba(191, 149, 63, 0.4);
+}
+
+.uhbm-pill-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    transform: skewX(-20deg);
+    z-index: -1; 
+}
+
+.uhbm-pill-button:hover::before {
+    animation: shimmer-sweep 1.5s infinite;
+}
+
+/* Sparkles for the Pill Button */
+.uhbm-pill-button .sparkle {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.uhbm-pill-button .sparkle::before,
+.uhbm-pill-button .sparkle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #FFFFFF;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    box-shadow: 0 0 4px #FFFFFF;
+}
+
+.uhbm-pill-button .sparkle::before { width: 100%; height: 1.5px; }
+.uhbm-pill-button .sparkle::after { width: 1.5px; height: 100%; }
+
+.uhbm-pill-button .top-left { top: 8px; left: 18px; }
+.uhbm-pill-button .bottom-right { bottom: 8px; right: 18px; }
+
+.uhbm-pill-button:hover .top-left { animation: twinkle 1.5s infinite ease-in-out; }
+.uhbm-pill-button:hover .bottom-right { animation: quick-flash 2.5s infinite linear; animation-delay: 0.5s; }
+
+
+/* ==========================================================================
+   2. Floating Action Container (The Positioning & Arrow Image)
+   ========================================================================== */
+
+.floating-widget-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    gap: 0px;               
+    pointer-events: none;   
+}
+
+.floating-widget-container .uhbm-pill-button {
+    pointer-events: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+}
+
+.floating-prompt-image {
+    width: 150px;
+    height: 90px;
+    object-fit: contain; 
+    pointer-events: none; 
+    animation: gentle-bob 3.5s infinite ease-in-out;
+}
+
+/* Animations */
+@keyframes shimmer-sweep {
+    0% { left: -150%; }
+    50% { left: 150%; }
+    100% { left: 150%; } 
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(45deg); }
+}
+@keyframes quick-flash {
+    0%, 85%, 100% { opacity: 0; transform: scale(0.2) rotate(0deg); }
+    90% { opacity: 1; transform: scale(1.6) rotate(90deg); }
+    95% { opacity: 0; transform: scale(0.5) rotate(135deg); }
+}
+@keyframes gentle-bob {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); } 
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .floating-widget-container {
+        bottom: 15px;
+        right: 15px;
+    }
+    .floating-prompt-image {
+        width: 120px; 
+        height: 72px;
+    }
+    .floating-widget-container .uhbm-pill-button {
+        padding: 12px 25px;
+        font-size: 0.85rem;
+    }
+}
