@@ -441,7 +441,8 @@ a {
 }
 
 .faq-item.active .faq-answer {
-    max-height: 300px; /* Expands smoothly */
+    max-height: 1500px; /* Expands smoothly */
+    padding: 15px 20px;
 }
 /* Update this inside your @media (max-width: 768px) block at the bottom of looks.css */
     
