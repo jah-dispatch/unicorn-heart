@@ -102,3 +102,145 @@ body { overflow-x: hidden; }
 }
 
 .main-footer { text-align: center; padding: 40px 20px; width: 100%; }
+/* ==========================================================================
+   Footer Attribution (Disability-Owned Tag)
+   ========================================================================== */
+.footer-attribution {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800; /* Bold to establish authority */
+    font-size: 0.8rem;
+    letter-spacing: 2.5px; /* Wide spacing for an architectural feel */
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px; /* Gives it breathing room above the copyright */
+    
+    /* The Signature Gold Gradient Applied to Text */
+    background: linear-gradient(120deg, #B38728, #FCF6BA, #BF953F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; 
+
+    /* A very soft ambient glow so it pops off the deep black */
+    filter: drop-shadow(0px 2px 4px rgba(191, 149, 63, 0.25));
+
+    /* Flexbox to perfectly align the text with the side accent lines */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* --- Architectural Accent Lines --- */
+.footer-attribution::before,
+.footer-attribution::after {
+    content: '';
+    display: block;
+    width: 40px; /* Length of the lines */
+    height: 1px;
+}
+
+/* Fades from transparent to gold */
+.footer-attribution::before {
+    background: linear-gradient(90deg, transparent, #BF953F); 
+}
+
+/* Fades from gold to transparent */
+.footer-attribution::after {
+    background: linear-gradient(270deg, transparent, #BF953F);
+}
+
+/* Mobile Adjustment to keep lines proportionate */
+@media (max-width: 768px) {
+    .footer-attribution {
+        font-size: 0.7rem;
+        letter-spacing: 1.5px;
+        gap: 10px;
+    }
+    .footer-attribution::before,
+    .footer-attribution::after {
+        width: 20px;
+    }
+}
+
+/* ==========================================================================
+   Splash Page Hero Box (.splash-page-copy1)
+   ========================================================================== */
+
+.splash-page-copy1 {
+    background-color: rgba(5, 5, 5, 0.85); /* Deep dark background */
+    border: 1px solid #BF953F; /* Signature Gold Border */
+    border-radius: 6px;
+    
+    /* THE FIX: Generous padding. 60px top/bottom, 40px left/right */
+    padding: 60px 40px; 
+    
+    max-width: 800px;
+    margin: 0 auto; /* Perfectly centers the box horizontally */
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Adds floating depth */
+}
+
+/* Spacing out the internal elements smoothly */
+.splash-page-copy1 h2 {
+    margin-bottom: 25px; /* Pushes the paragraph down away from the header */
+}
+
+.splash-page-copy1 p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.splash-page-copy1 .shimmer-paragraph {
+    margin-top: 30px;
+    margin-bottom: 40px; /* Pushes the button down */
+}
+
+/* Ensuring the button container centers perfectly */
+.splash-page-copy1 .button-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* --- Mobile Optimization --- */
+@media (max-width: 768px) {
+    .splash-page-copy1 {
+        /* Slightly tighter padding on mobile so it fits the screen better */
+        padding: 40px 20px; 
+        margin: 0 15px; /* Prevents the box from touching the very edge of the phone screen */
+    }
+}
+/* ==========================================================================
+   Splash Page Hero Box (.splash-page-copy1)
+   ========================================================================== */
+
+.splash-page-copy1 {
+    background-color: rgba(5, 5, 5, 0.85); 
+    border: 1px solid #BF953F; 
+    border-radius: 6px;
+    padding: 30px 40px; 
+    max-width: 800px;
+    
+    /* THE FIX: 80px space on top and bottom, auto centers left and right */
+    margin: 30px auto; 
+    
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); 
+}
+
+/* ... keep the paragraph and button spacing exactly as it was ... */
+.splash-page-copy1 h2 { margin-bottom: 25px; }
+.splash-page-copy1 p { margin-bottom: 20px; line-height: 1.6; }
+.splash-page-copy1 .shimmer-paragraph { margin-top: 30px; margin-bottom: 40px; }
+.splash-page-copy1 .button-container { text-align: center; margin-top: 10px; }
+
+
+/* --- Mobile Optimization --- */
+@media (max-width: 768px) {
+    .splash-page-copy1 {
+        padding: px 20px; 
+        
+        /* THE FIX FOR MOBILE: 40px top/bottom space, 15px side space */
+        margin: 40px 15px; 
+    }
+}
