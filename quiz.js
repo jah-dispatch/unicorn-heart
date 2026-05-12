@@ -32,7 +32,7 @@ const quizData = [
         ]
     },
     {
-        question: "5. Consider the 'Crinkled Receipt Standard.' How many small, friction-causing glitches currently exist in your customer's journey?",
+        question: "5. Consider the journey of one new customer interaction. How many small, friction-causing glitches currently exist in your customer's journey?",
         answers: [
             { text: "Zero. We proactively audit for broken links, confusing menus, and unanswered messages to maintain 'Tactile Integrity.'", score: 3 },
             { text: "A few. We fix broken things when a customer complains about them.", score: 1 },
