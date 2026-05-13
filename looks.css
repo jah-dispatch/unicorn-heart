@@ -1051,3 +1051,101 @@ a {
         font-size: 1rem;
     }
 }
+/* =========================================
+   DIAGNOSTIC QUIZ AESTHETICS (quiz.js)
+   ========================================= */
+
+.results-container {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    background: rgba(11, 14, 20, 0.4);
+    border: 1px solid rgba(191, 149, 63, 0.2);
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* The Question Text */
+.quiz-question {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #E2E8F0;
+    margin-bottom: 25px;
+    text-align: left;
+    line-height: 1.5;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(191, 149, 63, 0.2);
+}
+
+/* The Options Container */
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+/* The Individual Answers (Buttons) */
+.quiz-option {
+    background: rgba(5, 5, 5, 0.8); 
+    border: 1px solid rgba(160, 174, 192, 0.3); /* Subtle silver border */
+    color: #A0AEC0; /* Muted text */
+    padding: 18px 25px;
+    border-radius: 4px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    line-height: 1.5;
+}
+
+/* Hover State for Answers */
+.quiz-option:hover {
+    background: rgba(191, 149, 63, 0.05); /* Faint gold tint */
+    border-color: #BF953F; /* Snaps to solid gold */
+    color: #FCF6BA; /* Brightens text */
+    transform: translateX(5px); /* Slight nudge to the right */
+}
+
+/* The Main Call-to-Action Buttons (Pill Shape) */
+.uhbm-pill-button {
+    display: inline-block;
+    background: transparent;
+    border: 1px solid #BF953F;
+    color: #BF953F;
+    padding: 15px 35px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    border-radius: 50px; /* Elegant pill shape */
+    margin-top: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.uhbm-pill-button:hover {
+    background: linear-gradient(to right, #AA771C, #BF953F, #FCF6BA, #BF953F, #AA771C);
+    color: #050505; /* Invert text to black */
+    border-color: transparent;
+    box-shadow: 0 0 20px rgba(252, 246, 186, 0.4);
+}
+
+/* The Final Result Highlight */
+.score-highlight {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 25px 0;
+    background: linear-gradient(to right, #e8a58a, #b87333, #FCF6BA);
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
