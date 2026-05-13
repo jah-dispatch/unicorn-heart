@@ -1149,3 +1149,55 @@ a {
     color: transparent !important;
     -webkit-text-fill-color: transparent !important;
 }
+/* --- MOBILE SPECIFIC OVERRIDES (Ultra-Optimized for Small Screens) --- */
+@media (max-width: 768px) {
+    
+    /* 1. Give the section a bit more height to breathe */
+    .parallax-pane {
+        min-height: 85vh; /* Increased from 75vh to ensure background visibility */
+        padding-bottom: 15px; /* Pushed even closer to the bottom edge */
+    }
+
+    .parallax-pane::before {
+        background-attachment: scroll !important; 
+        background-position: center 5% !important; /* Kept high to protect the face focus */
+        background-size: cover; 
+    }
+    
+    /* 2. Shrink the box footprint drastically */
+    .pane-content {
+        width: 92%;
+        padding: 15px 12px; /* Extremely tight internal padding */
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+
+    /* 3. Scale down the massive headers for mobile */
+    .pane-content h1, 
+    .pane-content h1.glow-text {
+        font-size: 1.6rem; /* Scaled down from 2rem */
+        margin-bottom: 10px;
+    }
+
+    .pane-content h2, 
+    .pane-content h2.glow-text {
+        font-size: 1.4rem; /* Scaled down from 1.6rem */
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    /* 4. Tightly pack the paragraph text */
+    .pane-content p {
+        font-size: 0.85rem; /* Scaled down from 0.95rem */
+        line-height: 1.4; /* Tighter line spacing */
+        margin-bottom: 12px;
+    }
+
+    /* 5. Scale down the Call-to-Action buttons */
+    .uhbm-button, 
+    .uhbm-pill-button {
+        padding: 12px 20px; /* Thinner button */
+        font-size: 0.8rem; /* Smaller text */
+        margin-top: 5px;
+    }
+}
