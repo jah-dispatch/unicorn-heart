@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UHBM | Tactile Integrity Audit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* =========================================
+           UHBM Core Aesthetics (Embedded for PDF Integrity)
+           ========================================= */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #050505;
+            color: #FFFFFF;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .splash-page-copy1 {
+            background-color: rgba(15, 15, 15, 0.95);
+            border: 1px solid #BF953F;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            margin-bottom: 30px;
+        }
+
+        .glow-text {
+            color: #BF953F;
+            text-shadow: 0 0 12px rgba(191, 149, 63, 0.4);
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+
+        .brand-logo {
+            max-width: 180px;
+            margin: 0 auto 20px auto;
+            display: block;
+        }
+
+        /* --- Form Elements --- */
+        .audit-phase {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed #333;
+        }
+        
+        .audit-phase:last-of-type { border-bottom: none; }
+
+        .audit-phase h3 {
+            color: #FCF6BA;
+            margin-bottom: 5px;
+            font-size: 1.3rem;
+        }
+
+        .audit-phase p.phase-desc {
+            color: #aaaaaa;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cccccc;
+            font-weight: 500;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            background-color: #0B0E14;
+            border: 1px solid #555;
+            color: #FFF;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: 'Raleway', sans-serif;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #BF953F;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* --- Custom Range Slider --- */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #BF953F;
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-weight: 800;
+            color: #BF953F;
+            min-width: 45px;
+            text-align: right;
+            font-size: 1.2rem;
+        }
+
+        /* --- Results Dashboard --- */
+        .results-box {
+            background-color: #0B0E14;
+            border: 1px solid #BF953F;
+            border-radius: 6px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .results-box h2 { font-size: 2rem; margin-bottom: 10px; }
+        .diagnostic-text { color: #cccccc; font-style: italic; line-height: 1.5; }
+
+        /* --- Buttons --- */
+        .action-bar {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .uhbm-pill-button {
+            background: linear-gradient(180deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            border: 2px solid #0B0E14;
+            border-radius: 30px;
+            color: #050505;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(191, 149, 63, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .uhbm-pill-button:active { transform: scale(0.98); }
+
+        /* Mobile tweaks */
+        @media (max-width: 768px) {
+            .splash-page-copy1 { padding: 25px 15px; margin: 10px; }
+            .results-box h2 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="audit-report" class="splash-page-copy1">
+        
+        <div class="header-section">
+            <img src="../assets/images/uhbm-site-logo.png" alt="UHBM Logo" class="brand-logo" onerror="this.style.display='none';">
+            <h1 class="glow-text">Tactile Integrity Audit</h1>
+            <p style="color:#aaa; margin-top:5px;">Sign-to-Receipt Protocol Diagnostics</p>
+        </div>
+
+        <label for="clientName">Target Entity / Business Name</label>
+        <input type="text" id="clientName" placeholder="e.g., George's Bike Shop" class="auto-save">
+
+        <label for="auditDate">Date of Audit</label>
+        <input type="text" id="auditDate" placeholder="MM/DD/YYYY" class="auto-save">
+
+        <div class="audit-phase">
+            <h3>Phase 1: Environment & Initial Engagement</h3>
+            <p class="phase-desc">The Approach, The 10-Second Rule, Sensory Navigation & Visual Merchandising.</p>
+            <div class="slider-container">
+                <input type="range" id="score_p1" class="phase-slider auto-save" min="1" max="10" value="5">
+                <div class="score-display"><span id="val_p1">5</span>/10</div>
+            </div>
+            <textarea id="notes_p1" class="auto-save" placeholder="Document friction points, sensory breaches, or wins..."></textarea>
+        </div>
+
+        <div class="audit-phase">
+            <h3>Phase 2: Qualification & Empathy Mapping</h3>
+            <p class="phase-desc">The Greeting, The "Surgery Drop" Vulnerability Test, Active Listening Capabilities.</p>
+            <div class="slider-container">
+                <input type="range" id="score_p2" class="phase-slider auto-save" min="1" max="10" value="5">
+                <div class="score-display"><span id="val_p2">5</span>/10</div>
+            </div>
+            <textarea id="notes_p2" class="auto-save" placeholder="Did they guide you consultatively or act as a transactional cashier?"></textarea>
+        </div>
+
+        <div class="audit-phase">
+            <h3>Phase 3: Product Navigation & Value Articulation</h3>
+            <p class="phase-desc">The Floor Experience, Translation of Value vs. Price, Service Policy Clarification.</p>
+            <div class="slider-container">
+                <input type="range" id="score_p3" class="phase-slider auto-save" min="1" max="10" value="5">
+                <div class="score-display"><span id="val_p3">5</span>/10</div>
+            </div>
+            <textarea id="notes_p3" class="auto-save" placeholder="Did they sell peace of mind, or just a piece of metal?"></textarea>
+        </div>
+
+        <div class="audit-phase">
+            <h3>Phase 4: Ecosystem Integration</h3>
+            <p class="phase-desc">The Upsell, Anticipatory Needs, Natural Cross-Selling without pressure.</p>
+            <div class="slider-container">
+                <input type="range" id="score_p4" class="phase-slider auto-save" min="1" max="10" value="5">
+                <div class="score-display"><span id="val_p4">5</span>/10</div>
+            </div>
+            <textarea id="notes_p4" class="auto-save" placeholder="Did they naturally guide you into their broader brand ecosystem?"></textarea>
+        </div>
+
+        <div class="audit-phase">
+            <h3>Phase 5: The "Graceful Exit" & Offboarding</h3>
+            <p class="phase-desc">The Crinkled Receipt Standard, Handling the Non-Sale, Provision of Artifacts & Follow-up Capture.</p>
+            <div class="slider-container">
+                <input type="range" id="score_p5" class="phase-slider auto-save" min="1" max="10" value="5">
+                <div class="score-display"><span id="val_p5">5</span>/10</div>
+            </div>
+            <textarea id="notes_p5" class="auto-save" placeholder="Did hospitality vanish when the wallet stayed put? Were artifacts provided?"></textarea>
+        </div>
+
+        <div class="audit-phase" style="border:none;">
+            <h3 style="color:#FFFFFF;">Master Resolution & Assessment Findings</h3>
+            <p class="phase-desc">Your official executive summary of the brand's Data Breaches of Trust and operational friction.</p>
+            <textarea id="master_notes" class="auto-save" style="min-height: 120px;" placeholder="Final verdict and resolution plan..."></textarea>
+        </div>
+
+        <div class="results-box">
+            <h2 class="glow-text">Integrity Confidence Score: <span id="final_percentage">50</span>%</h2>
+            <p id="diagnostic_output" class="diagnostic-text">Awaiting data...</p>
+        </div>
+
+    </div> <div class="action-bar" id="action-bar">
+        <button onclick="clearAudit()" style="background:transparent; color:#aaa; border:none; margin-right:20px; cursor:pointer;">Clear Form</button>
+        <button onclick="exportToPDF()" class="uhbm-pill-button">Export Official PDF</button>
+    </div>
+
+</div>
+
+<script>
+    // --- Logic & Algorithm Engine ---
+    
+    const elements = document.querySelectorAll('.auto-save');
+    const sliders = document.querySelectorAll('.phase-slider');
+
+    // Dictionary for the Algorithmic Output
+    const getDiagnosticText = (percentage) => {
+        if (percentage <= 50) return "Definite Room for Improvement: Critical data breaches of trust detected. The Sign-to-Receipt experience relies heavily on transactional momentum rather than consultative guidance, risking high customer attrition.";
+        if (percentage <= 75) return "Some Room for Improvement: Functional baseline achieved, but the ecosystem lacks empathetic depth. Opportunities exist to refine value articulation and ensure offboarding matches the energy of the initial greeting.";
+        if (percentage <= 90) return "Not too shabby: Strong consultative presence with minor friction points. The staff successfully navigates customer pain points but may miss subtle opportunities for seamless ecosystem integration.";
+        return "Superior Service: Exceptional Tactile Integrity. The environment, empathy mapping, and graceful exit create a flawless, high-trust customer journey.";
+    };
+
+    // Calculate Master Score
+    const calculateScore = () => {
+        let totalScore = 0;
+        sliders.forEach(slider => {
+            const val = parseInt(slider.value);
+            totalScore += val;
+            // Update individual span text
+            document.getElementById(`val_${slider.id.split('_')[1]}`).innerText = val;
+        });
+
+        // Calculate Percentage (5 sliders * 10 max points = 50 max points)
+        const percentage = Math.round((totalScore / 50) * 100);
+        
+        // Inject into DOM
+        document.getElementById('final_percentage').innerText = percentage;
+        document.getElementById('diagnostic_output').innerText = getDiagnosticText(percentage);
+    };
+
+    // LocalStorage: Save Data
+    const saveState = () => {
+        const auditData = {};
+        elements.forEach(el => {
+            auditData[el.id] = el.value;
+        });
+        localStorage.setItem('uhbm_audit_state', JSON.stringify(auditData));
+        calculateScore();
+    };
+
+    // LocalStorage: Load Data
+    const loadState = () => {
+        const saved = localStorage.getItem('uhbm_audit_state');
+        if (saved) {
+            const auditData = JSON.parse(saved);
+            elements.forEach(el => {
+                if(auditData[el.id]) {
+                    el.value = auditData[el.id];
+                }
+            });
+        }
+        // Auto-fill date if empty
+        const dateInput = document.getElementById('auditDate');
+        if(!dateInput.value) {
+            const today = new Date();
+            dateInput.value = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+        }
+        calculateScore();
+    };
+
+    // Attach Listeners
+    elements.forEach(el => {
+        el.addEventListener('input', saveState);
+    });
+
+    window.onload = loadState;
+
+    const clearAudit = () => {
+        if(confirm("Are you sure you want to clear the current audit data?")) {
+            localStorage.removeItem('uhbm_audit_state');
+            location.reload();
+        }
+    }
+
+    // --- PDF Export Engine ---
+    const exportToPDF = () => {
+        const element = document.getElementById('audit-report');
+        const actionBar = document.getElementById('action-bar');
+        const textareas = document.querySelectorAll('textarea');
+        const clientName = document.getElementById('clientName').value || "Audit";
+
+        // Pre-Flight: Expand Textareas so content isn't cut off in the PDF
+        textareas.forEach(ta => {
+            ta.style.height = 'auto';
+            ta.style.height = (ta.scrollHeight + 5) + 'px';
+            ta.style.overflow = 'hidden';
+            ta.style.border = 'none'; // Looks cleaner on print
+            ta.style.backgroundColor = 'transparent';
+        });
+
+        // Pre-Flight: Hide UI elements
+        actionBar.style.display = 'none';
+
+        // Configuration
+        const opt = {
+            margin:       0.4,
+            filename:     `UHBM_Tactile_Audit_${clientName.replace(/\s+/g, '_')}.pdf`,
+            image:        { type: 'jpeg', quality: 1 },
+            html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#050505' },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        // Execute PDF generation
+        html2pdf().set(opt).from(element).save().then(() => {
+            // Post-Flight: Restore UI state
+            actionBar.style.display = 'block';
+            textareas.forEach(ta => {
+                ta.style.height = ''; 
+                ta.style.border = '1px solid #555';
+                ta.style.backgroundColor = '#0B0E14';
+            });
+        });
+    };
+</script>
+
+</body>
+</html>
