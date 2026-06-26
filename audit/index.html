@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UHBM | Tactile Integrity Audit</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;800&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         /* =========================================
-           UHBM Core Aesthetics 
+           APP UI AESTHETICS (DARK MODE)
            ========================================= */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -19,11 +18,7 @@
             padding: 20px 0;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 15px; }
 
         .splash-page-copy1 {
             background-color: rgba(15, 15, 15, 0.95);
@@ -41,224 +36,97 @@
             letter-spacing: 1px;
         }
 
-        .header-section {
-            text-align: center;
-            margin-bottom: 40px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 20px;
-        }
-
-        .brand-logo {
-            max-width: 180px;
-            margin: 0 auto 20px auto;
-            display: block;
-        }
+        .header-section { text-align: center; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+        .brand-logo { max-width: 180px; margin: 0 auto 20px auto; display: block; }
 
         /* --- Form Elements --- */
-        .audit-phase {
-            margin-bottom: 35px;
-            padding-bottom: 25px;
-            border-bottom: 1px dashed #333;
-        }
-        
+        .audit-phase { margin-bottom: 35px; padding-bottom: 25px; border-bottom: 1px dashed #333; }
         .audit-phase:last-of-type { border-bottom: none; }
 
-        .phase-header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
+        .phase-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .audit-phase h3 { color: #FCF6BA; font-size: 1.3rem; flex-grow: 1; }
+        .audit-phase p.phase-desc { color: #aaaaaa; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.4; }
 
-        .audit-phase h3 {
-            color: #FCF6BA;
-            font-size: 1.3rem;
-            flex-grow: 1;
-        }
-
-        .audit-phase p.phase-desc {
-            color: #aaaaaa;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #cccccc;
-            font-weight: 500;
-        }
-
+        label { display: block; margin-bottom: 8px; color: #cccccc; font-weight: 500; }
         input[type="text"], textarea {
-            width: 100%;
-            background-color: #0B0E14;
-            border: 1px solid #555;
-            color: #FFF;
-            padding: 12px;
-            border-radius: 4px;
-            font-family: 'Raleway', sans-serif;
-            margin-bottom: 15px;
-            transition: border-color 0.3s ease;
+            width: 100%; background-color: #0B0E14; border: 1px solid #555; color: #FFF;
+            padding: 12px; border-radius: 4px; font-family: 'Raleway', sans-serif; margin-bottom: 15px;
         }
-
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: #BF953F;
-        }
-
+        input[type="text"]:focus, textarea:focus { outline: none; border-color: #BF953F; }
         textarea { resize: vertical; min-height: 80px; }
 
         /* --- Custom Range Slider --- */
-        .slider-container {
-            margin-bottom: 15px;
-        }
-
-        input[type="range"] {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 6px;
-            background: #333;
-            border-radius: 5px;
-            outline: none;
-            margin-top: 10px;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #BF953F;
-            cursor: pointer;
-        }
+        .slider-container { margin-bottom: 15px; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; background: #333; border-radius: 5px; margin-top: 10px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #BF953F; cursor: pointer; }
 
         .score-display {
-            font-weight: 800;
-            color: #BF953F;
-            font-size: 1.2rem;
-            background: rgba(191, 149, 63, 0.1);
-            padding: 4px 10px;
-            border-radius: 4px;
-            border: 1px solid #BF953F;
-            text-align: center;
-            min-width: 60px;
+            font-weight: 800; color: #BF953F; font-size: 1.2rem; background: rgba(191, 149, 63, 0.1);
+            padding: 4px 10px; border-radius: 4px; border: 1px solid #BF953F; text-align: center; min-width: 60px;
         }
 
         /* --- Results Dashboard --- */
-        .results-box {
-            background-color: #0B0E14;
-            border: 1px solid #BF953F;
-            border-radius: 6px;
-            padding: 25px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
+        .results-box { background-color: #0B0E14; border: 1px solid #BF953F; border-radius: 6px; padding: 25px; text-align: center; margin-top: 30px; }
         .results-box h2 { font-size: 2rem; margin-bottom: 10px; }
         .diagnostic-text { color: #cccccc; font-style: italic; line-height: 1.5; }
 
         /* --- Buttons --- */
-        .action-bar {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            margin-top: 20px;
-            padding-bottom: 50px; /* Safe space for iOS swipe bar */
-        }
-
-        .clear-btn {
-            background: transparent;
-            color: #888;
-            border: none;
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 10px;
-        }
-
+        .action-bar { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-top: 20px; padding-bottom: 50px; }
+        .clear-btn { background: transparent; color: #888; border: none; font-size: 0.9rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 10px; }
         .uhbm-pill-button {
             background: linear-gradient(180deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            border: 2px solid #0B0E14;
-            border-radius: 30px;
-            color: #050505;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(191, 149, 63, 0.3);
-            width: 100%;
-            max-width: 350px;
+            border: 2px solid #0B0E14; border-radius: 30px; color: #050505; padding: 15px 40px;
+            font-size: 1.1rem; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; width: 100%; max-width: 350px;
         }
+
+        @media (max-width: 768px) { .splash-page-copy1 { padding: 25px 15px; margin: 10px; } .results-box h2 { font-size: 1.5rem; } }
 
         /* =========================================
-           PDF PRINT-STATE OVERLAY (THE FIX)
+           PRINT ENGINE (WHITE BACKGROUND REPORT)
            ========================================= */
-        .pdf-export-mode {
-            background-color: #050505 !important;
-            padding: 0 !important;
-        }
-        
-        .pdf-export-mode .splash-page-copy1 {
-            border: none !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-            padding: 15px 25px !important;
-        }
+        #print-ui { display: none; } /* Hidden entirely on screen */
 
-        .pdf-export-mode .brand-logo {
-            width: 150px !important; 
-            margin-bottom: 10px !important;
-        }
+        @media print {
+            /* Hide the web app entirely */
+            #app-ui { display: none !important; }
+            
+            /* Show the beautiful white report */
+            #print-ui { display: block !important; background: #FFFFFF; color: #000000; padding: 0.5in; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+            
+            /* Force white background natively in browser */
+            body, html { background-color: #FFFFFF !important; }
 
-        .pdf-export-mode .audit-phase {
-            page-break-inside: avoid !important; 
-            break-inside: avoid !important;
-            margin-bottom: 20px !important;
-            padding-bottom: 15px !important;
-            border-bottom: 1px solid #222 !important;
-        }
+            .print-header { text-align: center; border-bottom: 2px solid #BF953F; padding-bottom: 15px; margin-bottom: 30px; }
+            .print-logo { max-width: 140px; margin: 0 auto 15px; display: block; }
+            .print-title { font-size: 26px; font-weight: 800; color: #000; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+            .print-subtitle { font-size: 14px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
 
-        .pdf-export-mode input[type="text"], 
-        .pdf-export-mode textarea {
-            background-color: transparent !important;
-            border: none !important;
-            color: #BF953F !important; 
-            font-weight: 500;
-            font-size: 1.05rem !important;
-            padding: 5px 0 !important;
-        }
+            .print-meta-grid { display: flex; justify-content: space-between; margin-bottom: 40px; font-size: 14px; }
+            .print-meta-grid strong { color: #BF953F; }
 
-        .pdf-export-mode textarea::placeholder,
-        .pdf-export-mode input::placeholder {
-            color: transparent !important; 
-        }
+            .print-phase { margin-bottom: 30px; page-break-inside: avoid; break-inside: avoid; }
+            .print-phase-head { display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 10px; }
+            .print-phase-title { font-size: 16px; font-weight: bold; color: #000; }
+            .print-phase-score { font-size: 16px; font-weight: bold; color: #BF953F; }
+            .print-phase-notes { font-size: 14px; line-height: 1.6; color: #333; white-space: pre-wrap; padding-left: 10px; border-left: 3px solid #BF953F; }
 
-        .pdf-export-mode input[type="range"] { display: none !important; }
-        
-        /* THE FIX: Only hide the action bar when the PDF engine is running */
-        .pdf-export-mode .hide-for-export { display: none !important; }
-
-        @media (max-width: 768px) {
-            .splash-page-copy1 { padding: 25px 15px; margin: 10px; }
-            .results-box h2 { font-size: 1.5rem; }
+            .print-results-box {
+                margin-top: 40px; border: 2px solid #BF953F; padding: 25px; text-align: center;
+                page-break-inside: avoid; background-color: #FAFAFA !important; -webkit-print-color-adjust: exact;
+            }
+            .print-results-box h2 { font-size: 22px; color: #B38728; margin-bottom: 10px; }
+            .print-results-box p { font-size: 14px; font-style: italic; color: #444; line-height: 1.5; }
         }
     </style>
 </head>
 <body>
 
-<div class="container" id="main-container">
-    <div id="audit-report" class="splash-page-copy1">
-        
+<div id="app-ui" class="container">
+    <div class="splash-page-copy1">
         <div class="header-section">
             <img src="../assets/images/uhbm-site-logo.png" alt="UHBM Logo" class="brand-logo" onerror="this.style.display='none';">
             <h1 class="glow-text">Tactile Integrity Audit</h1>
-            <p style="color:#aaa; margin-top:5px;">Sign-to-Receipt Protocol Diagnostics</p>
+            <p style="color:#aaa; margin-top:5px;">Sign-to-Receipt Protocol</p>
         </div>
 
         <label for="clientName">Target Entity / Business Name</label>
@@ -273,9 +141,7 @@
                 <div class="score-display"><span id="val_p1">5</span>/10</div>
             </div>
             <p class="phase-desc">The Approach, The 10-Second Rule, Sensory Navigation & Visual Merchandising.</p>
-            <div class="slider-container">
-                <input type="range" id="score_p1" class="phase-slider auto-save" min="1" max="10" value="5">
-            </div>
+            <div class="slider-container"><input type="range" id="score_p1" class="phase-slider auto-save" min="1" max="10" value="5"></div>
             <textarea id="notes_p1" class="auto-save" placeholder="Document friction points, sensory breaches, or wins..."></textarea>
         </div>
 
@@ -285,9 +151,7 @@
                 <div class="score-display"><span id="val_p2">5</span>/10</div>
             </div>
             <p class="phase-desc">The Greeting, The "Surgery Drop" Vulnerability Test, Active Listening Capabilities.</p>
-            <div class="slider-container">
-                <input type="range" id="score_p2" class="phase-slider auto-save" min="1" max="10" value="5">
-            </div>
+            <div class="slider-container"><input type="range" id="score_p2" class="phase-slider auto-save" min="1" max="10" value="5"></div>
             <textarea id="notes_p2" class="auto-save" placeholder="Did they guide you consultatively or act as a transactional cashier?"></textarea>
         </div>
 
@@ -297,9 +161,7 @@
                 <div class="score-display"><span id="val_p3">5</span>/10</div>
             </div>
             <p class="phase-desc">The Floor Experience, Translation of Value vs. Price, Service Policy Clarification.</p>
-            <div class="slider-container">
-                <input type="range" id="score_p3" class="phase-slider auto-save" min="1" max="10" value="5">
-            </div>
+            <div class="slider-container"><input type="range" id="score_p3" class="phase-slider auto-save" min="1" max="10" value="5"></div>
             <textarea id="notes_p3" class="auto-save" placeholder="Did they sell peace of mind, or just a piece of metal?"></textarea>
         </div>
 
@@ -309,9 +171,7 @@
                 <div class="score-display"><span id="val_p4">5</span>/10</div>
             </div>
             <p class="phase-desc">The Upsell, Anticipatory Needs, Natural Cross-Selling without pressure.</p>
-            <div class="slider-container">
-                <input type="range" id="score_p4" class="phase-slider auto-save" min="1" max="10" value="5">
-            </div>
+            <div class="slider-container"><input type="range" id="score_p4" class="phase-slider auto-save" min="1" max="10" value="5"></div>
             <textarea id="notes_p4" class="auto-save" placeholder="Did they naturally guide you into their broader brand ecosystem?"></textarea>
         </div>
 
@@ -321,9 +181,7 @@
                 <div class="score-display"><span id="val_p5">5</span>/10</div>
             </div>
             <p class="phase-desc">The Crinkled Receipt Standard, Handling the Non-Sale, Provision of Artifacts & Follow-up Capture.</p>
-            <div class="slider-container">
-                <input type="range" id="score_p5" class="phase-slider auto-save" min="1" max="10" value="5">
-            </div>
+            <div class="slider-container"><input type="range" id="score_p5" class="phase-slider auto-save" min="1" max="10" value="5"></div>
             <textarea id="notes_p5" class="auto-save" placeholder="Did hospitality vanish when the wallet stayed put? Were artifacts provided?"></textarea>
         </div>
 
@@ -337,17 +195,81 @@
             <h2 class="glow-text">Integrity Confidence Score: <span id="final_percentage">50</span>%</h2>
             <p id="diagnostic_output" class="diagnostic-text">Awaiting data...</p>
         </div>
+    </div> 
 
-    </div> <div class="action-bar hide-for-export" id="action-bar">
-        <button onclick="exportToPDF()" class="uhbm-pill-button">Export Official PDF</button>
+    <div class="action-bar">
+        <button onclick="triggerPrintExport()" class="uhbm-pill-button">Export Official PDF</button>
         <button onclick="clearAudit()" class="clear-btn">Clear Form</button>
     </div>
+</div>
 
+<div id="print-ui">
+    <div class="print-header">
+        <img src="../assets/images/uhbm-site-logo.png" alt="UHBM Logo" class="print-logo" onerror="this.style.display='none';">
+        <div class="print-title">Tactile Integrity Audit</div>
+        <div class="print-subtitle">Sign-to-Receipt Protocol Diagnostics</div>
+    </div>
+
+    <div class="print-meta-grid">
+        <div><strong>Target Entity:</strong> <span id="pr-client"></span></div>
+        <div><strong>Date:</strong> <span id="pr-date"></span></div>
+    </div>
+
+    <div class="print-phase">
+        <div class="print-phase-head">
+            <div class="print-phase-title">Phase 1: Environment & Initial Engagement</div>
+            <div class="print-phase-score" id="pr-sc-1"></div>
+        </div>
+        <div class="print-phase-notes" id="pr-note-1"></div>
+    </div>
+
+    <div class="print-phase">
+        <div class="print-phase-head">
+            <div class="print-phase-title">Phase 2: Qualification & Empathy Mapping</div>
+            <div class="print-phase-score" id="pr-sc-2"></div>
+        </div>
+        <div class="print-phase-notes" id="pr-note-2"></div>
+    </div>
+
+    <div class="print-phase">
+        <div class="print-phase-head">
+            <div class="print-phase-title">Phase 3: Product Navigation & Value Articulation</div>
+            <div class="print-phase-score" id="pr-sc-3"></div>
+        </div>
+        <div class="print-phase-notes" id="pr-note-3"></div>
+    </div>
+
+    <div class="print-phase">
+        <div class="print-phase-head">
+            <div class="print-phase-title">Phase 4: Ecosystem Integration</div>
+            <div class="print-phase-score" id="pr-sc-4"></div>
+        </div>
+        <div class="print-phase-notes" id="pr-note-4"></div>
+    </div>
+
+    <div class="print-phase">
+        <div class="print-phase-head">
+            <div class="print-phase-title">Phase 5: The "Graceful Exit" & Offboarding</div>
+            <div class="print-phase-score" id="pr-sc-5"></div>
+        </div>
+        <div class="print-phase-notes" id="pr-note-5"></div>
+    </div>
+
+    <div class="print-phase">
+        <div class="print-phase-head">
+            <div class="print-phase-title">Master Resolution & Assessment Findings</div>
+        </div>
+        <div class="print-phase-notes" id="pr-master" style="border-color: #333;"></div>
+    </div>
+
+    <div class="print-results-box">
+        <h2 id="pr-final-score">Integrity Confidence Score: 0%</h2>
+        <p id="pr-diagnostic"></p>
+    </div>
 </div>
 
 <script>
     // --- Logic & Algorithm Engine ---
-    
     const elements = document.querySelectorAll('.auto-save');
     const sliders = document.querySelectorAll('.phase-slider');
 
@@ -381,9 +303,7 @@
         const saved = localStorage.getItem('uhbm_audit_state');
         if (saved) {
             const auditData = JSON.parse(saved);
-            elements.forEach(el => {
-                if(auditData[el.id]) el.value = auditData[el.id];
-            });
+            elements.forEach(el => { if(auditData[el.id]) el.value = auditData[el.id]; });
         }
         const dateInput = document.getElementById('auditDate');
         if(!dateInput.value) {
@@ -403,38 +323,23 @@
         }
     }
 
-    // --- High-Fidelity PDF Export Engine ---
-    const exportToPDF = () => {
-        const wrapper = document.getElementById('main-container');
-        const element = document.getElementById('audit-report');
-        const textareas = document.querySelectorAll('textarea');
-        const clientName = document.getElementById('clientName').value || "Audit";
-
-        // Pre-Flight: Apply Print-State Overlay
-        wrapper.classList.add('pdf-export-mode');
+    // --- NATIVE PRINT EXPORT ENGINE (The Fix) ---
+    const triggerPrintExport = () => {
+        // 1. Send all data from the app UI into the hidden Print UI
+        document.getElementById('pr-client').innerText = document.getElementById('clientName').value || "Unnamed Client";
+        document.getElementById('pr-date').innerText = document.getElementById('auditDate').value;
         
-        // Expand textareas to reveal full content physically in the DOM
-        textareas.forEach(ta => {
-            ta.style.height = 'auto';
-            ta.style.height = (ta.scrollHeight) + 'px';
-        });
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById(`pr-sc-${i}`).innerText = document.getElementById(`score_p${i}`).value + "/10";
+            document.getElementById(`pr-note-${i}`).innerText = document.getElementById(`notes_p${i}`).value || "No notes recorded for this phase.";
+        }
 
-        // Advanced PDF Configuration to prevent bad page breaks
-        const opt = {
-            margin:       [0.3, 0.2, 0.3, 0.2], 
-            filename:     `UHBM_Tactile_Audit_${clientName.replace(/\s+/g, '_')}.pdf`,
-            image:        { type: 'jpeg', quality: 1 },
-            html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#050505', windowWidth: 800 },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
-            pagebreak:    { mode: ['avoid-all', 'css'] } 
-        };
+        document.getElementById('pr-master').innerText = document.getElementById('master_notes').value || "No master resolution recorded.";
+        document.getElementById('pr-final-score').innerText = "Integrity Confidence Score: " + document.getElementById('final_percentage').innerText + "%";
+        document.getElementById('pr-diagnostic').innerText = document.getElementById('diagnostic_output').innerText;
 
-        // Execute PDF generation
-        html2pdf().set(opt).from(element).save().then(() => {
-            // Post-Flight: Remove Print-State Overlay instantly
-            wrapper.classList.remove('pdf-export-mode');
-            textareas.forEach(ta => { ta.style.height = ''; });
-        });
+        // 2. Trigger the native iOS/Browser Print Dialog
+        window.print();
     };
 </script>
 
