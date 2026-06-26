@@ -9,7 +9,7 @@
 
     <style>
         /* =========================================
-           UHBM Core Aesthetics (Embedded for PDF Integrity)
+           UHBM Core Aesthetics 
            ========================================= */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -63,10 +63,17 @@
         
         .audit-phase:last-of-type { border-bottom: none; }
 
+        .phase-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
         .audit-phase h3 {
             color: #FCF6BA;
-            margin-bottom: 5px;
             font-size: 1.3rem;
+            flex-grow: 1;
         }
 
         .audit-phase p.phase-desc {
@@ -100,16 +107,10 @@
             border-color: #BF953F;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
+        textarea { resize: vertical; min-height: 80px; }
 
         /* --- Custom Range Slider --- */
         .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
             margin-bottom: 15px;
         }
 
@@ -120,6 +121,7 @@
             background: #333;
             border-radius: 5px;
             outline: none;
+            margin-top: 10px;
         }
 
         input[type="range"]::-webkit-slider-thumb {
@@ -135,9 +137,13 @@
         .score-display {
             font-weight: 800;
             color: #BF953F;
-            min-width: 45px;
-            text-align: right;
             font-size: 1.2rem;
+            background: rgba(191, 149, 63, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid #BF953F;
+            text-align: center;
+            min-width: 60px;
         }
 
         /* --- Results Dashboard --- */
@@ -154,10 +160,7 @@
         .diagnostic-text { color: #cccccc; font-style: italic; line-height: 1.5; }
 
         /* --- Buttons --- */
-        .action-bar {
-            text-align: center;
-            margin-top: 20px;
-        }
+        .action-bar { text-align: center; margin-top: 20px; }
 
         .uhbm-pill-button {
             background: linear-gradient(180deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
@@ -171,12 +174,57 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(191, 149, 63, 0.3);
-            transition: transform 0.2s ease;
         }
 
-        .uhbm-pill-button:active { transform: scale(0.98); }
+        /* =========================================
+           PDF PRINT-STATE OVERLAY (THE FIX)
+           ========================================= */
+        .pdf-export-mode {
+            background-color: #050505 !important;
+            padding: 0 !important;
+        }
+        
+        .pdf-export-mode .splash-page-copy1 {
+            border: none !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            padding: 15px 25px !important;
+        }
 
-        /* Mobile tweaks */
+        .pdf-export-mode .brand-logo {
+            width: 150px !important; /* Explicit width prevents full-page blowouts */
+            margin-bottom: 10px !important;
+        }
+
+        .pdf-export-mode .audit-phase {
+            page-break-inside: avoid !important; /* Forces PDF to keep phases together */
+            break-inside: avoid !important;
+            margin-bottom: 20px !important;
+            padding-bottom: 15px !important;
+            border-bottom: 1px solid #222 !important;
+        }
+
+        /* Transform forms into elite text reports */
+        .pdf-export-mode input[type="text"], 
+        .pdf-export-mode textarea {
+            background-color: transparent !important;
+            border: none !important;
+            color: #BF953F !important; /* User inputs turn gold in the PDF */
+            font-weight: 500;
+            font-size: 1.05rem !important;
+            padding: 5px 0 !important;
+        }
+
+        .pdf-export-mode textarea::placeholder,
+        .pdf-export-mode input::placeholder {
+            color: transparent !important; /* Hides placeholders in the PDF */
+        }
+
+        /* Hide the ugly slider bar entirely, keep only the Gold Score Box */
+        .pdf-export-mode input[type="range"] { display: none !important; }
+        
+        .hide-for-export { display: none !important; }
+
         @media (max-width: 768px) {
             .splash-page-copy1 { padding: 25px 15px; margin: 10px; }
             .results-box h2 { font-size: 1.5rem; }
@@ -185,7 +233,7 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="main-container">
     <div id="audit-report" class="splash-page-copy1">
         
         <div class="header-section">
@@ -201,51 +249,61 @@
         <input type="text" id="auditDate" placeholder="MM/DD/YYYY" class="auto-save">
 
         <div class="audit-phase">
-            <h3>Phase 1: Environment & Initial Engagement</h3>
+            <div class="phase-header-flex">
+                <h3>Phase 1: Environment & Initial Engagement</h3>
+                <div class="score-display"><span id="val_p1">5</span>/10</div>
+            </div>
             <p class="phase-desc">The Approach, The 10-Second Rule, Sensory Navigation & Visual Merchandising.</p>
             <div class="slider-container">
                 <input type="range" id="score_p1" class="phase-slider auto-save" min="1" max="10" value="5">
-                <div class="score-display"><span id="val_p1">5</span>/10</div>
             </div>
             <textarea id="notes_p1" class="auto-save" placeholder="Document friction points, sensory breaches, or wins..."></textarea>
         </div>
 
         <div class="audit-phase">
-            <h3>Phase 2: Qualification & Empathy Mapping</h3>
+            <div class="phase-header-flex">
+                <h3>Phase 2: Qualification & Empathy Mapping</h3>
+                <div class="score-display"><span id="val_p2">5</span>/10</div>
+            </div>
             <p class="phase-desc">The Greeting, The "Surgery Drop" Vulnerability Test, Active Listening Capabilities.</p>
             <div class="slider-container">
                 <input type="range" id="score_p2" class="phase-slider auto-save" min="1" max="10" value="5">
-                <div class="score-display"><span id="val_p2">5</span>/10</div>
             </div>
             <textarea id="notes_p2" class="auto-save" placeholder="Did they guide you consultatively or act as a transactional cashier?"></textarea>
         </div>
 
         <div class="audit-phase">
-            <h3>Phase 3: Product Navigation & Value Articulation</h3>
+            <div class="phase-header-flex">
+                <h3>Phase 3: Product Navigation & Value Articulation</h3>
+                <div class="score-display"><span id="val_p3">5</span>/10</div>
+            </div>
             <p class="phase-desc">The Floor Experience, Translation of Value vs. Price, Service Policy Clarification.</p>
             <div class="slider-container">
                 <input type="range" id="score_p3" class="phase-slider auto-save" min="1" max="10" value="5">
-                <div class="score-display"><span id="val_p3">5</span>/10</div>
             </div>
             <textarea id="notes_p3" class="auto-save" placeholder="Did they sell peace of mind, or just a piece of metal?"></textarea>
         </div>
 
         <div class="audit-phase">
-            <h3>Phase 4: Ecosystem Integration</h3>
+            <div class="phase-header-flex">
+                <h3>Phase 4: Ecosystem Integration</h3>
+                <div class="score-display"><span id="val_p4">5</span>/10</div>
+            </div>
             <p class="phase-desc">The Upsell, Anticipatory Needs, Natural Cross-Selling without pressure.</p>
             <div class="slider-container">
                 <input type="range" id="score_p4" class="phase-slider auto-save" min="1" max="10" value="5">
-                <div class="score-display"><span id="val_p4">5</span>/10</div>
             </div>
             <textarea id="notes_p4" class="auto-save" placeholder="Did they naturally guide you into their broader brand ecosystem?"></textarea>
         </div>
 
         <div class="audit-phase">
-            <h3>Phase 5: The "Graceful Exit" & Offboarding</h3>
+            <div class="phase-header-flex">
+                <h3>Phase 5: The "Graceful Exit" & Offboarding</h3>
+                <div class="score-display"><span id="val_p5">5</span>/10</div>
+            </div>
             <p class="phase-desc">The Crinkled Receipt Standard, Handling the Non-Sale, Provision of Artifacts & Follow-up Capture.</p>
             <div class="slider-container">
                 <input type="range" id="score_p5" class="phase-slider auto-save" min="1" max="10" value="5">
-                <div class="score-display"><span id="val_p5">5</span>/10</div>
             </div>
             <textarea id="notes_p5" class="auto-save" placeholder="Did hospitality vanish when the wallet stayed put? Were artifacts provided?"></textarea>
         </div>
@@ -261,7 +319,7 @@
             <p id="diagnostic_output" class="diagnostic-text">Awaiting data...</p>
         </div>
 
-    </div> <div class="action-bar" id="action-bar">
+    </div> <div class="action-bar hide-for-export" id="action-bar">
         <button onclick="clearAudit()" style="background:transparent; color:#aaa; border:none; margin-right:20px; cursor:pointer;">Clear Form</button>
         <button onclick="exportToPDF()" class="uhbm-pill-button">Export Official PDF</button>
     </div>
@@ -274,7 +332,6 @@
     const elements = document.querySelectorAll('.auto-save');
     const sliders = document.querySelectorAll('.phase-slider');
 
-    // Dictionary for the Algorithmic Output
     const getDiagnosticText = (percentage) => {
         if (percentage <= 50) return "Definite Room for Improvement: Critical data breaches of trust detected. The Sign-to-Receipt experience relies heavily on transactional momentum rather than consultative guidance, risking high customer attrition.";
         if (percentage <= 75) return "Some Room for Improvement: Functional baseline achieved, but the ecosystem lacks empathetic depth. Opportunities exist to refine value articulation and ensure offboarding matches the energy of the initial greeting.";
@@ -282,46 +339,33 @@
         return "Superior Service: Exceptional Tactile Integrity. The environment, empathy mapping, and graceful exit create a flawless, high-trust customer journey.";
     };
 
-    // Calculate Master Score
     const calculateScore = () => {
         let totalScore = 0;
         sliders.forEach(slider => {
             const val = parseInt(slider.value);
             totalScore += val;
-            // Update individual span text
             document.getElementById(`val_${slider.id.split('_')[1]}`).innerText = val;
         });
-
-        // Calculate Percentage (5 sliders * 10 max points = 50 max points)
         const percentage = Math.round((totalScore / 50) * 100);
-        
-        // Inject into DOM
         document.getElementById('final_percentage').innerText = percentage;
         document.getElementById('diagnostic_output').innerText = getDiagnosticText(percentage);
     };
 
-    // LocalStorage: Save Data
     const saveState = () => {
         const auditData = {};
-        elements.forEach(el => {
-            auditData[el.id] = el.value;
-        });
+        elements.forEach(el => { auditData[el.id] = el.value; });
         localStorage.setItem('uhbm_audit_state', JSON.stringify(auditData));
         calculateScore();
     };
 
-    // LocalStorage: Load Data
     const loadState = () => {
         const saved = localStorage.getItem('uhbm_audit_state');
         if (saved) {
             const auditData = JSON.parse(saved);
             elements.forEach(el => {
-                if(auditData[el.id]) {
-                    el.value = auditData[el.id];
-                }
+                if(auditData[el.id]) el.value = auditData[el.id];
             });
         }
-        // Auto-fill date if empty
         const dateInput = document.getElementById('auditDate');
         if(!dateInput.value) {
             const today = new Date();
@@ -330,11 +374,7 @@
         calculateScore();
     };
 
-    // Attach Listeners
-    elements.forEach(el => {
-        el.addEventListener('input', saveState);
-    });
-
+    elements.forEach(el => el.addEventListener('input', saveState));
     window.onload = loadState;
 
     const clearAudit = () => {
@@ -344,43 +384,37 @@
         }
     }
 
-    // --- PDF Export Engine ---
+    // --- High-Fidelity PDF Export Engine ---
     const exportToPDF = () => {
+        const wrapper = document.getElementById('main-container');
         const element = document.getElementById('audit-report');
-        const actionBar = document.getElementById('action-bar');
         const textareas = document.querySelectorAll('textarea');
         const clientName = document.getElementById('clientName').value || "Audit";
 
-        // Pre-Flight: Expand Textareas so content isn't cut off in the PDF
+        // Pre-Flight: Apply Print-State Overlay
+        wrapper.classList.add('pdf-export-mode');
+        
+        // Expand textareas to reveal full content physically in the DOM
         textareas.forEach(ta => {
             ta.style.height = 'auto';
-            ta.style.height = (ta.scrollHeight + 5) + 'px';
-            ta.style.overflow = 'hidden';
-            ta.style.border = 'none'; // Looks cleaner on print
-            ta.style.backgroundColor = 'transparent';
+            ta.style.height = (ta.scrollHeight) + 'px';
         });
 
-        // Pre-Flight: Hide UI elements
-        actionBar.style.display = 'none';
-
-        // Configuration
+        // Advanced PDF Configuration to prevent bad page breaks
         const opt = {
-            margin:       0.4,
+            margin:       [0.3, 0.2, 0.3, 0.2], // Top, Right, Bottom, Left margins (in inches)
             filename:     `UHBM_Tactile_Audit_${clientName.replace(/\s+/g, '_')}.pdf`,
             image:        { type: 'jpeg', quality: 1 },
-            html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#050505' },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#050505', windowWidth: 800 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+            pagebreak:    { mode: ['avoid-all', 'css'] } // The magic bullet for preventing cut-off text
         };
 
         // Execute PDF generation
         html2pdf().set(opt).from(element).save().then(() => {
-            // Post-Flight: Restore UI state
-            actionBar.style.display = 'block';
-            textareas.forEach(ta => {
-                ta.style.height = ''; 
-                ta.style.border = '1px solid #555';
-                ta.style.backgroundColor = '#0B0E14';
-            });
+            // Post-Flight: Remove Print-State Overlay instantly
+            wrapper.classList.remove('pdf-export-mode');
+            textareas.forEach(ta => { ta.style.height = ''; });
         });
     };
 </script>
