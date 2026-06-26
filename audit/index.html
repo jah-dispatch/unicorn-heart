@@ -31,7 +31,7 @@
             border-radius: 8px;
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .glow-text {
@@ -160,7 +160,25 @@
         .diagnostic-text { color: #cccccc; font-style: italic; line-height: 1.5; }
 
         /* --- Buttons --- */
-        .action-bar { text-align: center; margin-top: 20px; }
+        .action-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            padding-bottom: 50px; /* Safe space for iOS swipe bar */
+        }
+
+        .clear-btn {
+            background: transparent;
+            color: #888;
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px;
+        }
 
         .uhbm-pill-button {
             background: linear-gradient(180deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
@@ -174,6 +192,8 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(191, 149, 63, 0.3);
+            width: 100%;
+            max-width: 350px;
         }
 
         /* =========================================
@@ -192,24 +212,23 @@
         }
 
         .pdf-export-mode .brand-logo {
-            width: 150px !important; /* Explicit width prevents full-page blowouts */
+            width: 150px !important; 
             margin-bottom: 10px !important;
         }
 
         .pdf-export-mode .audit-phase {
-            page-break-inside: avoid !important; /* Forces PDF to keep phases together */
+            page-break-inside: avoid !important; 
             break-inside: avoid !important;
             margin-bottom: 20px !important;
             padding-bottom: 15px !important;
             border-bottom: 1px solid #222 !important;
         }
 
-        /* Transform forms into elite text reports */
         .pdf-export-mode input[type="text"], 
         .pdf-export-mode textarea {
             background-color: transparent !important;
             border: none !important;
-            color: #BF953F !important; /* User inputs turn gold in the PDF */
+            color: #BF953F !important; 
             font-weight: 500;
             font-size: 1.05rem !important;
             padding: 5px 0 !important;
@@ -217,13 +236,13 @@
 
         .pdf-export-mode textarea::placeholder,
         .pdf-export-mode input::placeholder {
-            color: transparent !important; /* Hides placeholders in the PDF */
+            color: transparent !important; 
         }
 
-        /* Hide the ugly slider bar entirely, keep only the Gold Score Box */
         .pdf-export-mode input[type="range"] { display: none !important; }
         
-        .hide-for-export { display: none !important; }
+        /* THE FIX: Only hide the action bar when the PDF engine is running */
+        .pdf-export-mode .hide-for-export { display: none !important; }
 
         @media (max-width: 768px) {
             .splash-page-copy1 { padding: 25px 15px; margin: 10px; }
@@ -320,8 +339,8 @@
         </div>
 
     </div> <div class="action-bar hide-for-export" id="action-bar">
-        <button onclick="clearAudit()" style="background:transparent; color:#aaa; border:none; margin-right:20px; cursor:pointer;">Clear Form</button>
         <button onclick="exportToPDF()" class="uhbm-pill-button">Export Official PDF</button>
+        <button onclick="clearAudit()" class="clear-btn">Clear Form</button>
     </div>
 
 </div>
@@ -402,12 +421,12 @@
 
         // Advanced PDF Configuration to prevent bad page breaks
         const opt = {
-            margin:       [0.3, 0.2, 0.3, 0.2], // Top, Right, Bottom, Left margins (in inches)
+            margin:       [0.3, 0.2, 0.3, 0.2], 
             filename:     `UHBM_Tactile_Audit_${clientName.replace(/\s+/g, '_')}.pdf`,
             image:        { type: 'jpeg', quality: 1 },
             html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#050505', windowWidth: 800 },
             jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
-            pagebreak:    { mode: ['avoid-all', 'css'] } // The magic bullet for preventing cut-off text
+            pagebreak:    { mode: ['avoid-all', 'css'] } 
         };
 
         // Execute PDF generation
