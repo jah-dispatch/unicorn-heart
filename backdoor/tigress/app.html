@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Tigress Cultivars — Guest Portal</title>
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
     <style>
         :root {
             --bg-matte-black: #0d0e10;
@@ -48,13 +48,13 @@
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             position: relative;
-            min-height: 750px;
+            min-height: 800px;
             display: flex;
             flex-direction: column;
         }
 
         .screen {
-            display: none; /* Hidden by default */
+            display: none; 
             flex-direction: column;
             padding: 30px 24px;
             height: 100%;
@@ -85,39 +85,50 @@
         .btn-secondary { width: 100%; background: transparent; color: var(--platinum-grey); border: none; padding: 15px; font-size: 0.8rem; cursor: pointer; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
 
         /* DASHBOARD ELEMENTS */
-        .dash-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--card-border); margin-bottom: 25px; }
-        .guest-id { font-size: 0.8rem; color: var(--platinum-grey); letter-spacing: 1px; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--card-border); margin-bottom: 15px; }
+        .guest-name { font-size: 1.1rem; font-weight: 800; color: var(--platinum-light); letter-spacing: 1px; text-transform: uppercase; }
+        .guest-id { font-size: 0.7rem; color: var(--platinum-grey); letter-spacing: 1px; margin-top: 4px; }
         .tier-badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: 6px 12px; border-radius: 20px; border: 1px solid; }
         .tier-orange { color: var(--orange-tier); border-color: var(--orange-tier); background: rgba(249, 115, 22, 0.1); }
         
-        /* DOMED GAUGE (PetSmart Style) */
-        .gauge-container { text-align: center; margin-bottom: 30px; position: relative; }
-        .domed-gauge { width: 220px; margin: 0 auto; display: block; overflow: visible; }
+        /* DOMED GAUGE */
+        .gauge-container { text-align: center; margin-bottom: 20px; position: relative; }
+        .domed-gauge { width: 200px; margin: 0 auto; display: block; overflow: visible; }
         .gauge-bg { fill: none; stroke: var(--card-border); stroke-width: 12; stroke-linecap: round; }
         .gauge-fill { fill: none; stroke: var(--orange-tier); stroke-width: 12; stroke-linecap: round; stroke-dasharray: 125.6; stroke-dashoffset: 125.6; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        
         .gauge-data { position: absolute; bottom: 10px; left: 0; width: 100%; text-align: center; }
-        .gauge-spend { font-size: 2rem; font-weight: 700; color: var(--text-main); }
-        .gauge-target { font-size: 0.8rem; color: var(--platinum-grey); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+        .gauge-spend { font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
+        .gauge-target { font-size: 0.75rem; color: var(--platinum-grey); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
-        /* PROGRESS INFO */
-        .progress-details { background: var(--bg-matte-black); border: 1px solid var(--card-border); padding: 15px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
-        .progress-text { font-size: 0.8rem; color: var(--platinum-grey); line-height: 1.4; }
-        .progress-amount { font-size: 1.1rem; color: var(--silver-tier); font-weight: 700; }
-
-        /* RECENT VISITS & REWARDS */
-        .section-heading { font-size: 0.75rem; color: var(--platinum-grey); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; border-bottom: 1px solid var(--card-border); padding-bottom: 5px; }
+        /* TABS NAVIGATION */
+        .tab-nav { display: flex; border-bottom: 1px solid var(--card-border); margin-bottom: 20px; }
+        .tab-btn { flex: 1; background: none; border: none; padding: 12px 0; color: var(--platinum-grey); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s ease; }
+        .tab-btn:hover { color: var(--orange-tier); }
+        .tab-btn.active { color: var(--orange-tier); border-bottom-color: var(--orange-tier); }
         
-        .reward-card { background: linear-gradient(145deg, rgba(229, 169, 59, 0.1) 0%, rgba(21, 24, 28, 1) 100%); border: 1px solid rgba(229, 169, 59, 0.3); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
-        .reward-icon { width: 40px; height: 40px; background: var(--bg-matte-black); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid var(--amber-2700k); color: var(--amber-2700k); font-weight: bold; }
-        .reward-info h4 { font-size: 0.9rem; color: var(--platinum-light); margin-bottom: 4px; }
-        .reward-info p { font-size: 0.75rem; color: var(--platinum-grey); }
+        .tab-content { display: none; flex: 1; overflow-y: auto; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
 
+        /* TAB 1: HISTORY */
         .visit-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--card-border); }
         .visit-row:last-child { border-bottom: none; }
-        .visit-date { font-size: 0.85rem; color: var(--platinum-light); }
-        .visit-type { font-size: 0.75rem; color: var(--text-muted); }
-        .visit-spend { font-size: 0.9rem; color: var(--velvet-green); font-weight: 600; }
+        .visit-date { font-size: 0.85rem; color: var(--platinum-light); font-weight: 600; }
+        .visit-details { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+        .visit-spend { font-size: 0.9rem; color: var(--velvet-green); font-weight: 600; text-align: right; }
+
+        /* TAB 2: PAYMENT PROFILE */
+        .qr-container { text-align: center; padding: 20px; background: var(--bg-matte-black); border: 1px solid var(--card-border); border-radius: 12px; margin-top: 10px; }
+        .qr-mockup { width: 150px; height: 150px; background: #fff; margin: 0 auto 15px auto; padding: 10px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 2px; }
+        .qr-dot { width: 12px; height: 12px; background: #000; } /* Simple visual mockup */
+        .dutchie-badge { display: inline-block; padding: 4px 10px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--velvet-green); color: var(--velvet-green); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; border-radius: 4px; margin-bottom: 10px; }
+
+        /* TAB 3: OUTREACH */
+        .outreach-quote { font-size: 0.85rem; color: var(--platinum-light); font-style: italic; line-height: 1.5; padding-left: 12px; border-left: 3px solid var(--velvet-green); margin-bottom: 20px; }
+        .outreach-card { background: linear-gradient(145deg, rgba(16, 185, 129, 0.1) 0%, rgba(21, 24, 28, 1) 100%); border: 1px solid rgba(16, 185, 129, 0.3); padding: 20px; border-radius: 12px; text-align: center; }
+        .outreach-amount { font-size: 2.5rem; font-weight: 700; color: var(--velvet-green); margin: 10px 0; }
+        .date-filter { display: flex; gap: 10px; margin-bottom: 20px; }
+        .date-filter input { flex: 1; background: var(--bg-matte-black); border: 1px solid var(--card-border); color: var(--text-muted); padding: 8px; border-radius: 4px; font-size: 0.75rem; color-scheme: dark; }
+
     </style>
 </head>
 <body>
@@ -127,7 +138,6 @@
         <!-- SCREEN 1: SIGN UP -->
         <div id="screen-signup" class="screen active">
             <div class="app-header">
-                <!-- Replaced the broken SVG with the verified PNG asset -->
                 <div class="logo-placeholder">
                     <img src="leaf.png" alt="Tigress Cultivars Logo" style="width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 0 4px var(--amber-glow));">
                 </div>
@@ -140,6 +150,10 @@
             </p>
 
             <div class="input-group">
+                <label>First Name</label>
+                <input type="text" id="signup-name" placeholder="Jack">
+            </div>
+            <div class="input-group">
                 <label>Email Address</label>
                 <input type="email" id="signup-email" placeholder="guest@example.com">
             </div>
@@ -151,7 +165,6 @@
             <button class="btn-primary" onclick="goToVerify()">Create Account</button>
             <button class="btn-secondary">Log In Instead</button>
         </div>
-
 
         <!-- SCREEN 2: VERIFICATION -->
         <div id="screen-verify" class="screen">
@@ -172,18 +185,17 @@
             <button class="btn-secondary" onclick="goBack()">Return</button>
         </div>
 
-
         <!-- SCREEN 3: GUEST DASHBOARD -->
         <div id="screen-dashboard" class="screen">
             <div class="dash-header">
                 <div>
-                    <div class="brand-title" style="font-size: 0.9rem;">Tigress Cultivars</div>
+                    <div class="guest-name" id="display-name">Welcome, Guest</div>
                     <div class="guest-id">Folio: TIG-8492</div>
                 </div>
-                <div class="tier-badge tier-orange" id="user-tier">Orange Status</div>
+                <div class="tier-badge tier-orange">Orange Status</div>
             </div>
 
-            <!-- THE DOMED GAUGE -->
+            <!-- DOMED GAUGE -->
             <div class="gauge-container">
                 <svg viewBox="0 0 100 50" class="domed-gauge">
                     <path class="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" />
@@ -191,56 +203,90 @@
                 </svg>
                 <div class="gauge-data">
                     <div class="gauge-spend" id="current-spend">$180.00</div>
-                    <div class="gauge-target">Current Net Spend</div>
+                    <div class="gauge-target">Net Spend to Silver: $270.00 left</div>
                 </div>
             </div>
 
-            <div class="progress-details">
-                <div class="progress-text">
-                    Spend required to unlock<br><strong>Silver Status (Velvet Upgrade)</strong>:
-                </div>
-                <div class="progress-amount" id="remaining-spend">$270.00</div>
+            <!-- TAB NAVIGATION -->
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('history', this)">Purchase History</button>
+                <button class="tab-btn" onclick="switchTab('payment', this)">Payment Profile</button>
+                <button class="tab-btn" onclick="switchTab('outreach', this)">Outreach</button>
             </div>
 
-            <div class="section-heading">Available Folio Rewards</div>
-            <div class="reward-card">
-                <div class="reward-icon">%</div>
-                <div class="reward-info">
-                    <h4>Welcome Back Voucher</h4>
-                    <p>20% off your first scheduled Core Reset somatic massage.</p>
-                </div>
-            </div>
-
-            <div class="section-heading">Recent Folio History (Rolling 365)</div>
-            <div style="flex: 1; overflow-y: auto;">
+            <!-- TAB CONTENT: HISTORY -->
+            <div id="tab-history" class="tab-content active">
+                <div style="font-size: 0.75rem; color: var(--platinum-grey); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Recent Folio Activity</div>
                 <div class="visit-row">
                     <div>
                         <div class="visit-date">Oct 14, 2026</div>
-                        <div class="visit-type">Retail Walk-In</div>
+                        <div class="visit-details">Mary Jane's 1:1, Wana Optimals, Green Dot</div>
                     </div>
-                    <div class="visit-spend">$180.00</div>
+                    <div class="visit-spend">$180.00<br><span style="font-size: 0.65rem; color: var(--platinum-grey); font-weight: normal;">Retail Walk-In</span></div>
+                </div>
+                <div class="visit-row">
+                    <div>
+                        <div class="visit-date">Sep 02, 2026</div>
+                        <div class="visit-details">Core Reset Massage Deposit</div>
+                    </div>
+                    <div class="visit-spend">$120.00<br><span style="font-size: 0.65rem; color: var(--platinum-grey); font-weight: normal;">Somatic Service</span></div>
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-size: 0.7rem; color: var(--text-muted);">
+                    Status recalibrates on rolling 365-day calendar.
                 </div>
             </div>
-            
-            <div style="text-align: center; margin-top: 20px; font-size: 0.7rem; color: var(--text-muted);">
-                Status recalibrates on Oct 14, 2027
-            </div>
-        </div>
 
+            <!-- TAB CONTENT: PAYMENT PROFILE -->
+            <div id="tab-payment" class="tab-content">
+                <p style="font-size: 0.85rem; color: var(--platinum-grey); text-align: center; margin-bottom: 10px;">Present this secure code at the Velvet Tray for frictionless folio settlement.</p>
+                <div class="qr-container">
+                    <div class="dutchie-badge">Dutchie Pay ACH Active</div>
+                    
+                    <!-- Mock QR Code visual -->
+                    <div class="qr-mockup">
+                        <!-- Purely visual CSS blocks to simulate a QR -->
+                        <script>
+                            for(let i=0; i<100; i++) {
+                                document.write(`<div class="qr-dot" style="opacity: ${Math.random() > 0.4 ? 1 : 0}"></div>`);
+                            }
+                        </script>
+                    </div>
+                    
+                    <div style="font-size: 0.75rem; color: var(--platinum-light); letter-spacing: 2px;">SCAN TO SETTLE</div>
+                </div>
+                <button class="btn-secondary" style="margin-top: 15px;">Update Bank Link</button>
+            </div>
+
+            <!-- TAB CONTENT: OUTREACH -->
+            <div id="tab-outreach" class="tab-content">
+                <div class="outreach-quote">
+                    "You've really taken care of yourself AND OTHERS in the community. We at Tigress Cultivars couldn't be happier that you chose us to help the community."
+                </div>
+                
+                <div class="date-filter">
+                    <input type="date" value="2026-01-01">
+                    <input type="date" value="2026-12-31">
+                </div>
+
+                <div class="outreach-card">
+                    <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--platinum-light);">Your Total Mesa County Impact</div>
+                    <div class="outreach-amount">$3.60</div>
+                    <div style="font-size: 0.7rem; color: var(--platinum-grey);">Calculated at 2% of total net retail sales. Funds distributed to United Way of the Grand Valley & Food Bank of the Rockies.</div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <!-- PROTOTYPE LOGIC -->
     <script>
-        // Data Configuration (Simulated Backend)
-        const guestData = {
-            netSpend: 180.00,
-            silverTarget: 450.00,
-            goldTarget: 900.00
-        };
+        const guestData = { netSpend: 180.00, silverTarget: 450.00 };
 
-        // Navigation Functions
         function goToVerify() {
+            const name = document.getElementById('signup-name').value || "Guest";
             const email = document.getElementById('signup-email').value || "guest@example.com";
+            
+            document.getElementById('display-name').innerText = "Welcome, " + name;
             document.getElementById('display-email').innerText = email;
             
             document.getElementById('screen-signup').classList.remove('active');
@@ -255,27 +301,26 @@
         function goToDashboard() {
             document.getElementById('screen-verify').classList.remove('active');
             document.getElementById('screen-dashboard').classList.add('active');
-            
-            // Trigger Gauge Animation after rendering
             setTimeout(animateGauge, 100);
         }
 
-        // Mathematical Gauge Logic
         function animateGauge() {
-            // The total length of the SVG half-circle path (Pi * radius of 40 = ~125.6)
             const strokeDasharray = 125.6; 
             const progressFill = document.getElementById('progress-fill');
-            
-            // Calculate percentage toward next tier (Silver)
             let percentComplete = guestData.netSpend / guestData.silverTarget;
             if (percentComplete > 1) percentComplete = 1;
-
-            // Calculate the stroke offset. 
-            // 125.6 is empty (0%). 0 is full (100%).
             const offset = strokeDasharray - (strokeDasharray * percentComplete);
-            
-            // Apply animation
             progressFill.style.strokeDashoffset = offset;
+        }
+
+        function switchTab(tabId, btnElement) {
+            // Remove active classes
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and target tab
+            btnElement.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
         }
     </script>
 </body>
