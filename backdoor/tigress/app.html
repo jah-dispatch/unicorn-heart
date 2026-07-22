@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Tigress Cultivars — Guest Portal</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <style>
+        :root {
+            --bg-matte-black: #0d0e10;
+            --card-bg: #15181c;
+            --card-border: #23272e;
+            --amber-2700k: #e5a93b;
+            --amber-glow: rgba(229, 169, 59, 0.25);
+            --velvet-green: #10b981;
+            --velvet-green-glow: rgba(16, 185, 129, 0.2);
+            --platinum-grey: #9ca3af;
+            --platinum-light: #e5e7eb;
+            --text-main: #f3f4f6;
+            --text-muted: #6b7280;
+            --orange-tier: #f97316;
+            --silver-tier: #d1d5db;
+            --gold-tier: #fbbf24;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { 
+            background-color: var(--bg-matte-black); 
+            color: var(--text-main); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* MOBILE APP CONTAINER */
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            position: relative;
+            min-height: 750px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            padding: 30px 24px;
+            height: 100%;
+            flex: 1;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .screen.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* BRANDING */
+        .app-header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
+        .logo-placeholder { width: 80px; height: 80px; margin: 0 auto 15px auto; display: flex; justify-content: center; align-items: center; background: var(--bg-matte-black); border-radius: 50%; border: 1px solid var(--amber-2700k); box-shadow: 0 0 15px var(--amber-glow); overflow: hidden; }
+        .brand-title { font-size: 1.2rem; font-weight: 800; letter-spacing: 4px; color: var(--platinum-light); text-transform: uppercase; }
+
+        /* FORMS */
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.75rem; color: var(--platinum-grey); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .input-group input { width: 100%; background: var(--bg-matte-black); border: 1px solid var(--card-border); color: var(--text-main); padding: 15px; border-radius: 8px; outline: none; font-size: 1rem; transition: border 0.3s; }
+        .input-group input:focus { border-color: var(--amber-2700k); }
+
+        .btn-primary { width: 100%; background: transparent; color: var(--amber-2700k); border: 1px solid var(--amber-2700k); padding: 16px; font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; }
+        .btn-primary:hover { background: var(--amber-glow); box-shadow: 0 0 15px var(--amber-glow); }
+        .btn-secondary { width: 100%; background: transparent; color: var(--platinum-grey); border: none; padding: 15px; font-size: 0.8rem; cursor: pointer; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* DASHBOARD ELEMENTS */
+        .dash-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--card-border); margin-bottom: 25px; }
+        .guest-id { font-size: 0.8rem; color: var(--platinum-grey); letter-spacing: 1px; }
+        .tier-badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: 6px 12px; border-radius: 20px; border: 1px solid; }
+        .tier-orange { color: var(--orange-tier); border-color: var(--orange-tier); background: rgba(249, 115, 22, 0.1); }
+        
+        /* DOMED GAUGE (PetSmart Style) */
+        .gauge-container { text-align: center; margin-bottom: 30px; position: relative; }
+        .domed-gauge { width: 220px; margin: 0 auto; display: block; overflow: visible; }
+        .gauge-bg { fill: none; stroke: var(--card-border); stroke-width: 12; stroke-linecap: round; }
+        .gauge-fill { fill: none; stroke: var(--orange-tier); stroke-width: 12; stroke-linecap: round; stroke-dasharray: 125.6; stroke-dashoffset: 125.6; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .gauge-data { position: absolute; bottom: 10px; left: 0; width: 100%; text-align: center; }
+        .gauge-spend { font-size: 2rem; font-weight: 700; color: var(--text-main); }
+        .gauge-target { font-size: 0.8rem; color: var(--platinum-grey); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+
+        /* PROGRESS INFO */
+        .progress-details { background: var(--bg-matte-black); border: 1px solid var(--card-border); padding: 15px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        .progress-text { font-size: 0.8rem; color: var(--platinum-grey); line-height: 1.4; }
+        .progress-amount { font-size: 1.1rem; color: var(--silver-tier); font-weight: 700; }
+
+        /* RECENT VISITS & REWARDS */
+        .section-heading { font-size: 0.75rem; color: var(--platinum-grey); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; border-bottom: 1px solid var(--card-border); padding-bottom: 5px; }
+        
+        .reward-card { background: linear-gradient(145deg, rgba(229, 169, 59, 0.1) 0%, rgba(21, 24, 28, 1) 100%); border: 1px solid rgba(229, 169, 59, 0.3); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
+        .reward-icon { width: 40px; height: 40px; background: var(--bg-matte-black); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid var(--amber-2700k); color: var(--amber-2700k); font-weight: bold; }
+        .reward-info h4 { font-size: 0.9rem; color: var(--platinum-light); margin-bottom: 4px; }
+        .reward-info p { font-size: 0.75rem; color: var(--platinum-grey); }
+
+        .visit-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--card-border); }
+        .visit-row:last-child { border-bottom: none; }
+        .visit-date { font-size: 0.85rem; color: var(--platinum-light); }
+        .visit-type { font-size: 0.75rem; color: var(--text-muted); }
+        .visit-spend { font-size: 0.9rem; color: var(--velvet-green); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SCREEN 1: SIGN UP -->
+        <div id="screen-signup" class="screen active">
+            <div class="app-header">
+                <!-- Replaced the broken SVG with the verified PNG asset -->
+                <div class="logo-placeholder">
+                    <img src="leaf.png" alt="Tigress Cultivars Logo" style="width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 0 4px var(--amber-glow));">
+                </div>
+                <div class="brand-title">Tigress Cultivars</div>
+                <div style="font-size: 0.75rem; color: var(--platinum-grey); letter-spacing: 2px; margin-top: 5px;">Sanctuary Protocol</div>
+            </div>
+
+            <p style="text-align: center; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 30px;">
+                Secure your exclusive access to premium somatic wellness and localized plant medicine.
+            </p>
+
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="signup-email" placeholder="guest@example.com">
+            </div>
+            <div class="input-group">
+                <label>Secure Password</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+
+            <button class="btn-primary" onclick="goToVerify()">Create Account</button>
+            <button class="btn-secondary">Log In Instead</button>
+        </div>
+
+
+        <!-- SCREEN 2: VERIFICATION -->
+        <div id="screen-verify" class="screen">
+            <div class="app-header" style="margin-bottom: 20px;">
+                <div class="brand-title" style="font-size: 1rem;">Identity Verification</div>
+            </div>
+
+            <p style="text-align: center; font-size: 0.9rem; color: var(--platinum-grey); margin-bottom: 30px; line-height: 1.5;">
+                We have dispatched a secure 6-digit code to <br><strong id="display-email" style="color: var(--amber-2700k);"></strong>. <br>Please enter it below to finalize your folio.
+            </p>
+
+            <div class="input-group">
+                <label style="text-align: center;">6-Digit Security Code</label>
+                <input type="text" style="text-align: center; letter-spacing: 10px; font-size: 1.2rem;" placeholder="000000" maxlength="6">
+            </div>
+
+            <button class="btn-primary" onclick="goToDashboard()">Verify & Enter</button>
+            <button class="btn-secondary" onclick="goBack()">Return</button>
+        </div>
+
+
+        <!-- SCREEN 3: GUEST DASHBOARD -->
+        <div id="screen-dashboard" class="screen">
+            <div class="dash-header">
+                <div>
+                    <div class="brand-title" style="font-size: 0.9rem;">Tigress Cultivars</div>
+                    <div class="guest-id">Folio: TIG-8492</div>
+                </div>
+                <div class="tier-badge tier-orange" id="user-tier">Orange Status</div>
+            </div>
+
+            <!-- THE DOMED GAUGE -->
+            <div class="gauge-container">
+                <svg viewBox="0 0 100 50" class="domed-gauge">
+                    <path class="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" />
+                    <path id="progress-fill" class="gauge-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
+                </svg>
+                <div class="gauge-data">
+                    <div class="gauge-spend" id="current-spend">$180.00</div>
+                    <div class="gauge-target">Current Net Spend</div>
+                </div>
+            </div>
+
+            <div class="progress-details">
+                <div class="progress-text">
+                    Spend required to unlock<br><strong>Silver Status (Velvet Upgrade)</strong>:
+                </div>
+                <div class="progress-amount" id="remaining-spend">$270.00</div>
+            </div>
+
+            <div class="section-heading">Available Folio Rewards</div>
+            <div class="reward-card">
+                <div class="reward-icon">%</div>
+                <div class="reward-info">
+                    <h4>Welcome Back Voucher</h4>
+                    <p>20% off your first scheduled Core Reset somatic massage.</p>
+                </div>
+            </div>
+
+            <div class="section-heading">Recent Folio History (Rolling 365)</div>
+            <div style="flex: 1; overflow-y: auto;">
+                <div class="visit-row">
+                    <div>
+                        <div class="visit-date">Oct 14, 2026</div>
+                        <div class="visit-type">Retail Walk-In</div>
+                    </div>
+                    <div class="visit-spend">$180.00</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px; font-size: 0.7rem; color: var(--text-muted);">
+                Status recalibrates on Oct 14, 2027
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PROTOTYPE LOGIC -->
+    <script>
+        // Data Configuration (Simulated Backend)
+        const guestData = {
+            netSpend: 180.00,
+            silverTarget: 450.00,
+            goldTarget: 900.00
+        };
+
+        // Navigation Functions
+        function goToVerify() {
+            const email = document.getElementById('signup-email').value || "guest@example.com";
+            document.getElementById('display-email').innerText = email;
+            
+            document.getElementById('screen-signup').classList.remove('active');
+            document.getElementById('screen-verify').classList.add('active');
+        }
+
+        function goBack() {
+            document.getElementById('screen-verify').classList.remove('active');
+            document.getElementById('screen-signup').classList.add('active');
+        }
+
+        function goToDashboard() {
+            document.getElementById('screen-verify').classList.remove('active');
+            document.getElementById('screen-dashboard').classList.add('active');
+            
+            // Trigger Gauge Animation after rendering
+            setTimeout(animateGauge, 100);
+        }
+
+        // Mathematical Gauge Logic
+        function animateGauge() {
+            // The total length of the SVG half-circle path (Pi * radius of 40 = ~125.6)
+            const strokeDasharray = 125.6; 
+            const progressFill = document.getElementById('progress-fill');
+            
+            // Calculate percentage toward next tier (Silver)
+            let percentComplete = guestData.netSpend / guestData.silverTarget;
+            if (percentComplete > 1) percentComplete = 1;
+
+            // Calculate the stroke offset. 
+            // 125.6 is empty (0%). 0 is full (100%).
+            const offset = strokeDasharray - (strokeDasharray * percentComplete);
+            
+            // Apply animation
+            progressFill.style.strokeDashoffset = offset;
+        }
+    </script>
+</body>
+</html>
