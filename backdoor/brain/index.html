@@ -49,7 +49,7 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(33, 206, 99, 0.4);
         }
-        #app-content {
+        #app-content, #full-ledger-screen {
             display: none;
             width: 100%;
             max-width: 600px;
@@ -97,12 +97,14 @@
             <div id="routine-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
         </div>
 
-        <!-- THE VAULT (Checkbook) -->
+       <!-- THE VAULT (Checkbook) -->
         <div class="module-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin: 0; color: #00b4d8;">The Vault</h3>
+            <!-- Clickable Header -->
+            <div id="vault-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; cursor: pointer; background: #222; padding: 10px; border-radius: 8px; border-left: 4px solid #00b4d8;">
+                <h3 style="margin: 0; color: #00b4d8; font-size: 1.1rem;">The Vault <span style="font-size: 0.8rem; color: #888;">(Tap for Ledger ➔)</span></h3>
                 <h3 id="current-balance" style="margin: 0; color: #fff;">$0.00</h3>
             </div>
+            
             <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
                 <input type="text" id="tx-desc" placeholder="Description (e.g. Groceries)" class="input-base">
                 <div style="display: flex; gap: 10px;">
@@ -119,7 +121,10 @@
                 <p id="file-name-display" style="margin: 0; font-size: 0.8rem; color: #888; text-align: center;"></p>
                 <button id="add-tx-btn" style="background: #00b4d8; color: #000; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">Log Transaction</button>
             </div>
-            <div id="ledger-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            
+            <!-- Snapshot: Only shows 3 most recent -->
+            <h4 style="margin: 0 0 10px 0; color: #888; font-size: 0.9rem;">Recent Activity</h4>
+            <div id="ledger-snapshot" style="display: flex; flex-direction: column; gap: 10px;"></div>
         </div>
 
         <!-- SHOPPING LIST -->
@@ -141,6 +146,15 @@
             <p id="memo-status" style="margin-top: -5px; margin-bottom: 10px; font-size: 0.8rem; color: #888;">All notes saved.</p>
             <textarea id="memopad-input" class="input-base" style="height: 150px; resize: none; font-family: inherit;" placeholder="Jot down notes, dimensions, or ideas here. Auto-saves when you stop typing."></textarea>
         </div>
+    </div> <!-- END OF MAIN APP CONTENT -->
+
+    <!-- FULL LEDGER SCREEN (Hidden by default, outside of app-content) -->
+    <div id="full-ledger-screen">
+        <div class="header-bar" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #00b4d8; padding-bottom: 10px; margin-bottom: 20px;">
+            <h2 style="margin: 0; color: #00b4d8;">Financial Ledger</h2>
+            <button id="back-to-dash-btn" style="padding: 10px 20px; background:#333; color:#fff; border:none; border-radius:5px; font-weight:bold; cursor:pointer; font-size: 1rem;">Back</button>
+        </div>
+        <div id="full-ledger-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
     </div>
 
     <!-- FIREBASE MODULES -->
@@ -168,6 +182,7 @@
 
         const loginScreen = document.getElementById('login-screen');
         const appContent = document.getElementById('app-content');
+        const fullLedgerScreen = document.getElementById('full-ledger-screen');
 
         // Auth Logic
         document.getElementById('login-btn').addEventListener('click', () => signInWithPopup(auth, provider).catch(e => console.error(e)));
@@ -177,6 +192,7 @@
             if (user && user.email === 'jackaspenharper@gmail.com') {
                 loginScreen.style.display = 'none';
                 appContent.style.display = 'block';
+                fullLedgerScreen.style.display = 'none';
                 loadProtocol(); 
                 loadLedger(); 
                 loadShoppingList();
@@ -186,6 +202,7 @@
             } else {
                 loginScreen.style.display = 'block';
                 appContent.style.display = 'none';
+                fullLedgerScreen.style.display = 'none';
             }
         });
 
@@ -268,7 +285,6 @@
 
         // -----------------------------------------
         // THE VAULT & MEDICATION PROTOCOL 
-        // (Functionality remains identical to Phase 3)
         // -----------------------------------------
         
         // Vault File Upload UI
@@ -322,29 +338,46 @@
         function loadLedger() {
             const q = query(collection(db, "financial_ledger"), orderBy("timestamp", "desc"));
             onSnapshot(q, (snapshot) => {
-                const ledgerList = document.getElementById('ledger-list');
+                const snapshotContainer = document.getElementById('ledger-snapshot');
+                const fullContainer = document.getElementById('full-ledger-list');
                 const balanceDisplay = document.getElementById('current-balance');
-                ledgerList.innerHTML = ''; 
+                
+                snapshotContainer.innerHTML = ''; 
+                fullContainer.innerHTML = ''; 
                 let runningBalance = 0;
+                let count = 0; // Track how many items we've displayed
+
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     if (data.type === 'credit') runningBalance += data.amount;
                     if (data.type === 'debit') runningBalance -= data.amount;
+                    
                     const date = data.timestamp ? data.timestamp.toDate().toLocaleDateString() : "Just now";
                     const receiptHTML = data.receiptUrl ? `<a href="${data.receiptUrl}" target="_blank" style="color: #00b4d8; text-decoration: none; font-size: 1.2rem;">🧾</a>` : ``;
                     const amountColor = data.type === 'credit' ? '#21ce63' : '#ff4d4d';
                     const sign = data.type === 'credit' ? '+' : '-';
-                    const itemDiv = document.createElement('div');
-                    itemDiv.style.cssText = "background: #222; padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;";
-                    itemDiv.innerHTML = `
-                        <div style="display: flex; flex-direction: column;">
-                            <strong style="font-size: 1rem; color: #fff;">${data.desc} ${receiptHTML}</strong>
-                            <span style="font-size: 0.8rem; color: #888;">${date}</span>
+                    
+                    // Build the transaction block
+                    const itemHTML = `
+                        <div style="background: #222; padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <div style="display: flex; flex-direction: column;">
+                                <strong style="font-size: 1rem; color: #fff;">${data.desc} ${receiptHTML}</strong>
+                                <span style="font-size: 0.8rem; color: #888;">${date}</span>
+                            </div>
+                            <strong style="font-size: 1.1rem; color: ${amountColor};">${sign}$${data.amount.toFixed(2)}</strong>
                         </div>
-                        <strong style="font-size: 1.1rem; color: ${amountColor};">${sign}$${data.amount.toFixed(2)}</strong>
                     `;
-                    ledgerList.appendChild(itemDiv);
+                    
+                    // Always add to the full ledger screen
+                    fullContainer.insertAdjacentHTML('beforeend', itemHTML);
+                    
+                    // Only add the first 3 to the main dashboard snapshot
+                    if (count < 3) {
+                        snapshotContainer.insertAdjacentHTML('beforeend', itemHTML);
+                    }
+                    count++;
                 });
+                
                 balanceDisplay.style.color = runningBalance >= 0 ? '#21ce63' : '#ff4d4d';
                 balanceDisplay.innerText = `$${runningBalance.toFixed(2)}`;
             });
@@ -400,6 +433,20 @@
             try { await addDoc(collection(db, "med_logs"), { medId: medId, medName: medName, status: status, timestamp: serverTimestamp() }); } 
             catch (error) { console.error("Error logging action:", error); }
         };
+
+        // Screen Navigation Logic
+        
+        document.getElementById('vault-header').addEventListener('click', () => {
+            appContent.style.display = 'none';
+            fullLedgerScreen.style.display = 'block';
+            window.scrollTo(0, 0); // Jump to top of screen
+        });
+
+        document.getElementById('back-to-dash-btn').addEventListener('click', () => {
+            fullLedgerScreen.style.display = 'none';
+            appContent.style.display = 'block';
+            window.scrollTo(0, 0);
+        });
     </script>
 </body>
 </html>
