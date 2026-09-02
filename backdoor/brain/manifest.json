@@ -1,0 +1,20 @@
+{
+  "name": "Harperville's Brain",
+  "short_name": "The Brain",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#21ce63",
+  "icons": [
+    {
+      "src": "harperville-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "harperville-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

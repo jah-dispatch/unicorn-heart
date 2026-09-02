@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- The Cloak of Invisibility -->
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- PWA & Apple iOS Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="The Brain">
+    <link rel="apple-touch-icon" href="harperville-logo.jpg">
+    
+    <title>Harperville's Brain</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 50px;
+        }
+        #login-screen {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+        .harperville-logo {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 30px;
+        }
+        .auth-btn {
+            background-color: #21ce63;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(33, 206, 99, 0.4);
+        }
+        #app-content {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .module-card {
+            background: #111;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+        .input-base {
+            padding: 15px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            background: #222;
+            color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen">
+        <img src="harperville-logo.png" alt="Harperville Logo" class="harperville-logo">
+        <h2>System Authorization</h2>
+        <button id="login-btn" class="auth-btn">Access the Brain</button>
+    </div>
+
+    <!-- MAIN APP CONTENT -->
+    <div id="app-content">
+        <div class="header-bar" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #21ce63; padding-bottom: 10px; margin-bottom: 20px;">
+            <h2 style="margin: 0;">The Brain</h2>
+            <button id="logout-btn" style="padding: 10px 20px; background:#ff69b4; color:#000; border:none; border-radius:5px; font-weight:bold; cursor:pointer; font-size: 1rem;">Lock</button>
+        </div>
+
+        <!-- TODAY'S PROTOCOL (Medications) -->
+        <div class="module-card">
+            <h3 style="margin-top: 0; color: #21ce63;">Today's Protocol</h3>
+            <div id="routine-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
+        </div>
+
+        <!-- THE VAULT (Checkbook) -->
+        <div class="module-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: #00b4d8;">The Vault</h3>
+                <h3 id="current-balance" style="margin: 0; color: #fff;">$0.00</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                <input type="text" id="tx-desc" placeholder="Description (e.g. Groceries)" class="input-base">
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="tx-amount" placeholder="Amount ($)" step="0.01" style="flex: 2;" class="input-base">
+                    <select id="tx-type" style="flex: 1;" class="input-base">
+                        <option value="debit">Debit (-)</option>
+                        <option value="credit">Deposit (+)</option>
+                    </select>
+                </div>
+                <label style="background: #333; color: #fff; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; cursor: pointer;">
+                    📸 Snap / Upload Receipt
+                    <input type="file" id="tx-receipt" accept="image/*" capture="environment" style="display: none;">
+                </label>
+                <p id="file-name-display" style="margin: 0; font-size: 0.8rem; color: #888; text-align: center;"></p>
+                <button id="add-tx-btn" style="background: #00b4d8; color: #000; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">Log Transaction</button>
+            </div>
+            <div id="ledger-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+
+        <!-- SHOPPING LIST -->
+        <div class="module-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: #ffb703;">Supply Run</h3>
+                <button id="clear-list-btn" style="background: transparent; color: #888; border: 1px solid #555; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Clear Checked</button>
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="new-item-input" placeholder="Add an item..." class="input-base" style="flex: 3;">
+                <button id="add-item-btn" style="background: #ffb703; color: #000; border: none; border-radius: 8px; font-weight: bold; padding: 0 20px; cursor: pointer;">Add</button>
+            </div>
+            <div id="shopping-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+
+        <!-- MEMOPAD -->
+        <div class="module-card">
+            <h3 style="margin-top: 0; color: #a45ee5; margin-bottom: 10px;">Scratchpad</h3>
+            <p id="memo-status" style="margin-top: -5px; margin-bottom: 10px; font-size: 0.8rem; color: #888;">All notes saved.</p>
+            <textarea id="memopad-input" class="input-base" style="height: 150px; resize: none; font-family: inherit;" placeholder="Jot down notes, dimensions, or ideas here. Auto-saves when you stop typing."></textarea>
+        </div>
+    </div>
+
+    <!-- FIREBASE MODULES -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, setDoc, getDoc, onSnapshot, query, where, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-storage.js";
+
+        // YOUR LOCKED-IN FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2Iz31PCrLpqF5j9BxUHpycJ0O9uHzm30",
+            authDomain: "harpervilles-brain.firebaseapp.com",
+            projectId: "harpervilles-brain",
+            storageBucket: "harpervilles-brain.firebasestorage.app",
+            messagingSenderId: "2271824835",
+            appId: "1:2271824835:web:a47e9c2e6162525f3e8b76"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const provider = new GoogleAuthProvider();
+
+        const loginScreen = document.getElementById('login-screen');
+        const appContent = document.getElementById('app-content');
+
+        // Auth Logic
+        document.getElementById('login-btn').addEventListener('click', () => signInWithPopup(auth, provider).catch(e => console.error(e)));
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === 'jackaspenharper@gmail.com') {
+                loginScreen.style.display = 'none';
+                appContent.style.display = 'block';
+                loadProtocol(); 
+                loadLedger(); 
+                loadShoppingList();
+                loadMemopad();
+            } else if (user) {
+                signOut(auth).then(() => alert("Access Denied. Demanded dignity - Non Negotiable."));
+            } else {
+                loginScreen.style.display = 'block';
+                appContent.style.display = 'none';
+            }
+        });
+
+        // -----------------------------------------
+        // SHOPPING LIST LOGIC
+        // -----------------------------------------
+        const itemInput = document.getElementById('new-item-input');
+        
+        document.getElementById('add-item-btn').addEventListener('click', async () => {
+            const item = itemInput.value.trim();
+            if(!item) return;
+            await addDoc(collection(db, "shopping_list"), { text: item, completed: false, timestamp: serverTimestamp() });
+            itemInput.value = '';
+        });
+
+        function loadShoppingList() {
+            const q = query(collection(db, "shopping_list"), orderBy("timestamp", "asc"));
+            onSnapshot(q, (snapshot) => {
+                const listDiv = document.getElementById('shopping-list');
+                listDiv.innerHTML = '';
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const docId = docSnap.id;
+                    const itemDiv = document.createElement('div');
+                    itemDiv.style.cssText = `background: #222; padding: 15px; border-radius: 8px; display: flex; align-items: center; cursor: pointer; opacity: ${data.completed ? '0.5' : '1'}; text-decoration: ${data.completed ? 'line-through' : 'none'}; border-left: 4px solid ${data.completed ? '#555' : '#ffb703'};`;
+                    
+                    itemDiv.innerHTML = `<span style="font-size: 1.1rem;">${data.text}</span>`;
+                    
+                    // Toggle Complete Status on Tap
+                    itemDiv.addEventListener('click', async () => {
+                        await updateDoc(doc(db, "shopping_list", docId), { completed: !data.completed });
+                    });
+                    
+                    listDiv.appendChild(itemDiv);
+                });
+            });
+        }
+
+        // Clear Completed Items
+        document.getElementById('clear-list-btn').addEventListener('click', async () => {
+            const q = query(collection(db, "shopping_list"), where("completed", "==", true));
+            onSnapshot(q, (snapshot) => {
+                snapshot.forEach(async (docSnap) => {
+                    await deleteDoc(doc(db, "shopping_list", docSnap.id));
+                });
+            });
+        });
+
+        // -----------------------------------------
+        // MEMOPAD LOGIC
+        // -----------------------------------------
+        const memoInput = document.getElementById('memopad-input');
+        const memoStatus = document.getElementById('memo-status');
+        let typingTimer;
+
+        async function loadMemopad() {
+            const memoRef = doc(db, "system_data", "main_memo");
+            const memoSnap = await getDoc(memoRef);
+            if (memoSnap.exists()) {
+                memoInput.value = memoSnap.data().text || '';
+            }
+        }
+
+        // Auto-save logic (1 second after typing stops)
+        memoInput.addEventListener('input', () => {
+            clearTimeout(typingTimer);
+            memoStatus.innerText = "Typing...";
+            memoStatus.style.color = "#ffb703";
+            
+            typingTimer = setTimeout(async () => {
+                memoStatus.innerText = "Saving...";
+                await setDoc(doc(db, "system_data", "main_memo"), {
+                    text: memoInput.value,
+                    lastUpdated: serverTimestamp()
+                });
+                memoStatus.innerText = "All notes saved.";
+                memoStatus.style.color = "#888";
+            }, 1000);
+        });
+
+        // -----------------------------------------
+        // THE VAULT & MEDICATION PROTOCOL 
+        // (Functionality remains identical to Phase 3)
+        // -----------------------------------------
+        
+        // Vault File Upload UI
+        const fileInput = document.getElementById('tx-receipt');
+        const fileDisplay = document.getElementById('file-name-display');
+        let selectedFile = null;
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                fileDisplay.innerText = `Ready: ${selectedFile.name}`;
+                fileDisplay.style.color = '#21ce63';
+            }
+        });
+
+        // Add Transaction
+        document.getElementById('add-tx-btn').addEventListener('click', async () => {
+            const desc = document.getElementById('tx-desc').value.trim();
+            const amountStr = document.getElementById('tx-amount').value;
+            const type = document.getElementById('tx-type').value;
+            const btn = document.getElementById('add-tx-btn');
+            if (!desc || !amountStr) return;
+            const amount = parseFloat(amountStr);
+            let receiptUrl = null;
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            try {
+                if (selectedFile) {
+                    const storageRef = ref(storage, `receipts/${Date.now()}_${selectedFile.name}`);
+                    const snapshot = await uploadBytes(storageRef, selectedFile);
+                    receiptUrl = await getDownloadURL(snapshot.ref);
+                }
+                await addDoc(collection(db, "financial_ledger"), {
+                    desc: desc, amount: amount, type: type, receiptUrl: receiptUrl, timestamp: serverTimestamp()
+                });
+                document.getElementById('tx-desc').value = '';
+                document.getElementById('tx-amount').value = '';
+                fileInput.value = '';
+                selectedFile = null;
+                fileDisplay.innerText = '';
+                btn.innerText = "Log Transaction";
+                btn.disabled = false;
+            } catch (error) {
+                console.error(error);
+                btn.innerText = "Log Transaction";
+                btn.disabled = false;
+            }
+        });
+
+        // Load Ledger
+        function loadLedger() {
+            const q = query(collection(db, "financial_ledger"), orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const ledgerList = document.getElementById('ledger-list');
+                const balanceDisplay = document.getElementById('current-balance');
+                ledgerList.innerHTML = ''; 
+                let runningBalance = 0;
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (data.type === 'credit') runningBalance += data.amount;
+                    if (data.type === 'debit') runningBalance -= data.amount;
+                    const date = data.timestamp ? data.timestamp.toDate().toLocaleDateString() : "Just now";
+                    const receiptHTML = data.receiptUrl ? `<a href="${data.receiptUrl}" target="_blank" style="color: #00b4d8; text-decoration: none; font-size: 1.2rem;">🧾</a>` : ``;
+                    const amountColor = data.type === 'credit' ? '#21ce63' : '#ff4d4d';
+                    const sign = data.type === 'credit' ? '+' : '-';
+                    const itemDiv = document.createElement('div');
+                    itemDiv.style.cssText = "background: #222; padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;";
+                    itemDiv.innerHTML = `
+                        <div style="display: flex; flex-direction: column;">
+                            <strong style="font-size: 1rem; color: #fff;">${data.desc} ${receiptHTML}</strong>
+                            <span style="font-size: 0.8rem; color: #888;">${date}</span>
+                        </div>
+                        <strong style="font-size: 1.1rem; color: ${amountColor};">${sign}$${data.amount.toFixed(2)}</strong>
+                    `;
+                    ledgerList.appendChild(itemDiv);
+                });
+                balanceDisplay.style.color = runningBalance >= 0 ? '#21ce63' : '#ff4d4d';
+                balanceDisplay.innerText = `$${runningBalance.toFixed(2)}`;
+            });
+        }
+
+        // Medication Arsenal
+        const medArsenal = [
+            { id: "invega", name: "Invega ER 9mg", displayTime: "8:00 AM", type: "daily", maxLogs: 1 },
+            { id: "sertraline", name: "Sertraline 150mg", displayTime: "Bedtime", type: "daily", maxLogs: 1 },
+            { id: "ropinirole", name: "Ropinirole 1mg", displayTime: "Bedtime", type: "daily", maxLogs: 1 },
+            { id: "alprazolam", name: "Alprazolam 1mg", displayTime: "PRN Anxiety (Max 3)", type: "prn", maxLogs: 3 },
+            { id: "mounjaro", name: "Mounjaro 12.5mg", displayTime: "Weekly (Saturday)", type: "weekly", maxLogs: 1 }
+        ];
+
+        function loadProtocol() {
+            const startOfToday = new Date();
+            startOfToday.setHours(0, 0, 0, 0);
+            const q = query(collection(db, "med_logs"), where("timestamp", ">=", startOfToday));
+            onSnapshot(q, (snapshot) => {
+                const todaysLogs = [];
+                snapshot.forEach((doc) => todaysLogs.push(doc.data()));
+                const routineList = document.getElementById('routine-list');
+                routineList.innerHTML = ''; 
+                const currentDayOfWeek = new Date().getDay(); 
+                medArsenal.forEach(med => {
+                    if (med.type === 'weekly' && currentDayOfWeek !== 6) return;
+                    const logCount = todaysLogs.filter(log => log.medId === med.id).length;
+                    const isCompleted = logCount >= med.maxLogs;
+                    const containerStyle = isCompleted ? "background: #222; padding: 15px; border-radius: 8px; border-left: 4px solid #555; opacity: 0.5;" : "background: #222; padding: 15px; border-radius: 8px; border-left: 4px solid #a45ee5;";
+                    const buttonState = isCompleted ? "disabled" : "";
+                    const cursorStyle = isCompleted ? "cursor: not-allowed;" : "cursor: pointer;";
+                    const itemDiv = document.createElement('div');
+                    itemDiv.style.cssText = containerStyle;
+                    let prnStatus = med.type === 'prn' ? `<span style="font-size: 0.8rem; color: #ffb703;">(Logged: ${logCount}/${med.maxLogs})</span>` : "";
+                    
+                    itemDiv.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <strong style="font-size: 1.1rem; color: ${isCompleted ? '#888' : '#fff'};">${med.name} ${prnStatus}</strong>
+                            <span style="color: ${isCompleted ? '#555' : '#ffb703'}; font-weight: bold; background: #000; padding: 5px 10px; border-radius: 5px;">${med.displayTime}</span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button ${buttonState} onclick="logAction('${med.id}', '${med.name}', 'Cognitively Taken')" style="flex: 1; background: ${isCompleted ? '#333' : '#21ce63'}; color: ${isCompleted ? '#555' : '#000'}; border: none; padding: 15px 5px; border-radius: 5px; ${cursorStyle} font-weight: bold; font-size: 0.9rem;">✅ Taken</button>
+                            <button ${buttonState} onclick="logAction('${med.id}', '${med.name}', 'Let it Slide')" style="flex: 1; background: ${isCompleted ? '#333' : '#ffb703'}; color: ${isCompleted ? '#555' : '#000'}; border: none; padding: 15px 5px; border-radius: 5px; ${cursorStyle} font-weight: bold; font-size: 0.9rem;">⚠️ Slide</button>
+                            <button ${buttonState} onclick="logAction('${med.id}', '${med.name}', 'Alarm Failed')" style="flex: 1; background: ${isCompleted ? '#333' : '#fb8500'}; color: ${isCompleted ? '#555' : '#000'}; border: none; padding: 15px 5px; border-radius: 5px; ${cursorStyle} font-weight: bold; font-size: 0.9rem;">🚨 Failed</button>
+                        </div>
+                    `;
+                    routineList.appendChild(itemDiv);
+                });
+            });
+        }
+
+        window.logAction = async (medId, medName, status) => {
+            try { await addDoc(collection(db, "med_logs"), { medId: medId, medName: medName, status: status, timestamp: serverTimestamp() }); } 
+            catch (error) { console.error("Error logging action:", error); }
+        };
+    </script>
+</body>
+</html>
