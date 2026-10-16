@@ -90,9 +90,37 @@
       background-color: #1a1a1a;
       color: #e0e0e0;
     }
+
+    /* Unicorn Sparkle Overlay Styles */
+    .sparkle-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 35;
+      overflow: hidden;
+    }
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #fff 20%, var(--sparkle-color) 70%, transparent 100%);
+      border-radius: 50%;
+      animation: sparkle-anim var(--duration) ease-in-out infinite;
+      opacity: 0;
+    }
+    @keyframes sparkle-anim {
+      0%, 100% { transform: scale(0) translateY(0); opacity: 0; }
+      50% { transform: scale(1.3) translateY(-10px); opacity: 0.75; filter: drop-shadow(0 0 6px var(--sparkle-color)); }
+    }
   </style>
 </head>
 <body class="bg-cream-50 text-cream-900 font-sans min-h-screen flex flex-col selection:bg-amber-200 selection:text-amber-900">
+
+  <!-- Unicorn Rainbow Sparkles Background Overlay -->
+  <div id="sparkle-container" class="sparkle-overlay"></div>
 
   <!-- ================= STICKY HEADER ================= -->
   <header class="sticky top-0 z-40 bg-cream-100/90 backdrop-blur-md border-b border-cream-200 shadow-sm transition-all duration-300">
@@ -223,46 +251,10 @@
               <div>
                 <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Grumpy x Sunshine</span>
                 <h3 class="font-serif font-bold text-lg mt-1">Sunflower Lane</h3>
-                <p class="text-xs text-cream-800 line-clamp-2 mt-1">A heartwarming tale of love and friendship in a small town.</p>
+                <p class="text-xs text-cream-800 line-clamp-2 mt-1">A small-town raunchy pharmaceutical sales rep falls for the local man about coffee.</p>
               </div>
               <button onclick="openReader('book1')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
                 Coming November 2026
-              </button>
-            </div>
-          </div>
-
-          <!-- Book Card 2 -->
-          <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
-            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow">
-              <img src="assets/images/book2.jpg" alt="Book 2" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80';"/>
-              <div class="absolute inset-0 book-spine"></div>
-            </div>
-            <div class="text-center space-y-2 flex-grow flex flex-col justify-between">
-              <div>
-                <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Coastal Romance</span>
-                <h3 class="font-serif font-bold text-lg mt-1">The Salt & The Sun</h3>
-                <p class="text-xs text-cream-800 line-clamp-2 mt-1">An introverted artist and a cheerful lighthouse keeper navigate stormy tides together.</p>
-              </div>
-              <button onclick="openReader('book2')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
-                Read Free Online
-              </button>
-            </div>
-          </div>
-
-          <!-- Book Card 3 -->
-          <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
-            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow">
-              <img src="assets/images/book3.jpg" alt="Book 3" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80';"/>
-              <div class="absolute inset-0 book-spine"></div>
-            </div>
-            <div class="text-center space-y-2 flex-grow flex flex-col justify-between">
-              <div>
-                <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Cozy Paranormal</span>
-                <h3 class="font-serif font-bold text-lg mt-1">Coffee, Magic & You</h3>
-                <p class="text-xs text-cream-800 line-clamp-2 mt-1">A cozy bakery, an unexpected witchy potion, and two hearts falling in love.</p>
-              </div>
-              <button onclick="openReader('book3')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
-                Read Free Online
               </button>
             </div>
           </div>
@@ -292,67 +284,23 @@
             </div>
             <h2 class="font-serif text-xl font-bold">Sunflower Lane</h2>
             <p class="text-xs text-cream-800 leading-relaxed">
-              Insert Blurb Here.
+              Coffee's just liquid hot anxiety—and Calvin Collins sells corporate confidence in a bottle!
             </p>
+            <p>As a high-flying pharma rep, Calvin hit rock bottom when he snapped at a tired barista. But that barista was none other than Brody Decker running his family's cafe on four hours of sleep. When the enemies end up seated together on a flight to Seattle, sparks fly into a fiery, impulsive hookup.</p>
+            <p> They part ways with no numbers exchanged—until Brody looks out his bedroom window on Sunflower Lane and finds his mystery hookup moving in next door.</p>
+            <p>But, when a ruthless corporate chain threatens the family cafe, Calvin uses his shark-like tactics to help. Now, they're sneaking through bedroom windows, dodging Brody's overly-involved parents, and hiding a secret romance. Can a corporate burnout and a small-town barista roast up a happy ending, or will their romance burn out before the morning rush?</p>
             <div class="pt-2">
               <button onclick="openReader('book1')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                Launch E-Reader
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story Detail Item 2 -->
-        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow">
-            <img src="assets/images/book2.jpg" alt="The Salt & The Sun" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80';"/>
-            <div class="absolute inset-0 book-spine"></div>
-          </div>
-          <div class="space-y-3 flex-grow text-center sm:text-left">
-            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
-              <span class="font-typewriter text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded">Short Story</span>
-              <span class="font-typewriter text-[10px] bg-cream-200 text-cream-800 px-2 py-0.5 rounded">24,000 Words</span>
-            </div>
-            <h2 class="font-serif text-xl font-bold">TITLE</h2>
-            <p class="text-xs text-cream-800 leading-relaxed">
-              Insert blurb here.
-            </p>
-            <div class="pt-2">
-              <button onclick="openReader('book2')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                Launch E-Reader
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story Detail Item 3 -->
-        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow">
-            <img src="assets/images/book3.jpg" alt="Coffee, Magic & You" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80';"/>
-            <div class="absolute inset-0 book-spine"></div>
-          </div>
-          <div class="space-y-3 flex-grow text-center sm:text-left">
-            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
-              <span class="font-typewriter text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded">Short Story</span>
-              <span class="font-typewriter text-[10px] bg-cream-200 text-cream-800 px-2 py-0.5 rounded">15,000 Words</span>
-            </div>
-            <h2 class="font-serif text-xl font-bold">TITLE</h2>
-            <p class="text-xs text-cream-800 leading-relaxed">
-              Insert blurb here.
-            </p>
-            <div class="pt-2">
-              <button onclick="openReader('book3')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                Launch E-Reader
+                AVAILABLE NOV 13, 2026
               </button>
             </div>
           </div>
         </div>
 
       </div>
-    </section>
+    </section> 
+    
 
     <!-- PAGE 3: ABOUT PAGE (NEWSPAPER CLIPPING AESTHETIC) -->
     <section id="page-about" class="tab-page hidden py-4">
@@ -385,19 +333,23 @@
             </div>
 
             <p class="dropcap">
-              Welcome to my cozy corner of the internet. I am Jay Harper, a gay romance author dedicated to writing stories about love, healing, second chances, and the beautiful messiness of finding home in another person. 
+              Welcome to my cozy corner of the internet. I’m Jay Harper, an MM romance author dedicated to writing stories grounded in deep emotion, genuine connection, and the beautiful messiness of finding home in another person. 
             </p>
             
             <p>
-              Having published stories across traditional avenues, I envisioned this website as a pure "author sandbox"—a place where readers can browse my complete portfolio and read full-length stories for free using an embedded browser e-reader, completely free from vendor lock-in or subscription algorithms.
+              If the name sounds familiar, you might remember my work under Jack Harper. I’ve stepped into a fresh era as Jay to bring a whole new flavor of gay romance to the table—stories with richer depth, bigger heart, and a fresh perspective on love.
             </p>
 
             <blockquote class="my-6 p-4 border-y-2 border-news-ink font-typewriter text-xs italic text-center bg-news-ink/5">
-              "Romance isn't just about the ending—it's about every heartbeat, pause, and shared whisper that builds the bridge between two souls."
+              "I've committed to writing stories free of charge, for anyone's budget to allow readers to enjoy my work without barriers. My stories are for everyone, and I want them to be accessible to all."
             </blockquote>
 
             <p>
-              When I'm not writing, you can find me sipping chamomile tea, tending to my vintage typewriter collection, or walking along rainy shorelines thinking up dialogue for characters who refuse to go to sleep.
+              When I’m not writing, you can usually find me surrounded by music, obsessing over cheese (in all its magnificent forms), or indulging in my ultimate comfort meal: a rare steak with extra mushrooms and fluffy mashed potatoes at Texas Roadhouse. 
+            </p>
+
+            <p>
+              I keep my creative spark alive with constant playlists—and while Taylor Swift used to hold a major spot in my rotation, she’s currently just 'okay' in my book. Keeping me company, keeping me grounded, and strictly keeping me on my toes through every chapter is Ivy, my wonderfully fluffy feline companion.
             </p>
           </div>
 
@@ -414,10 +366,10 @@
             <div class="border-t-2 border-b-2 border-news-ink py-3 font-typewriter text-xs space-y-2">
               <p class="font-bold uppercase tracking-wider text-[11px] text-center border-b border-news-ink/20 pb-1">Quick Facts</p>
               <ul class="space-y-1 text-[11px]">
-                <li>• <strong>Genre:</strong> Contemporary & Paranormal M/M</li>
-                <li>• <strong>Press:</strong> Unicorn Heart Press</li>
-                <li>• <strong>Format:</strong> Free Browser Reader</li>
-                <li>• <strong>Favorite Trope:</strong> Grumpy x Sunshine</li>
+                <li><strong>Genre:</strong> Contemporary M/M Romance</li>
+                <li><strong>Companion:</strong> Ivy (Fluffy Feline Manager)</li>
+                <li><strong>Fuel:</strong> Cheese & Texas Roadhouse</li>
+                <li><strong>Vibe:</strong> Curated Playlists & Honest Stories</li>
               </ul>
             </div>
           </div>
@@ -440,33 +392,33 @@
         <article class="bg-cream-100/60 p-6 md:p-8 rounded-2xl border border-cream-200 space-y-4">
           <div class="flex flex-wrap justify-between items-center text-xs font-typewriter text-cream-800">
             <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded">Writing Dispatch</span>
-            <span>October 12, 2026</span>
+            <span>October 14, 2026</span>
           </div>
-          <h2 class="font-serif text-2xl font-bold text-cream-900">Why I Build Free E-Readers Instead of Vendor Paywalls</h2>
+          <h2 class="font-serif text-2xl font-bold text-cream-900">A Quick Note on AI & Workflow</h2>
           <p class="text-sm leading-relaxed text-cream-800">
-            As an indie romance author, nothing brings me greater joy than placing my stories directly into the hands of readers. By embedding a web-based e-reader into my site, anyone can read my works on their phone, tablet, or laptop without needing proprietary apps or subscriptions.
+            Just a quick lowdown on my stance where AI is concerned. I don’t use it to influence my personal writing and only as a creativity enhancer. I use it to edit and advance my craft. I use it to do fun graphic projects from time to time just in the name of fun. When you have the willingness to walk a day in my schizophrenic shoes, you’ll learn quickly just how much this technology benefits me with my daily struggles.
           </p>
           <div class="bg-cream-200/50 p-4 rounded-lg font-typewriter text-xs italic text-cream-900">
-            "Stories are bridges. The shorter the distance between the page and the reader's heart, the better."
+            "Peace out - Jay"
           </div>
         </article>
 
         <!-- Blog Entry 2 -->
         <article class="bg-cream-100/60 p-6 md:p-8 rounded-2xl border border-cream-200 space-y-4">
           <div class="flex flex-wrap justify-between items-center text-xs font-typewriter text-cream-800">
-            <span class="bg-pink-100 text-pink-900 px-2.5 py-1 rounded">Character Notes</span>
-            <span>September 28, 2026</span>
+            <span class="bg-pink-100 text-pink-900 px-2.5 py-1 rounded">Studio Notes</span>
+            <span>October 11, 2026</span>
           </div>
-          <h2 class="font-serif text-2xl font-bold text-cream-900">Developing 'The Salt & The Sun'</h2>
-          <p class="text-sm leading-relaxed text-cream-800">
-            Knox was originally plotted as a minor antagonist in early drafts of Julian's story. But the moment Knox handed Julian a cold bottle of water and told him to stop scowling at the ocean, their banter practically wrote itself!
-          </p>
+          <h2 class="font-serif text-2xl font-bold text-cream-900">Studio Update</h2>
+          <div class="bg-cream-200/50 p-4 rounded-lg font-typewriter text-xs italic text-cream-900">
+            “Feline overlord is happy and napping on the desk next to Oopie’s computer monitors.”
+          </div>
         </article>
 
       </div>
     </section>
 
-    <!-- PAGE 5: CONTACT PAGE (Only Functional Form) -->
+    <!-- PAGE 5: CONTACT PAGE (Only Functional Form) 
     <section id="page-contact" class="tab-page hidden space-y-8">
       <div class="max-w-2xl mx-auto space-y-6">
         <div class="text-center space-y-2 border-b border-cream-200 pb-4">
@@ -474,7 +426,7 @@
           <p class="font-typewriter text-xs text-cream-800">Have a question or note of feedback? Send a direct message below!</p>
         </div>
 
-        <!-- Functional Contact Form Container -->
+        <!-- Functional Contact Form Container
         <form id="contact-form" onsubmit="handleFormSubmit(event)" class="bg-cream-100/80 p-6 md:p-8 rounded-2xl border border-cream-200 space-y-5 shadow-sm">
           
           <div>
@@ -497,13 +449,54 @@
           </button>
         </form>
 
-        <!-- Form Success State Message -->
+        <!-- Form Success State Message 
         <div id="contact-success" class="hidden bg-emerald-100 border border-emerald-300 p-6 rounded-2xl text-center space-y-2">
           <h3 class="font-serif font-bold text-emerald-900 text-xl">Message Sent!</h3>
           <p class="font-typewriter text-xs text-emerald-800">Thank you for reaching out to Jay Harper. Your message has been received!</p>
         </div>
       </div>
+      -->
+
+      <!-- PAGE 5: CONTACT PAGE -->
+    <section id="page-contact" class="tab-page hidden space-y-8">
+      <div class="max-w-2xl mx-auto space-y-6">
+        <div class="text-center space-y-2 border-b border-cream-200 pb-4">
+          <h1 class="font-serif text-3xl font-bold">Get In Touch</h1>
+          <p class="font-typewriter text-xs text-cream-800">Have a question or note of feedback? Send a direct message below!</p>
+        </div>
+
+        <!-- Service Status Notice -->
+        <div class="bg-amber-100/80 border border-amber-300 p-4 rounded-xl text-center">
+          <p class="font-typewriter text-xs text-amber-900 leading-relaxed">
+            <strong>Note:</strong> This contact form has not been linked to a form delivery service as of this moment and is currently inactive.
+          </p>
+        </div>
+
+        <!-- Non-Clickable Contact Form Container -->
+        <div class="bg-cream-100/80 p-6 md:p-8 rounded-2xl border border-cream-200 space-y-5 shadow-sm opacity-80">
+          
+          <div>
+            <label for="name" class="block font-typewriter text-xs font-bold uppercase mb-1">Your Name</label>
+            <input type="text" id="name" disabled placeholder="Form currently inactive" class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 font-sans text-sm cursor-not-allowed">
+          </div>
+
+          <div>
+            <label for="email" class="block font-typewriter text-xs font-bold uppercase mb-1">Email Address</label>
+            <input type="email" id="email" disabled placeholder="Form currently inactive" class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 font-sans text-sm cursor-not-allowed">
+          </div>
+
+          <div>
+            <label for="message" class="block font-typewriter text-xs font-bold uppercase mb-1">Message</label>
+            <textarea id="message" rows="5" disabled placeholder="Form currently inactive..." class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 font-sans text-sm cursor-not-allowed"></textarea>
+          </div>
+
+          <button type="button" disabled class="w-full py-3 bg-cream-300 text-cream-800 font-typewriter text-sm font-bold rounded-lg cursor-not-allowed">
+            Send Message (Unavailable)
+          </button>
+        </div>
+      </div>
     </section>
+    
 
   </main>
 
@@ -605,7 +598,7 @@
 
     // EPUB BOOK PATHS & RENDERER ENGINE
     const bookPaths = {
-      book1: { path: "assets/books/sample.epub", title: "SAMPLE 1" },
+      book1: { path: "assets/books/sunflower-lane-placeholder.epub", title: "Sunflower Lane" },
       book2: { path: "assets/books/book2.epub", title: "BOOK 2" },
       book3: { path: "assets/books/samplex.epub", title: "BOOK 3" }
     };
@@ -703,8 +696,27 @@
       }
     });
 
-    // Default Tab Initialization
+    // Generate Unicorn Rainbow Sparkles Dynamically
+    function initSparkles() {
+      const container = document.getElementById('sparkle-container');
+      const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
+      const sparkleCount = 20;
+
+      for (let i = 0; i < sparkleCount; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + 'vw';
+        sparkle.style.top = Math.random() * 100 + 'vh';
+        sparkle.style.setProperty('--sparkle-color', colors[Math.floor(Math.random() * colors.length)]);
+        sparkle.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
+        sparkle.style.animationDelay = (Math.random() * 3) + 's';
+        container.appendChild(sparkle);
+      }
+    }
+
+    // Default Tab Initialization & Sparkles
     switchTab('home');
+    initSparkles();
   </script>
 </body>
 </html>
