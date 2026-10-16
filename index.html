@@ -217,7 +217,7 @@
 
         <!-- Featured Spotlight Card (5.75" x 8.75" Proportion) -->
         <div class="w-48 sm:w-56 flex-shrink-0 group">
-          <div class="relative aspect-book rounded-r-md overflow-hidden book-shadow transition-transform duration-300 group-hover:-translate-y-2 cursor-pointer" onclick="openReader('book1')">
+          <div class="relative aspect-book rounded-r-md overflow-hidden book-shadow transition-transform duration-300 group-hover:-translate-y-2 cursor-pointer" onclick="promptAgeVerification('book1')">
             <img 
               src="assets/images/sunflowerlane.jpg" 
               alt="Sunflower Lane" 
@@ -233,7 +233,7 @@
         </div>
       </div>
 
-      <!-- Quick Shelf Section -->
+      <!-- Quick Shelf Section (3-Book Spread Layout) -->
       <div class="space-y-6">
         <div class="flex items-center justify-between border-b border-cream-200 pb-3">
           <h2 class="font-serif text-2xl font-bold">Latest Free Releases</h2>
@@ -241,9 +241,10 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          <!-- Book Card 1 -->
+          
+          <!-- Active Book Card 1 -->
           <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
-            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow">
+            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book1')">
               <img src="assets/images/sunflowerlane.jpg" alt="Sunflower Lane" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
               <div class="absolute inset-0 book-spine"></div>
             </div>
@@ -253,11 +254,52 @@
                 <h3 class="font-serif font-bold text-lg mt-1">Sunflower Lane</h3>
                 <p class="text-xs text-cream-800 line-clamp-2 mt-1">A small-town raunchy pharmaceutical sales rep falls for the local man about coffee.</p>
               </div>
-              <button onclick="openReader('book1')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
+              <button onclick="promptAgeVerification('book1')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
                 Coming November 2026
               </button>
             </div>
           </div>
+
+          <!-- INACTIVE PLACEHOLDER BOOK CARD 2 (Uncomment & edit details to activate) -->
+          <!--
+          <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
+            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book2')">
+              <img src="assets/images/book2.jpg" alt="Book 2" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+              <div class="absolute inset-0 book-spine"></div>
+            </div>
+            <div class="text-center space-y-2 flex-grow flex flex-col justify-between">
+              <div>
+                <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Trope / Genre</span>
+                <h3 class="font-serif font-bold text-lg mt-1">Book Title Two</h3>
+                <p class="text-xs text-cream-800 line-clamp-2 mt-1">Short catchy description or teaser line for your second book.</p>
+              </div>
+              <button onclick="promptAgeVerification('book2')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
+                Read Free
+              </button>
+            </div>
+          </div>
+          -->
+
+          <!-- INACTIVE PLACEHOLDER BOOK CARD 3 (Uncomment & edit details to activate) -->
+          <!--
+          <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
+            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book3')">
+              <img src="assets/images/book3.jpg" alt="Book 3" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+              <div class="absolute inset-0 book-spine"></div>
+            </div>
+            <div class="text-center space-y-2 flex-grow flex flex-col justify-between">
+              <div>
+                <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Trope / Genre</span>
+                <h3 class="font-serif font-bold text-lg mt-1">Book Title Three</h3>
+                <p class="text-xs text-cream-800 line-clamp-2 mt-1">Short catchy description or teaser line for your third book.</p>
+              </div>
+              <button onclick="promptAgeVerification('book3')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
+                Read Free
+              </button>
+            </div>
+          </div>
+          -->
+
         </div>
       </div>
     </section>
@@ -271,10 +313,10 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <!-- Story Detail Item 1 -->
+        <!-- Active Story Detail Item 1 -->
         <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow">
-            <img src="assets/images/sunflowerlane.jpg" alt="The Summer We Swam" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book1')">
+            <img src="assets/images/sunflowerlane.jpg" alt="Sunflower Lane" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
             <div class="absolute inset-0 book-spine"></div>
           </div>
           <div class="space-y-3 flex-grow text-center sm:text-left">
@@ -287,16 +329,72 @@
               Coffee's just liquid hot anxiety—and Calvin Collins sells corporate confidence in a bottle!
             </p>
             <p>As a high-flying pharma rep, Calvin hit rock bottom when he snapped at a tired barista. But that barista was none other than Brody Decker running his family's cafe on four hours of sleep. When the enemies end up seated together on a flight to Seattle, sparks fly into a fiery, impulsive hookup.</p>
-            <p> They part ways with no numbers exchanged—until Brody looks out his bedroom window on Sunflower Lane and finds his mystery hookup moving in next door.</p>
+            <p>They part ways with no numbers exchanged—until Brody looks out his bedroom window on Sunflower Lane and finds his mystery hookup moving in next door.</p>
             <p>But, when a ruthless corporate chain threatens the family cafe, Calvin uses his shark-like tactics to help. Now, they're sneaking through bedroom windows, dodging Brody's overly-involved parents, and hiding a secret romance. Can a corporate burnout and a small-town barista roast up a happy ending, or will their romance burn out before the morning rush?</p>
             <div class="pt-2">
-              <button onclick="openReader('book1')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
+              <button onclick="promptAgeVerification('book1')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 AVAILABLE NOV 13, 2026
               </button>
             </div>
           </div>
         </div>
+
+        <!-- INACTIVE PLACEHOLDER STORY ITEM 2 (Uncomment & edit to activate full blurb listing) -->
+        <!--
+        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book2')">
+            <img src="assets/images/book2.jpg" alt="Book 2" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+            <div class="absolute inset-0 book-spine"></div>
+          </div>
+          <div class="space-y-3 flex-grow text-center sm:text-left">
+            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+              <span class="font-typewriter text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded">Short Story</span>
+              <span class="font-typewriter text-[10px] bg-cream-200 text-cream-800 px-2 py-0.5 rounded">Word Count</span>
+            </div>
+            <h2 class="font-serif text-xl font-bold">Book Title Two</h2>
+            <p class="text-xs text-cream-800 leading-relaxed">
+              First paragraph teaser blurb for your second story.
+            </p>
+            <p>Second paragraph expanding on the plot, conflict, and character dynamics.</p>
+            <p>Third paragraph wrapping up the romance and inviting readers to open the e-reader.</p>
+            <div class="pt-2">
+              <button onclick="promptAgeVerification('book2')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                READ NOW FREE
+              </button>
+            </div>
+          </div>
+        </div>
+        -->
+
+        <!-- INACTIVE PLACEHOLDER STORY ITEM 3 (Uncomment & edit to activate full blurb listing) -->
+        <!--
+        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book3')">
+            <img src="assets/images/book3.jpg" alt="Book 3" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+            <div class="absolute inset-0 book-spine"></div>
+          </div>
+          <div class="space-y-3 flex-grow text-center sm:text-left">
+            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+              <span class="font-typewriter text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded">Short Story</span>
+              <span class="font-typewriter text-[10px] bg-cream-200 text-cream-800 px-2 py-0.5 rounded">Word Count</span>
+            </div>
+            <h2 class="font-serif text-xl font-bold">Book Title Three</h2>
+            <p class="text-xs text-cream-800 leading-relaxed">
+              First paragraph teaser blurb for your third story.
+            </p>
+            <p>Second paragraph expanding on the plot, conflict, and character dynamics.</p>
+            <p>Third paragraph wrapping up the romance and inviting readers to open the e-reader.</p>
+            <div class="pt-2">
+              <button onclick="promptAgeVerification('book3')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                READ NOW FREE
+              </button>
+            </div>
+          </div>
+        </div>
+        -->
 
       </div>
     </section> 
@@ -357,7 +455,7 @@
           <div class="space-y-6">
             <div class="border-2 border-news-ink p-3 bg-news-paper shadow-inner text-center">
               <div class="aspect-square bg-cream-300 border border-news-ink mb-3 relative overflow-hidden grayscale contrast-125">
-                <img src="assets/images/jay-harper-bio.jpg" alt="Jay Harper Photo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80';"/>
+                <img src="assets/images/jay-harper-bio-color.png" alt="Jay Harper Photo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80';"/>
               </div>
               <p class="font-typewriter text-xs font-bold uppercase">Jay Harper</p>
               <p class="font-typewriter text-[10px] text-news-ink/80 italic">Gay Romance Author & Press Founder</p>
@@ -418,46 +516,7 @@
       </div>
     </section>
 
-    <!-- PAGE 5: CONTACT PAGE (Only Functional Form) 
-    <section id="page-contact" class="tab-page hidden space-y-8">
-      <div class="max-w-2xl mx-auto space-y-6">
-        <div class="text-center space-y-2 border-b border-cream-200 pb-4">
-          <h1 class="font-serif text-3xl font-bold">Get In Touch</h1>
-          <p class="font-typewriter text-xs text-cream-800">Have a question or note of feedback? Send a direct message below!</p>
-        </div>
-
-        <!-- Functional Contact Form Container
-        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="bg-cream-100/80 p-6 md:p-8 rounded-2xl border border-cream-200 space-y-5 shadow-sm">
-          
-          <div>
-            <label for="name" class="block font-typewriter text-xs font-bold uppercase mb-1">Your Name</label>
-            <input type="text" id="name" required placeholder="e.g. Reader Alex" class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-sans text-sm">
-          </div>
-
-          <div>
-            <label for="email" class="block font-typewriter text-xs font-bold uppercase mb-1">Email Address</label>
-            <input type="email" id="email" required placeholder="alex@example.com" class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-sans text-sm">
-          </div>
-
-          <div>
-            <label for="message" class="block font-typewriter text-xs font-bold uppercase mb-1">Message</label>
-            <textarea id="message" rows="5" required placeholder="Write your note to Jay Harper here..." class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-sans text-sm"></textarea>
-          </div>
-
-          <button type="submit" class="w-full py-3 bg-cream-900 text-cream-50 font-typewriter text-sm font-bold rounded-lg hover:bg-cream-800 transition-colors shadow">
-            Send Message
-          </button>
-        </form>
-
-        <!-- Form Success State Message 
-        <div id="contact-success" class="hidden bg-emerald-100 border border-emerald-300 p-6 rounded-2xl text-center space-y-2">
-          <h3 class="font-serif font-bold text-emerald-900 text-xl">Message Sent!</h3>
-          <p class="font-typewriter text-xs text-emerald-800">Thank you for reaching out to Jay Harper. Your message has been received!</p>
-        </div>
-      </div>
-      -->
-
-      <!-- PAGE 5: CONTACT PAGE -->
+    <!-- PAGE 5: CONTACT PAGE -->
     <section id="page-contact" class="tab-page hidden space-y-8">
       <div class="max-w-2xl mx-auto space-y-6">
         <div class="text-center space-y-2 border-b border-cream-200 pb-4">
@@ -496,7 +555,6 @@
         </div>
       </div>
     </section>
-    
 
   </main>
 
@@ -511,6 +569,27 @@
       </div>
     </div>
   </footer>
+
+  <!-- ================= AGE VERIFICATION MODAL ================= -->
+  <div id="age-modal" class="fixed inset-0 z-60 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-cream-100 text-cream-900 p-8 rounded-2xl max-w-md w-full text-center space-y-6 shadow-2xl border-2 border-cream-300 font-sans">
+      <div class="space-y-2">
+        <span class="font-typewriter text-xs uppercase tracking-widest text-amber-800 bg-amber-100 px-3 py-1 rounded-full">Age Verification</span>
+        <h2 class="font-serif text-2xl font-bold tracking-tight">Are you 18 years of age or older?</h2>
+        <p class="text-xs text-cream-800 font-light leading-relaxed">
+          This digital e-reader contains mature queer romance content (M/M romance). Please confirm your age to continue.
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2 font-typewriter text-xs">
+        <button onclick="confirmAge()" class="w-full sm:w-auto px-6 py-3 bg-cream-900 text-cream-50 font-bold rounded-lg hover:bg-cream-800 transition-colors shadow">
+          Yes, I am 18 or older
+        </button>
+        <button onclick="denyAge()" class="w-full sm:w-auto px-6 py-3 bg-cream-200 text-cream-900 font-bold rounded-lg hover:bg-cream-300 transition-colors">
+          No, Exit
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ================= DIGITAL EPUB EBOOK READER MODAL ================= -->
   <div id="reader-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
@@ -589,24 +668,37 @@
       menu.classList.toggle('hidden');
     }
 
-    // Contact Form Handler
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      document.getElementById('contact-form').classList.add('hidden');
-      document.getElementById('contact-success').classList.remove('hidden');
-    }
-
     // EPUB BOOK PATHS & RENDERER ENGINE
     const bookPaths = {
       book1: { path: "assets/books/sunflower-lane-placeholder.epub", title: "Sunflower Lane" },
-      book2: { path: "assets/books/book2.epub", title: "BOOK 2" },
-      book3: { path: "assets/books/samplex.epub", title: "BOOK 3" }
+      book2: { path: "assets/books/book2.epub", title: "Book Title Two" },
+      book3: { path: "assets/books/book3.epub", title: "Book Title Three" }
     };
 
     let currentBook = null;
     let rendition = null;
     let currentTheme = 'sepia';
     let currentFontSize = 100; // percentage scale
+    let pendingBookId = null;
+
+    // Age Verification Logic
+    function promptAgeVerification(bookId) {
+      pendingBookId = bookId;
+      document.getElementById('age-modal').classList.remove('hidden');
+    }
+
+    function confirmAge() {
+      document.getElementById('age-modal').classList.add('hidden');
+      if(pendingBookId) {
+        openReader(pendingBookId);
+        pendingBookId = null;
+      }
+    }
+
+    function denyAge() {
+      document.getElementById('age-modal').classList.add('hidden');
+      pendingBookId = null;
+    }
 
     function openReader(bookId) {
       if(!bookPaths[bookId]) return;
@@ -689,10 +781,14 @@
     // Keyboard navigation shortcuts inside e-reader
     document.addEventListener('keydown', (e) => {
       const modal = document.getElementById('reader-modal');
+      const ageModal = document.getElementById('age-modal');
       if(!modal.classList.contains('hidden')) {
         if(e.key === 'ArrowLeft') prevPage();
         if(e.key === 'ArrowRight') nextPage();
         if(e.key === 'Escape') closeReader();
+      }
+      if(!ageModal.classList.contains('hidden') && e.key === 'Escape') {
+        denyAge();
       }
     });
 

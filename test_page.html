@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- JSZip & ePub.js CDN (Required for EPUB support) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+  <title>Jay Harper | Gay Romance Author</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Playfair Display, Courier Prime (Typewriter), Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: {
+              50: '#FAF8F5',
+              100: '#F5EFE6',
+              200: '#E8DFD1',
+              300: '#D9CBB8',
+              800: '#3D352E',
+              900: '#2A241F',
+            },
+            news: {
+              paper: '#f3ede2',
+              ink: '#221e1a',
+              accent: '#8b2612'
+            }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            typewriter: ['Courier Prime', 'monospace'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          aspectRatio: {
+            'book': '23 / 35', // Exact match for 5.75" x 8.75" cover ratio
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Rainbow Heart SVG Cursor */
+    html, body {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='url(%23rainbow)' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3Cdefs%3E%3ClinearGradient id='rainbow' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FF0000'/%3E%3Cstop offset='20%25' stop-color='%23FF7F00'/%3E%3Cstop offset='40%25' stop-color='%23FFFF00'/%3E%3Cstop offset='60%25' stop-color='%2300FF00'/%3E%3Cstop offset='80%25' stop-color='%230000FF'/%3E%3Cstop offset='100%25' stop-color='%238B00FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E") 12 12, auto;
+    }
+
+    button, a, input, textarea {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24'%3E%3Cpath fill='url(%23rainbow)' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3Cdefs%3E%3ClinearGradient id='rainbow' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FF0000'/%3E%3Cstop offset='20%25' stop-color='%23FF7F00'/%3E%3Cstop offset='40%25' stop-color='%23FFFF00'/%3E%3Cstop offset='60%25' stop-color='%2300FF00'/%3E%3Cstop offset='80%25' stop-color='%230000FF'/%3E%3Cstop offset='100%25' stop-color='%238B00FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E") 14 14, pointer !important;
+    }
+
+    .dropcap::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.8rem;
+      float: left;
+      line-height: 0.8;
+      padding-top: 4px;
+      padding-right: 8px;
+      font-weight: 700;
+      color: #2A241F;
+    }
+
+    .book-shadow {
+      box-shadow: 10px 14px 28px rgba(0,0,0,0.22), 0 10px 10px rgba(0,0,0,0.15);
+    }
+
+    .book-spine {
+      background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.2) 3%, transparent 8%, rgba(255,255,255,0.15) 92%, rgba(0,0,0,0.25) 100%);
+    }
+
+    /* Reader Themes */
+    .reader-theme-sepia {
+      background-color: #f4ecd8;
+      color: #5b4636;
+    }
+    .reader-theme-light {
+      background-color: #ffffff;
+      color: #222222;
+    }
+    .reader-theme-dark {
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+    /* Unicorn Sparkle Overlay Styles */
+    .sparkle-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 35;
+      overflow: hidden;
+    }
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #fff 20%, var(--sparkle-color) 70%, transparent 100%);
+      border-radius: 50%;
+      animation: sparkle-anim var(--duration) ease-in-out infinite;
+      opacity: 0;
+    }
+    @keyframes sparkle-anim {
+      0%, 100% { transform: scale(0) translateY(0); opacity: 0; }
+      50% { transform: scale(1.3) translateY(-10px); opacity: 0.75; filter: drop-shadow(0 0 6px var(--sparkle-color)); }
+    }
+  </style>
+</head>
+<body class="bg-cream-50 text-cream-900 font-sans min-h-screen flex flex-col selection:bg-amber-200 selection:text-amber-900">
+
+  <!-- Unicorn Rainbow Sparkles Background Overlay -->
+  <div id="sparkle-container" class="sparkle-overlay"></div>
+
+  <!-- ================= STICKY HEADER ================= -->
+  <header class="sticky top-0 z-40 bg-cream-100/90 backdrop-blur-md border-b border-cream-200 shadow-sm transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo Branding -->
+        <a href="#home" onclick="switchTab('home')" class="flex items-center gap-3 group py-2">
+          <!-- Main Logo with mobile auto-resize & fallback rendering -->
+          <div class="relative max-h-12 overflow-hidden flex items-center">
+            <img 
+              src="assets/images/Jay Harper Main Logo.jpg" 
+              alt="Jay Harper Logo" 
+              class="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              onerror="this.onerror=null; this.classList.add('hidden'); document.getElementById('logo-fallback').classList.remove('hidden');"
+            />
+            
+            <!-- Styled SVG Fallback if image asset isn't loaded yet -->
+            <div id="logo-fallback" class="hidden flex items-center gap-2">
+              <span class="font-typewriter text-xl sm:text-2xl font-bold tracking-widest text-cream-900 uppercase">JAY HARPER|</span>
+              <svg class="w-6 h-6 text-red-500" viewBox="0 0 24 24" fill="url(#navRainbow)">
+                <defs>
+                  <linearGradient id="navRainbow" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#EF4444" />
+                    <stop offset="33%" stop-color="#F59E0B" />
+                    <stop offset="66%" stop-color="#10B981" />
+                    <stop offset="100%" stop-color="#6366F1" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center space-x-1 font-typewriter text-sm font-medium">
+          <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-full transition-all duration-200 hover:bg-cream-200/60">Home</button>
+          <span class="text-cream-300">/</span>
+          <button onclick="switchTab('stories')" id="nav-stories" class="nav-btn px-4 py-2 rounded-full transition-all duration-200 hover:bg-cream-200/60">Stories</button>
+          <span class="text-cream-300">/</span>
+          <button onclick="switchTab('about')" id="nav-about" class="nav-btn px-4 py-2 rounded-full transition-all duration-200 hover:bg-cream-200/60">About</button>
+          <span class="text-cream-300">/</span>
+          <button onclick="switchTab('blog')" id="nav-blog" class="nav-btn px-4 py-2 rounded-full transition-all duration-200 hover:bg-cream-200/60">Blog</button>
+          <span class="text-cream-300">/</span>
+          <button onclick="switchTab('contact')" id="nav-contact" class="nav-btn px-4 py-2 rounded-full transition-all duration-200 hover:bg-cream-200/60">Contact</button>
+        </nav>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-cream-900 hover:bg-cream-200 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div id="mobile-menu" class="hidden md:hidden pb-4 pt-2 font-typewriter text-center border-t border-cream-200/50">
+        <div class="flex flex-col space-y-2">
+          <button onclick="switchTab('home')" class="px-4 py-2 hover:bg-cream-200 rounded-md">Home</button>
+          <button onclick="switchTab('stories')" class="px-4 py-2 hover:bg-cream-200 rounded-md">Stories</button>
+          <button onclick="switchTab('about')" class="px-4 py-2 hover:bg-cream-200 rounded-md">About</button>
+          <button onclick="switchTab('blog')" class="px-4 py-2 hover:bg-cream-200 rounded-md">Blog</button>
+          <button onclick="switchTab('contact')" class="px-4 py-2 hover:bg-cream-200 rounded-md">Contact</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT PAGES ================= -->
+  <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+    <!-- PAGE 1: HOME PAGE -->
+    <section id="page-home" class="tab-page space-y-12">
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-cream-100 to-cream-200/70 p-8 md:p-12 border border-cream-200 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="space-y-4 max-w-2xl">
+          <span class="inline-block px-3 py-1 bg-cream-200 text-cream-800 rounded-full font-typewriter text-xs tracking-wider uppercase">Author Sandbox</span>
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-cream-900 leading-tight">
+            Fun, campy, queer stories for the heart.
+          </h1>
+          <p class="text-cream-800 text-base md:text-lg font-light leading-relaxed">
+            Welcome to my online hangout where you'll get my stories delivered free—always available and never hidden behind a paywall. I genuinely just love crafting fiction for you!
+          </p>
+          <div class="pt-2 flex flex-wrap gap-4 justify-center md:justify-start">
+            <button onclick="switchTab('stories')" class="px-6 py-3 bg-cream-900 text-cream-50 font-typewriter text-sm rounded-lg hover:bg-cream-800 transition-colors shadow-md">
+              Explore All Stories &rarr;
+            </button>
+            <button onclick="switchTab('about')" class="px-6 py-3 bg-cream-200 text-cream-900 font-typewriter text-sm rounded-lg hover:bg-cream-300 transition-colors">
+              Meet Jay Harper
+            </button>
+          </div>
+        </div>
+
+        <!-- Featured Spotlight Card (5.75" x 8.75" Proportion) -->
+        <div class="w-48 sm:w-56 flex-shrink-0 group">
+          <div class="relative aspect-book rounded-r-md overflow-hidden book-shadow transition-transform duration-300 group-hover:-translate-y-2 cursor-pointer" onclick="promptAgeVerification('book1')">
+            <img 
+              src="assets/images/sunflowerlane.jpg" 
+              alt="Sunflower Lane" 
+              class="w-full h-full object-cover"
+              onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"
+            />
+            <div class="absolute inset-0 book-spine"></div>
+            <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent text-white text-center">
+              <span class="font-typewriter text-[10px] uppercase tracking-widest text-amber-300">Upcoming Release</span>
+              <p class="font-serif text-xs font-bold truncate">Sunflower Lane</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Shelf Section (3-Book Spread Layout) -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-cream-200 pb-3">
+          <h2 class="font-serif text-2xl font-bold">Latest Free Releases</h2>
+          <button onclick="switchTab('stories')" class="font-typewriter text-xs text-cream-800 hover:text-cream-900 underline">View Catalog &rarr;</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          
+          <!-- Active Book Card 1 -->
+          <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
+            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book1')">
+              <img src="assets/images/sunflowerlane.jpg" alt="Sunflower Lane" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+              <div class="absolute inset-0 book-spine"></div>
+            </div>
+            <div class="text-center space-y-2 flex-grow flex flex-col justify-between">
+              <div>
+                <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Grumpy x Sunshine</span>
+                <h3 class="font-serif font-bold text-lg mt-1">Sunflower Lane</h3>
+                <p class="text-xs text-cream-800 line-clamp-2 mt-1">A small-town raunchy pharmaceutical sales rep falls for the local man about coffee.</p>
+              </div>
+              <button onclick="promptAgeVerification('book1')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
+                Coming November 2026
+              </button>
+            </div>
+          </div>
+
+          <!-- INACTIVE PLACEHOLDER BOOK CARD 2 (Uncomment & edit details to activate) -->
+          <!--
+          <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
+            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book2')">
+              <img src="assets/images/book2.jpg" alt="Book 2" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+              <div class="absolute inset-0 book-spine"></div>
+            </div>
+            <div class="text-center space-y-2 flex-grow flex flex-col justify-between">
+              <div>
+                <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Trope / Genre</span>
+                <h3 class="font-serif font-bold text-lg mt-1">Book Title Two</h3>
+                <p class="text-xs text-cream-800 line-clamp-2 mt-1">Short catchy description or teaser line for your second book.</p>
+              </div>
+              <button onclick="promptAgeVerification('book2')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
+                Read Free
+              </button>
+            </div>
+          </div>
+          -->
+
+          <!-- INACTIVE PLACEHOLDER BOOK CARD 3 (Uncomment & edit details to activate) -->
+          <!--
+          <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
+            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book3')">
+              <img src="assets/images/book3.jpg" alt="Book 3" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+              <div class="absolute inset-0 book-spine"></div>
+            </div>
+            <div class="text-center space-y-2 flex-grow flex flex-col justify-between">
+              <div>
+                <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Trope / Genre</span>
+                <h3 class="font-serif font-bold text-lg mt-1">Book Title Three</h3>
+                <p class="text-xs text-cream-800 line-clamp-2 mt-1">Short catchy description or teaser line for your third book.</p>
+              </div>
+              <button onclick="promptAgeVerification('book3')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
+                Read Free
+              </button>
+            </div>
+          </div>
+          -->
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: STORIES PAGE -->
+    <section id="page-stories" class="tab-page hidden space-y-10">
+      <div class="border-b border-cream-200 pb-4">
+        <h1 class="font-serif text-3xl font-bold">Original Stories & Works</h1>
+        <p class="font-typewriter text-xs text-cream-800 mt-1">Click any cover or read button to launch the full integrated browser e-reader.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Active Story Detail Item 1 -->
+        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book1')">
+            <img src="assets/images/sunflowerlane.jpg" alt="Sunflower Lane" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+            <div class="absolute inset-0 book-spine"></div>
+          </div>
+          <div class="space-y-3 flex-grow text-center sm:text-left">
+            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+              <span class="font-typewriter text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded">Short Story</span>
+              <span class="font-typewriter text-[10px] bg-cream-200 text-cream-800 px-2 py-0.5 rounded">24,000 Words</span>
+            </div>
+            <h2 class="font-serif text-xl font-bold">Sunflower Lane</h2>
+            <p class="text-xs text-cream-800 leading-relaxed">
+              Coffee's just liquid hot anxiety—and Calvin Collins sells corporate confidence in a bottle!
+            </p>
+            <p>As a high-flying pharma rep, Calvin hit rock bottom when he snapped at a tired barista. But that barista was none other than Brody Decker running his family's cafe on four hours of sleep. When the enemies end up seated together on a flight to Seattle, sparks fly into a fiery, impulsive hookup.</p>
+            <p>They part ways with no numbers exchanged—until Brody looks out his bedroom window on Sunflower Lane and finds his mystery hookup moving in next door.</p>
+            <p>But, when a ruthless corporate chain threatens the family cafe, Calvin uses his shark-like tactics to help. Now, they're sneaking through bedroom windows, dodging Brody's overly-involved parents, and hiding a secret romance. Can a corporate burnout and a small-town barista roast up a happy ending, or will their romance burn out before the morning rush?</p>
+            <div class="pt-2">
+              <button onclick="promptAgeVerification('book1')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                AVAILABLE NOV 13, 2026
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- INACTIVE PLACEHOLDER STORY ITEM 2 (Uncomment & edit to activate full blurb listing) -->
+        <!--
+        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book2')">
+            <img src="assets/images/book2.jpg" alt="Book 2" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+            <div class="absolute inset-0 book-spine"></div>
+          </div>
+          <div class="space-y-3 flex-grow text-center sm:text-left">
+            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+              <span class="font-typewriter text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded">Short Story</span>
+              <span class="font-typewriter text-[10px] bg-cream-200 text-cream-800 px-2 py-0.5 rounded">Word Count</span>
+            </div>
+            <h2 class="font-serif text-xl font-bold">Book Title Two</h2>
+            <p class="text-xs text-cream-800 leading-relaxed">
+              First paragraph teaser blurb for your second story.
+            </p>
+            <p>Second paragraph expanding on the plot, conflict, and character dynamics.</p>
+            <p>Third paragraph wrapping up the romance and inviting readers to open the e-reader.</p>
+            <div class="pt-2">
+              <button onclick="promptAgeVerification('book2')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                READ NOW FREE
+              </button>
+            </div>
+          </div>
+        </div>
+        -->
+
+        <!-- INACTIVE PLACEHOLDER STORY ITEM 3 (Uncomment & edit to activate full blurb listing) -->
+        <!--
+        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book3')">
+            <img src="assets/images/book3.jpg" alt="Book 3" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
+            <div class="absolute inset-0 book-spine"></div>
+          </div>
+          <div class="space-y-3 flex-grow text-center sm:text-left">
+            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+              <span class="font-typewriter text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded">Short Story</span>
+              <span class="font-typewriter text-[10px] bg-cream-200 text-cream-800 px-2 py-0.5 rounded">Word Count</span>
+            </div>
+            <h2 class="font-serif text-xl font-bold">Book Title Three</h2>
+            <p class="text-xs text-cream-800 leading-relaxed">
+              First paragraph teaser blurb for your third story.
+            </p>
+            <p>Second paragraph expanding on the plot, conflict, and character dynamics.</p>
+            <p>Third paragraph wrapping up the romance and inviting readers to open the e-reader.</p>
+            <div class="pt-2">
+              <button onclick="promptAgeVerification('book3')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                READ NOW FREE
+              </button>
+            </div>
+          </div>
+        </div>
+        -->
+
+      </div>
+    </section> 
+    
+
+    <!-- PAGE 3: ABOUT PAGE (NEWSPAPER CLIPPING AESTHETIC) -->
+    <section id="page-about" class="tab-page hidden py-4">
+      <!-- Newspaper Sheet Outer Border -->
+      <div class="bg-news-paper text-news-ink p-6 sm:p-10 rounded-sm shadow-xl border-2 border-news-ink relative">
+        
+        <!-- Newspaper Header / Masthead -->
+        <div class="text-center border-b-4 border-double border-news-ink pb-4 mb-6">
+          <div class="flex justify-between items-center text-[10px] sm:text-xs font-typewriter border-b border-news-ink pb-1 mb-3 uppercase tracking-widest text-news-ink/80">
+            <span>Vol. I — No. 1</span>
+            <span>Unicorn Heart Press Gazette</span>
+            <span>Special Author Edition</span>
+          </div>
+          <h1 class="font-serif text-4xl sm:text-6xl font-black uppercase tracking-tight leading-none mb-2">
+            THE DAILY HEARTBEAT
+          </h1>
+          <p class="font-typewriter text-xs italic">"All The Gay Romance Fit To Print & Share Direct To Readers"</p>
+        </div>
+
+        <!-- Article Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          
+          <!-- Column 1 & 2: Main Story -->
+          <div class="md:col-span-2 space-y-4 text-justify font-serif text-sm leading-relaxed border-r-0 md:border-r border-news-ink/30 md:pr-6">
+            <h2 class="font-serif text-2xl font-bold tracking-tight text-news-ink mb-1">
+              MEET JAY HARPER: CREATING HEARTFELT QUEER ROMANCE WITHOUT VENDOR BOUNDARIES
+            </h2>
+            <div class="font-typewriter text-[11px] text-news-accent font-bold uppercase mb-4">
+              By Special Correspondent — Published for Readers Everywhere
+            </div>
+
+            <p class="dropcap">
+              Welcome to my cozy corner of the internet. I’m Jay Harper, an MM romance author dedicated to writing stories grounded in deep emotion, genuine connection, and the beautiful messiness of finding home in another person. 
+            </p>
+            
+            <p>
+              If the name sounds familiar, you might remember my work under Jack Harper. I’ve stepped into a fresh era as Jay to bring a whole new flavor of gay romance to the table—stories with richer depth, bigger heart, and a fresh perspective on love.
+            </p>
+
+            <blockquote class="my-6 p-4 border-y-2 border-news-ink font-typewriter text-xs italic text-center bg-news-ink/5">
+              "I've committed to writing stories free of charge, for anyone's budget to allow readers to enjoy my work without barriers. My stories are for everyone, and I want them to be accessible to all."
+            </blockquote>
+
+            <p>
+              When I’m not writing, you can usually find me surrounded by music, obsessing over cheese (in all its magnificent forms), or indulging in my ultimate comfort meal: a rare steak with extra mushrooms and fluffy mashed potatoes at Texas Roadhouse. 
+            </p>
+
+            <p>
+              I keep my creative spark alive with constant playlists—and while Taylor Swift used to hold a major spot in my rotation, she’s currently just 'okay' in my book. Keeping me company, keeping me grounded, and strictly keeping me on my toes through every chapter is Ivy, my wonderfully fluffy feline companion.
+            </p>
+          </div>
+
+          <!-- Column 3: Author Bio Sidebar Frame & Press Note -->
+          <div class="space-y-6">
+            <div class="border-2 border-news-ink p-3 bg-news-paper shadow-inner text-center">
+              <div class="aspect-square bg-cream-300 border border-news-ink mb-3 relative overflow-hidden grayscale contrast-125">
+                <img src="assets/images/jay-harper-bio.jpg" alt="Jay Harper Photo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80';"/>
+              </div>
+              <p class="font-typewriter text-xs font-bold uppercase">Jay Harper</p>
+              <p class="font-typewriter text-[10px] text-news-ink/80 italic">Gay Romance Author & Press Founder</p>
+            </div>
+
+            <div class="border-t-2 border-b-2 border-news-ink py-3 font-typewriter text-xs space-y-2">
+              <p class="font-bold uppercase tracking-wider text-[11px] text-center border-b border-news-ink/20 pb-1">Quick Facts</p>
+              <ul class="space-y-1 text-[11px]">
+                <li><strong>Genre:</strong> Contemporary M/M Romance</li>
+                <li><strong>Companion:</strong> Ivy (Fluffy Feline Manager)</li>
+                <li><strong>Fuel:</strong> Cheese & Texas Roadhouse</li>
+                <li><strong>Vibe:</strong> Curated Playlists & Honest Stories</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PAGE 4: BLOG PAGE -->
+    <section id="page-blog" class="tab-page hidden space-y-8">
+      <div class="border-b border-cream-200 pb-4">
+        <h1 class="font-serif text-3xl font-bold">Author Journal & Updates</h1>
+        <p class="font-typewriter text-xs text-cream-800 mt-1">Behind-the-scenes, writing progress, and story notes from Jay Harper</p>
+      </div>
+
+      <div class="space-y-8">
+        
+        <!-- Blog Entry 1 -->
+        <article class="bg-cream-100/60 p-6 md:p-8 rounded-2xl border border-cream-200 space-y-4">
+          <div class="flex flex-wrap justify-between items-center text-xs font-typewriter text-cream-800">
+            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded">Writing Dispatch</span>
+            <span>October 14, 2026</span>
+          </div>
+          <h2 class="font-serif text-2xl font-bold text-cream-900">A Quick Note on AI & Workflow</h2>
+          <p class="text-sm leading-relaxed text-cream-800">
+            Just a quick lowdown on my stance where AI is concerned. I don’t use it to influence my personal writing and only as a creativity enhancer. I use it to edit and advance my craft. I use it to do fun graphic projects from time to time just in the name of fun. When you have the willingness to walk a day in my schizophrenic shoes, you’ll learn quickly just how much this technology benefits me with my daily struggles.
+          </p>
+          <div class="bg-cream-200/50 p-4 rounded-lg font-typewriter text-xs italic text-cream-900">
+            "Peace out - Jay"
+          </div>
+        </article>
+
+        <!-- Blog Entry 2 -->
+        <article class="bg-cream-100/60 p-6 md:p-8 rounded-2xl border border-cream-200 space-y-4">
+          <div class="flex flex-wrap justify-between items-center text-xs font-typewriter text-cream-800">
+            <span class="bg-pink-100 text-pink-900 px-2.5 py-1 rounded">Studio Notes</span>
+            <span>October 11, 2026</span>
+          </div>
+          <h2 class="font-serif text-2xl font-bold text-cream-900">Studio Update</h2>
+          <div class="bg-cream-200/50 p-4 rounded-lg font-typewriter text-xs italic text-cream-900">
+            “Feline overlord is happy and napping on the desk next to Oopie’s computer monitors.”
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- PAGE 5: CONTACT PAGE -->
+    <section id="page-contact" class="tab-page hidden space-y-8">
+      <div class="max-w-2xl mx-auto space-y-6">
+        <div class="text-center space-y-2 border-b border-cream-200 pb-4">
+          <h1 class="font-serif text-3xl font-bold">Get In Touch</h1>
+          <p class="font-typewriter text-xs text-cream-800">Have a question or note of feedback? Send a direct message below!</p>
+        </div>
+
+        <!-- Service Status Notice -->
+        <div class="bg-amber-100/80 border border-amber-300 p-4 rounded-xl text-center">
+          <p class="font-typewriter text-xs text-amber-900 leading-relaxed">
+            <strong>Note:</strong> This contact form has not been linked to a form delivery service as of this moment and is currently inactive.
+          </p>
+        </div>
+
+        <!-- Non-Clickable Contact Form Container -->
+        <div class="bg-cream-100/80 p-6 md:p-8 rounded-2xl border border-cream-200 space-y-5 shadow-sm opacity-80">
+          
+          <div>
+            <label for="name" class="block font-typewriter text-xs font-bold uppercase mb-1">Your Name</label>
+            <input type="text" id="name" disabled placeholder="Form currently inactive" class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 font-sans text-sm cursor-not-allowed">
+          </div>
+
+          <div>
+            <label for="email" class="block font-typewriter text-xs font-bold uppercase mb-1">Email Address</label>
+            <input type="email" id="email" disabled placeholder="Form currently inactive" class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 font-sans text-sm cursor-not-allowed">
+          </div>
+
+          <div>
+            <label for="message" class="block font-typewriter text-xs font-bold uppercase mb-1">Message</label>
+            <textarea id="message" rows="5" disabled placeholder="Form currently inactive..." class="w-full px-4 py-2.5 rounded-lg bg-cream-50 border border-cream-300 font-sans text-sm cursor-not-allowed"></textarea>
+          </div>
+
+          <button type="button" disabled class="w-full py-3 bg-cream-300 text-cream-800 font-typewriter text-sm font-bold rounded-lg cursor-not-allowed">
+            Send Message (Unavailable)
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= STICKY FOOTER ================= -->
+  <footer class="sticky bottom-0 z-30 bg-cream-100/95 backdrop-blur-md border-t border-cream-200 py-3 shadow-inner">
+    <div class="max-w-6xl mx-auto px-4 text-center font-typewriter text-xs text-cream-800 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        &copy; Copyright 2026 | Unicorn Heart Press
+      </div>
+      <div class="text-[10px] text-cream-800/80">
+        Jay Harper • Gay Romance Author
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= AGE VERIFICATION MODAL ================= -->
+  <div id="age-modal" class="fixed inset-0 z-60 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-cream-100 text-cream-900 p-8 rounded-2xl max-w-md w-full text-center space-y-6 shadow-2xl border-2 border-cream-300 font-sans">
+      <div class="space-y-2">
+        <span class="font-typewriter text-xs uppercase tracking-widest text-amber-800 bg-amber-100 px-3 py-1 rounded-full">Age Verification</span>
+        <h2 class="font-serif text-2xl font-bold tracking-tight">Are you 18 years of age or older?</h2>
+        <p class="text-xs text-cream-800 font-light leading-relaxed">
+          This digital e-reader contains mature queer romance content (M/M romance). Please confirm your age to continue.
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2 font-typewriter text-xs">
+        <button onclick="confirmAge()" class="w-full sm:w-auto px-6 py-3 bg-cream-900 text-cream-50 font-bold rounded-lg hover:bg-cream-800 transition-colors shadow">
+          Yes, I am 18 or older
+        </button>
+        <button onclick="denyAge()" class="w-full sm:w-auto px-6 py-3 bg-cream-200 text-cream-900 font-bold rounded-lg hover:bg-cream-300 transition-colors">
+          No, Exit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DIGITAL EPUB EBOOK READER MODAL ================= -->
+  <div id="reader-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
+    <div class="w-full max-w-4xl h-[92vh] flex flex-col rounded-xl overflow-hidden shadow-2xl transition-all duration-300 reader-theme-sepia" id="reader-container">
+      
+      <!-- E-Reader Header Toolbar -->
+      <div class="p-3 border-b flex items-center justify-between border-black/10 font-typewriter text-xs">
+        <div class="flex items-center gap-3">
+          <span id="reader-title" class="font-bold font-serif text-sm truncate max-w-[180px] sm:max-w-xs">Book Title</span>
+        </div>
+
+        <!-- Formatting & Control Actions -->
+        <div class="flex items-center gap-2">
+          <!-- Font Size Down -->
+          <button onclick="adjustFontSize(-1)" class="px-2 py-1 rounded bg-black/5 hover:bg-black/10 font-bold">A-</button>
+          <!-- Font Size Up -->
+          <button onclick="adjustFontSize(1)" class="px-2 py-1 rounded bg-black/5 hover:bg-black/10 font-bold">A+</button>
+
+          <!-- Theme Selectors -->
+          <button onclick="setReaderTheme('sepia')" class="w-6 h-6 rounded-full border border-black/20 bg-[#f4ecd8]" title="Sepia"></button>
+          <button onclick="setReaderTheme('light')" class="w-6 h-6 rounded-full border border-black/20 bg-white" title="Light"></button>
+          <button onclick="setReaderTheme('dark')" class="w-6 h-6 rounded-full border border-black/20 bg-[#1a1a1a]" title="Dark"></button>
+
+          <!-- Close Reader Modal -->
+          <button onclick="closeReader()" class="ml-2 p-1.5 rounded-full hover:bg-black/10">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- EPUB Rendering Canvas Area -->
+      <div class="flex-grow relative w-full h-full overflow-hidden" id="reader-content-body">
+        <div id="reader-viewer" class="w-full h-full"></div>
+      </div>
+
+      <!-- E-Reader Bottom Navigation Footer -->
+      <div class="p-3 border-t border-black/10 flex items-center justify-between font-typewriter text-xs">
+        <button onclick="prevPage()" id="btn-prev-page" class="px-4 py-2 rounded bg-black/10 hover:bg-black/20">
+          &larr; Prev Page
+        </button>
+
+        <div class="text-center">
+          <span id="page-indicator">Loading EPUB...</span>
+        </div>
+
+        <button onclick="nextPage()" id="btn-next-page" class="px-4 py-2 rounded bg-black/10 hover:bg-black/20">
+          Next Page &rarr;
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= INTERACTIVE JAVASCRIPT & EPUB.JS ENGINE ================= -->
+  <script>
+    // Tab Navigation Logic
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
+      const activePage = document.getElementById('page-' + tabId);
+      if(activePage) activePage.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-cream-200', 'font-bold');
+      });
+
+      const activeNav = document.getElementById('nav-' + tabId);
+      if(activeNav) activeNav.classList.add('bg-cream-200', 'font-bold');
+
+      // Close mobile drawer if opened
+      document.getElementById('mobile-menu').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    // EPUB BOOK PATHS & RENDERER ENGINE
+    const bookPaths = {
+      book1: { path: "assets/books/sunflower-lane-placeholder.epub", title: "Sunflower Lane" },
+      book2: { path: "assets/books/book2.epub", title: "Book Title Two" },
+      book3: { path: "assets/books/book3.epub", title: "Book Title Three" }
+    };
+
+    let currentBook = null;
+    let rendition = null;
+    let currentTheme = 'sepia';
+    let currentFontSize = 100; // percentage scale
+    let pendingBookId = null;
+
+    // Age Verification Logic
+    function promptAgeVerification(bookId) {
+      pendingBookId = bookId;
+      document.getElementById('age-modal').classList.remove('hidden');
+    }
+
+    function confirmAge() {
+      document.getElementById('age-modal').classList.add('hidden');
+      if(pendingBookId) {
+        openReader(pendingBookId);
+        pendingBookId = null;
+      }
+    }
+
+    function denyAge() {
+      document.getElementById('age-modal').classList.add('hidden');
+      pendingBookId = null;
+    }
+
+    function openReader(bookId) {
+      if(!bookPaths[bookId]) return;
+      
+      // Clean up previous book instance if open
+      if(rendition) { rendition.destroy(); }
+      if(currentBook) { currentBook.destroy(); }
+
+      document.getElementById('reader-title').innerText = bookPaths[bookId].title;
+      document.getElementById('reader-modal').classList.remove('hidden');
+      document.getElementById('page-indicator').innerText = "Loading EPUB...";
+
+      // Load EPUB file via ePub.js into the viewer container
+      currentBook = ePub(bookPaths[bookId].path);
+      rendition = currentBook.renderTo("reader-viewer", {
+        width: "100%",
+        height: "100%",
+        spread: "auto"
+      });
+
+      rendition.display();
+
+      // Register reading themes for ePub internal iframe documents
+      rendition.themes.register("sepia", {
+        body: { background: "#f4ecd8 !important", color: "#5b4636 !important", padding: "20px" }
+      });
+      rendition.themes.register("light", {
+        body: { background: "#ffffff !important", color: "#222222 !important", padding: "20px" }
+      });
+      rendition.themes.register("dark", {
+        body: { background: "#1a1a1a !important", color: "#e0e0e0 !important", padding: "20px" }
+      });
+
+      rendition.themes.select(currentTheme);
+      rendition.themes.fontSize(currentFontSize + '%');
+
+      // Track location progress percentage
+      rendition.on('relocated', (location) => {
+        const percent = currentBook.locations.percentageFromCfi(location.start.cfi);
+        if(!isNaN(percent)) {
+          document.getElementById('page-indicator').innerText = `Progress: ${Math.round(percent * 100)}%`;
+        } else {
+          document.getElementById('page-indicator').innerText = `Reading...`;
+        }
+      });
+    }
+
+    function closeReader() {
+      document.getElementById('reader-modal').classList.add('hidden');
+      if(rendition) { rendition.destroy(); }
+      if(currentBook) { currentBook.destroy(); }
+    }
+
+    function prevPage() {
+      if(rendition) { rendition.prev(); }
+    }
+
+    function nextPage() {
+      if(rendition) { rendition.next(); }
+    }
+
+    function adjustFontSize(delta) {
+      currentFontSize = Math.max(80, Math.min(160, currentFontSize + delta * 10));
+      if(rendition) {
+        rendition.themes.fontSize(currentFontSize + '%');
+      }
+    }
+
+    function setReaderTheme(theme) {
+      currentTheme = theme;
+      const container = document.getElementById('reader-container');
+      container.classList.remove('reader-theme-sepia', 'reader-theme-light', 'reader-theme-dark');
+      container.classList.add('reader-theme-' + theme);
+
+      if(rendition) {
+        rendition.themes.select(theme);
+      }
+    }
+
+    // Keyboard navigation shortcuts inside e-reader
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('reader-modal');
+      const ageModal = document.getElementById('age-modal');
+      if(!modal.classList.contains('hidden')) {
+        if(e.key === 'ArrowLeft') prevPage();
+        if(e.key === 'ArrowRight') nextPage();
+        if(e.key === 'Escape') closeReader();
+      }
+      if(!ageModal.classList.contains('hidden') && e.key === 'Escape') {
+        denyAge();
+      }
+    });
+
+    // Generate Unicorn Rainbow Sparkles Dynamically
+    function initSparkles() {
+      const container = document.getElementById('sparkle-container');
+      const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
+      const sparkleCount = 20;
+
+      for (let i = 0; i < sparkleCount; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + 'vw';
+        sparkle.style.top = Math.random() * 100 + 'vh';
+        sparkle.style.setProperty('--sparkle-color', colors[Math.floor(Math.random() * colors.length)]);
+        sparkle.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
+        sparkle.style.animationDelay = (Math.random() * 3) + 's';
+        container.appendChild(sparkle);
+      }
+    }
+
+    // Default Tab Initialization & Sparkles
+    switchTab('home');
+    initSparkles();
+  </script>
+</body>
+</html>
