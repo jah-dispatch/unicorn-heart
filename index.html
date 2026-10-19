@@ -260,8 +260,7 @@
             </div>
           </div>
 
-          <!-- INACTIVE PLACEHOLDER BOOK CARD 2 (Uncomment & edit details to activate) -->
-          
+          <!-- INACTIVE PLACEHOLDER BOOK CARD 2 -->
           <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
             <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book2')">
               <img src="assets/images/aspenlanding.jpg" alt="Aspen Landing" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
@@ -278,27 +277,6 @@
               </button>
             </div>
           </div>
-        
-
-          <!-- INACTIVE PLACEHOLDER BOOK CARD 3 (Uncomment & edit details to activate) -->
-          <!--
-          <div class="bg-cream-100/60 rounded-xl p-5 border border-cream-200 flex flex-col justify-between space-y-4 hover:border-cream-300 transition-all">
-            <div class="mx-auto w-40 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book3')">
-              <img src="assets/images/book3.jpg" alt="Book 3" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
-              <div class="absolute inset-0 book-spine"></div>
-            </div>
-            <div class="text-center space-y-2 flex-grow flex flex-col justify-between">
-              <div>
-                <span class="font-typewriter text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Trope / Genre</span>
-                <h3 class="font-serif font-bold text-lg mt-1">Book Title Three</h3>
-                <p class="text-xs text-cream-800 line-clamp-2 mt-1">Short catchy description or teaser line for your third book.</p>
-              </div>
-              <button onclick="promptAgeVerification('book3')" class="w-full py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors">
-                Read Free
-              </button>
-            </div>
-          </div>
-          -->
 
         </div>
       </div>
@@ -306,15 +284,21 @@
 
     <!-- PAGE 2: STORIES PAGE -->
     <section id="page-stories" class="tab-page hidden space-y-10">
-      <div class="border-b border-cream-200 pb-4">
-        <h1 class="font-serif text-3xl font-bold">Original Stories & Works</h1>
-        <p class="font-typewriter text-xs text-cream-800 mt-1">Click any cover or read button to launch the full integrated browser e-reader.</p>
+      <div class="border-b border-cream-200 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 class="font-serif text-3xl font-bold">Original Stories & Works</h1>
+          <p class="font-typewriter text-xs text-cream-800 mt-1">Click any cover or read button to launch the full integrated browser e-reader.</p>
+        </div>
+        <!-- Search Bar Added Here -->
+        <div class="w-full md:w-72">
+          <input type="text" id="story-search-input" oninput="filterStories()" placeholder="Search title, tropes, keywords..." class="w-full px-4 py-2 rounded-lg bg-cream-100 border border-cream-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-sans text-xs">
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="stories-grid">
         
         <!-- Active Story Detail Item 1 -->
-        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+        <div class="story-card bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
           <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book1')">
             <img src="assets/images/sunflowerlane.jpg" alt="Sunflower Lane" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
             <div class="absolute inset-0 book-spine"></div>
@@ -346,9 +330,8 @@
           </div>
         </div>
 
-        <!-- INACTIVE PLACEHOLDER STORY ITEM 2 (Uncomment & edit to activate full blurb listing) -->
-        
-        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+        <!-- Story Detail Item 2 -->
+        <div class="story-card bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
           <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book2')">
             <img src="assets/images/aspenlanding.jpg" alt="Aspen Landing" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
             <div class="absolute inset-0 book-spine"></div>
@@ -376,34 +359,6 @@
             </div>
           </div>
         </div>
-
-        <!-- INACTIVE PLACEHOLDER STORY ITEM 3 (Uncomment & edit to activate full blurb listing) -->
-        <!--
-        <div class="bg-cream-100/70 p-6 rounded-2xl border border-cream-200 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-          <div class="w-36 flex-shrink-0 aspect-book relative rounded-r-md overflow-hidden book-shadow cursor-pointer" onclick="promptAgeVerification('book3')">
-            <img src="assets/images/book3.jpg" alt="Book 3" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';"/>
-            <div class="absolute inset-0 book-spine"></div>
-          </div>
-          <div class="space-y-3 flex-grow text-center sm:text-left">
-            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
-              <span class="font-typewriter text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded">Short Story</span>
-              <span class="font-typewriter text-[10px] bg-cream-200 text-cream-800 px-2 py-0.5 rounded">Word Count</span>
-            </div>
-            <h2 class="font-serif text-xl font-bold">Book Title Three</h2>
-            <p class="text-xs text-cream-800 leading-relaxed">
-              First paragraph teaser blurb for your third story.
-            </p>
-            <p>Second paragraph expanding on the plot, conflict, and character dynamics.</p>
-            <p>Third paragraph wrapping up the romance and inviting readers to open the e-reader.</p>
-            <div class="pt-2">
-              <button onclick="promptAgeVerification('book3')" class="px-5 py-2 bg-cream-900 text-cream-50 font-typewriter text-xs rounded hover:bg-cream-800 transition-colors inline-flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                READ NOW FREE
-              </button>
-            </div>
-          </div>
-        </div>
-        -->
 
       </div>
     </section> 
@@ -519,7 +474,7 @@
           <h2 class="font-serif text-2xl font-bold text-cream-900">Story Notes</h2>
           <p class="text-sm leading-relaxed text-cream-800">
             In Sunflower Lane, I'm writing my most highly wired and complexly sunshiny characters yet. Calvin is something out of a ceareal box, flying on sugar and caffeine, and well, the pedaling of pharmaceuticals. This story is fun to write, but I'm taking my time just to make sure that I don't overwelm myself with too much. As you know, I suffer from mental health struggles. So, writing for me these days are only supposed to be nothing but fun for me. I am, however, thinking this story will be ready by November 13, 2026.
-          </div>
+          </p>
         </article>
 
         <!-- Blog Entry 2 -->
@@ -689,6 +644,20 @@
       menu.classList.toggle('hidden');
     }
 
+    // Story Search Filter Function
+    function filterStories() {
+      const query = document.getElementById('story-search-input').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.story-card');
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if(text.includes(query)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
     // EPUB BOOK PATHS & RENDERER ENGINE
     const bookPaths = {
       book1: { path: "assets/books/sunflower-lane-placeholder.epub", title: "Sunflower Lane" },
@@ -816,7 +785,7 @@
     // Generate Unicorn Rainbow Sparkles Dynamically
     function initSparkles() {
       const container = document.getElementById('sparkle-container');
-      const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
+      const colors = ['#B81500', '#0B961F', '#FFC638', '#3B82F6', '#1422FF', '#FF9914'];
       const sparkleCount = 20;
 
       for (let i = 0; i < sparkleCount; i++) {
