@@ -114,6 +114,8 @@
                         <span id="iconLight" class="p-1 rounded opacity-30">💡</span>
                         <span id="iconGame" class="p-1 rounded opacity-30">⚽</span>
                         <span id="iconMed" class="p-1 rounded opacity-30">💉</span>
+                        <!-- Visual Flashing Save Indicator Icon -->
+                        <span id="saveIndicator" class="p-0.5 rounded opacity-0 transition-opacity duration-300 text-[9px]" title="Saved">💾</span>
                     </div>
 
                     <!-- Main Pixel Canvas Overlay Viewport -->
@@ -177,8 +179,9 @@
 
             <!-- Extra Action Toolbar for Mobile Convenience -->
             <div class="w-full mt-3 pt-3 border-t border-amber-500/40 flex justify-between items-center px-1 text-[8px] text-amber-900">
-                <button id="renameBtn" class="hover:underline flex items-center gap-1">✏️ Rename</button>
+                <button id="renameBtn" class="hover:underline flex items-center gap-1">✏️ Name</button>
                 <button id="badgesBtn" class="hover:underline flex items-center gap-1">🏆 Badges</button>
+                <button id="dataBtn" class="hover:underline flex items-center gap-1">💾 Memory</button>
                 <button id="resetBtn" class="hover:underline text-rose-800 flex items-center gap-1">🔄 Reset</button>
             </div>
 
@@ -327,14 +330,125 @@
 
         // --- LocalStorage Save / Load System ---
         const SAVE_KEY = 'retro_tamagotchi_save_v1';
+        let saveIndicatorTimeout = null;
 
-        function saveGame() {
+        function triggerSaveIndicator() {
+            const ind = document.getElementById('saveIndicator');
+            if (!ind) return;
+            ind.classList.remove('opacity-0');
+            ind.classList.add('opacity-100');
+            
+            if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+            saveIndicatorTimeout = setTimeout(() => {
+                ind.classList.remove('opacity-100');
+                ind.classList.add('opacity-0');
+            }, 800);
+        }
+
+        function saveGame(showIndicator = true) {
             state.lastTick = Date.now();
             try {
-                localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+                const serialized = JSON.stringify(state);
+                localStorage.setItem(SAVE_KEY, serialized);
+                if (showIndicator) triggerSaveIndicator();
             } catch(e) {
-                console.error("Failed to save state", e);
+                console.error("Failed to save state to localStorage", e);
             }
+        }
+
+        function loadGame() {
+            try {
+                const saved = localStorage.getItem(SAVE_KEY);
+                if (saved) {
+                    const loadedState = JSON.parse(saved);
+                    if (loadedState && typeof loadedState === 'object') {
+                        state = { ...INITIAL_STATE, ...loadedState };
+                        calculateOfflineProgress();
+                        showAlert("Memory Loaded!");
+                        return true;
+                    }
+                }
+            } catch(e) {
+                console.error("Corrupted save file found, starting fresh.", e);
+            }
+            state = { ...INITIAL_STATE };
+            return false;
+        }
+
+        function exportSaveData() {
+            state.lastTick = Date.now();
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `tama_${state.name.toLowerCase()}_save.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showAlert("Save Exported!");
+        }
+
+        function importSaveData(jsonString) {
+            try {
+                const parsed = JSON.parse(jsonString);
+                if (parsed && parsed.stage && typeof parsed.hunger === 'number') {
+                    state = { ...INITIAL_STATE, ...parsed };
+                    calculateOfflineProgress();
+                    saveGame();
+                    showAlert("Import Successful!");
+                    updateMenuHighlights();
+                    renderCanvas();
+                    return true;
+                } else {
+                    throw new Error("Invalid Tamagotchi data format");
+                }
+            } catch(err) {
+                alert("Error importing save file: " + err.message);
+                return false;
+            }
+        }
+
+        function calculateOfflineProgress() {
+            if (state.stage === STAGES.DEAD || state.stage === STAGES.EGG) return;
+
+            const now = Date.now();
+            const elapsedSeconds = Math.floor((now - state.lastTick) / 1000);
+            
+            if (elapsedSeconds <= 0) return;
+
+            // Decay calculation for offline period (Scaled reasonably)
+            const decayFactor = Math.min(elapsedSeconds / 60, 180); // cap offline simulation at 3 hours max intensity
+
+            if (!state.isSleeping) {
+                state.hunger = Math.max(0, state.hunger - Math.floor(decayFactor * 1.2));
+                state.happiness = Math.max(0, state.happiness - Math.floor(decayFactor * 1.0));
+                state.energy = Math.max(0, state.energy - Math.floor(decayFactor * 0.8));
+            } else {
+                // Recover energy faster while sleeping
+                state.energy = Math.min(100, state.energy + Math.floor(decayFactor * 2.0));
+                state.hunger = Math.max(0, state.hunger - Math.floor(decayFactor * 0.4));
+            }
+
+            // Poop accumulation offline
+            if (state.hunger > 20 && Math.random() < (decayFactor * 0.05)) {
+                state.poopCount = Math.min(4, state.poopCount + 1);
+            }
+
+            // Sickness risk from neglect/poop offline
+            if (state.poopCount >= 2 || state.hunger < 15) {
+                if (Math.random() < 0.4) state.isSick = true;
+            }
+
+            // Check health degradation
+            if (state.isSick || state.hunger === 0 || state.poopCount >= 3) {
+                state.health = Math.max(0, state.health - Math.floor(decayFactor * 2));
+            }
+
+            // Check death
+            if (state.health <= 0) {
+                state.stage = STAGES.DEAD;
+            }
+
+            saveGame(false);
         }
 
         function loadGame() {
@@ -1055,6 +1169,58 @@
             openModal('BADGES & ACHIEVEMENTS', html);
         });
 
+        document.getElementById('dataBtn').addEventListener('click', () => {
+            const lastSavedStr = new Date(state.lastTick).toLocaleTimeString();
+            let html = `
+                <div class="space-y-3">
+                    <div class="text-[8px] text-slate-300 bg-slate-900 p-2 rounded border border-slate-700">
+                        <div>STATUS: <span class="text-green-400">MEMORY ACTIVE</span></div>
+                        <div class="mt-1">LAST SAVED: ${lastSavedStr}</div>
+                        <div class="mt-1">SLOT: LocalStorage (${SAVE_KEY})</div>
+                    </div>
+                    
+                    <button id="manualSaveBtn" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-1.5 px-2 rounded text-[9px] flex items-center justify-center gap-1">
+                        💾 Save Game Now
+                    </button>
+
+                    <button id="exportSaveBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-1.5 px-2 rounded text-[9px] flex items-center justify-center gap-1">
+                        📤 Export Backup File (.json)
+                    </button>
+
+                    <label class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-1.5 px-2 rounded text-[9px] flex items-center justify-center gap-1 cursor-pointer">
+                        📥 Import Backup File
+                        <input type="file" id="importFileInput" accept=".json" class="hidden" />
+                    </label>
+                </div>
+            `;
+            openModal('MEMORY MANAGEMENT', html);
+
+            setTimeout(() => {
+                const saveNow = document.getElementById('manualSaveBtn');
+                if (saveNow) saveNow.addEventListener('click', () => {
+                    saveGame();
+                    showAlert("Game Saved!");
+                });
+
+                const expBtn = document.getElementById('exportSaveBtn');
+                if (expBtn) expBtn.addEventListener('click', exportSaveData);
+
+                const fileInput = document.getElementById('importFileInput');
+                if (fileInput) fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            if (importSaveData(evt.target.result)) {
+                                modal.classList.add('hidden');
+                            }
+                        };
+                        reader.readAsText(file);
+                    }
+                });
+            }, 50);
+        });
+
         document.getElementById('renameBtn').addEventListener('click', () => {
             const currentName = state.name;
             const newName = prompt("Enter new pet name:", currentName);
@@ -1072,6 +1238,11 @@
                 showAlert("Reset Complete!");
                 saveGame();
             }
+        });
+
+        // Save state explicitly on tab close or navigation away
+        window.addEventListener('beforeunload', () => {
+            saveGame(false);
         });
 
         // --- Hardware Top Controls ---
