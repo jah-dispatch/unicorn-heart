@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>8-Bit Virtual Pet</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Press Start 2P Font for Retro Aesthetics -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Press Start 2P', monospace;
+            background-color: #0f172a;
+            color: #1e293b;
+        }
+
+        /* LCD Screen Palette & Effects */
+        .lcd-screen {
+            background-color: #8ec5cf;
+            box-shadow: inset 0 0 12px rgba(15, 23, 42, 0.45);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lcd-screen-night {
+            background-color: #4a7580 !important;
+        }
+
+        /* Subtle Scanline Effect */
+        .lcd-screen::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Pixel Grid overlay */
+        .lcd-screen::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 0);
+            background-size: 3px 3px;
+            pointer-events: none;
+            z-index: 11;
+        }
+
+        /* Tactical Retro Buttons */
+        .btn-physical {
+            box-shadow: 0 6px 0 #1e293b, 0 8px 10px rgba(0,0,0,0.3);
+            transition: all 0.05s ease;
+        }
+
+        .btn-physical:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #1e293b, 0 3px 5px rgba(0,0,0,0.3);
+        }
+
+        /* Scrollbar customization */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4 bg-slate-900 text-slate-900 select-none">
+
+    <!-- Outer Device Container -->
+    <div class="relative w-full max-w-sm flex flex-col items-center">
+        
+        <!-- Keyring Loop Mockup -->
+        <div class="w-12 h-12 rounded-full border-8 border-yellow-500 bg-transparent -mb-6 z-0 shadow-inner"></div>
+
+        <!-- Toy Egg Outer Plastic Shell -->
+        <div class="w-full bg-gradient-to-b from-amber-400 via-yellow-400 to-amber-500 rounded-[50px] p-5 sm:p-7 border-4 border-yellow-600 shadow-2xl relative z-10 flex flex-col items-center">
+            
+            <!-- Brand Header -->
+            <div class="w-full flex justify-between items-center mb-3 px-2">
+                <div class="text-[10px] tracking-widest text-amber-900 font-bold uppercase drop-shadow">POCKET PET</div>
+                <!-- Top Status Lights / Mute Toggle -->
+                <div class="flex items-center space-x-2">
+                    <button id="soundToggleBtn" class="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded border border-amber-500 hover:bg-amber-100 active:scale-95">
+                        🔊
+                    </button>
+                    <button id="speedBtn" class="text-[9px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded border border-amber-500 hover:bg-amber-100 active:scale-95">
+                        1x
+                    </button>
+                </div>
+            </div>
+
+            <!-- LCD Screen Border Surround -->
+            <div class="w-full bg-slate-800 p-4 rounded-3xl border-4 border-slate-700 shadow-inner">
+                
+                <!-- Inner Screen Container -->
+                <div id="lcdContainer" class="lcd-screen w-full aspect-square rounded-2xl border-4 border-slate-900 flex flex-col justify-between p-2 relative">
+                    
+                    <!-- Screen Top Icons Bar -->
+                    <div class="flex justify-between items-center text-[10px] text-slate-900 z-20 px-1 opacity-80">
+                        <span id="iconFeed" class="p-1 rounded opacity-30">🍚</span>
+                        <span id="iconLight" class="p-1 rounded opacity-30">💡</span>
+                        <span id="iconGame" class="p-1 rounded opacity-30">⚽</span>
+                        <span id="iconMed" class="p-1 rounded opacity-30">💉</span>
+                    </div>
+
+                    <!-- Main Pixel Canvas Overlay Viewport -->
+                    <div class="relative flex-1 flex items-center justify-center overflow-hidden my-1">
+                        <!-- Canvas for Pixel Sprite Graphics -->
+                        <canvas id="gameCanvas" width="128" height="128" class="w-full h-full image-rendering-pixelated z-20"></canvas>
+                        
+                        <!-- Mini Alert Banner -->
+                        <div id="alertBanner" class="absolute top-1 left-0 right-0 hidden bg-slate-900 text-slate-100 text-[8px] py-1 px-2 text-center z-30 rounded border border-slate-700 opacity-90">
+                            Alert Message
+                        </div>
+                    </div>
+
+                    <!-- Screen Bottom Icons Bar -->
+                    <div class="flex justify-between items-center text-[10px] text-slate-900 z-20 px-1 opacity-80">
+                        <span id="iconClean" class="p-1 rounded opacity-30">🧹</span>
+                        <span id="iconStats" class="p-1 rounded opacity-30">📊</span>
+                        <span id="iconDiscipline" class="p-1 rounded opacity-30">📣</span>
+                        <span id="iconAttention" class="p-1 rounded opacity-30 animate-pulse">⚠️</span>
+                    </div>
+
+                    <!-- Pause / Fast-Forward Overlay Tag -->
+                    <div id="speedBadge" class="absolute bottom-1 right-2 text-[7px] text-slate-800 font-bold z-20 hidden">FAST</div>
+                </div>
+            </div>
+
+            <!-- Decorative Speakers Holes -->
+            <div class="flex justify-center space-x-1.5 my-3">
+                <div class="w-1.5 h-1.5 rounded-full bg-amber-700/40"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-amber-700/40"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-amber-700/40"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-amber-700/40"></div>
+            </div>
+
+            <!-- Tactile Physical Retro Buttons (A / B / C) -->
+            <div class="w-full flex justify-around items-center px-4 mt-1 mb-2">
+                <!-- Button A (Select / Left) -->
+                <div class="flex flex-col items-center">
+                    <button id="btnA" class="btn-physical w-12 h-12 rounded-full bg-rose-500 border-2 border-rose-700 active:bg-rose-600 flex items-center justify-center font-bold text-white text-sm">
+                        A
+                    </button>
+                    <span class="text-[9px] text-amber-900 mt-2 font-bold uppercase tracking-wider">Select</span>
+                </div>
+
+                <!-- Button B (Execute / Center) -->
+                <div class="flex flex-col items-center -translate-y-2">
+                    <button id="btnB" class="btn-physical w-12 h-12 rounded-full bg-yellow-300 border-2 border-yellow-600 active:bg-yellow-400 flex items-center justify-center font-bold text-amber-900 text-sm">
+                        B
+                    </button>
+                    <span class="text-[9px] text-amber-900 mt-2 font-bold uppercase tracking-wider">Execute</span>
+                </div>
+
+                <!-- Button C (Cancel / Right) -->
+                <div class="flex flex-col items-center">
+                    <button id="btnC" class="btn-physical w-12 h-12 rounded-full bg-sky-500 border-2 border-sky-700 active:bg-sky-600 flex items-center justify-center font-bold text-white text-sm">
+                        C
+                    </button>
+                    <span class="text-[9px] text-amber-900 mt-2 font-bold uppercase tracking-wider">Cancel</span>
+                </div>
+            </div>
+
+            <!-- Extra Action Toolbar for Mobile Convenience -->
+            <div class="w-full mt-3 pt-3 border-t border-amber-500/40 flex justify-between items-center px-1 text-[8px] text-amber-900">
+                <button id="renameBtn" class="hover:underline flex items-center gap-1">✏️ Rename</button>
+                <button id="badgesBtn" class="hover:underline flex items-center gap-1">🏆 Badges</button>
+                <button id="resetBtn" class="hover:underline text-rose-800 flex items-center gap-1">🔄 Reset</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Dialogs for Badges & Info -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 text-slate-100 rounded-2xl border-2 border-slate-600 max-w-xs w-full p-4 flex flex-col space-y-3">
+            <div id="modalTitle" class="text-xs font-bold text-amber-400 border-b border-slate-700 pb-2 flex justify-between items-center">
+                <span>TITLE</span>
+                <button id="modalClose" class="text-slate-400 hover:text-white">✕</button>
+            </div>
+            <div id="modalBody" class="text-[9px] leading-relaxed max-h-60 overflow-y-auto space-y-2">
+                <!-- Content injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        /**
+         * 8-BIT TAMAGOTCHI ENGINE
+         * Completely Self-Contained Web App Architecture
+         */
+
+        // --- Audio Synthesizer (Web Audio API) ---
+        class RetroAudio {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+            }
+
+            playBeep(freq = 440, type = 'square', duration = 0.08, volume = 0.1) {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + duration);
+                    
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e) { console.warn("Audio play blocked", e); }
+            }
+
+            playBtnSound() {
+                this.playBeep(880, 'square', 0.04, 0.08);
+            }
+
+            playSuccess() {
+                this.playBeep(523, 'square', 0.08, 0.1);
+                setTimeout(() => this.playBeep(659, 'square', 0.08, 0.1), 80);
+                setTimeout(() => this.playBeep(783, 'square', 0.12, 0.1), 160);
+            }
+
+            playFail() {
+                this.playBeep(300, 'sawtooth', 0.12, 0.1);
+                setTimeout(() => this.playBeep(220, 'sawtooth', 0.18, 0.1), 120);
+            }
+
+            playEvolve() {
+                const notes = [440, 554, 659, 880, 1108];
+                notes.forEach((freq, i) => {
+                    setTimeout(() => this.playBeep(freq, 'square', 0.1, 0.12), i * 90);
+                });
+            }
+
+            playAlert() {
+                this.playBeep(900, 'triangle', 0.08, 0.12);
+                setTimeout(() => this.playBeep(900, 'triangle', 0.08, 0.12), 100);
+            }
+        }
+
+        const audio = new RetroAudio();
+
+        // --- Pet State & Mechanics ---
+        const STAGES = {
+            EGG: 'Egg',
+            BABY: 'Baby',
+            CHILD: 'Child',
+            TEEN: 'Teen',
+            ADULT_GOOD: 'Mametchi',
+            ADULT_NORMAL: 'Kuchipatchi',
+            ADULT_SECRET: 'Oyajitchi',
+            DEAD: 'Angel'
+        };
+
+        const INITIAL_STATE = {
+            name: "Tama",
+            stage: STAGES.EGG,
+            age: 0, // Days
+            hunger: 50, // 0 - 100
+            happiness: 50, // 0 - 100
+            energy: 100, // 0 - 100
+            health: 100, // 0 - 100
+            discipline: 0, // 0 - 100
+            weight: 5, // lbs
+            generation: 1,
+            isSleeping: false,
+            isSick: false,
+            poopCount: 0,
+            careMistakes: 0,
+            lastTick: Date.now(),
+            hatchedTime: null,
+            totalFeeds: 0,
+            totalGamesPlayed: 0,
+            badges: []
+        };
+
+        let state = { ...INITIAL_STATE };
+        let speedMultiplier = 1; // 1x, 2x, 5x, 0x (Pause)
+        let selectedMenuIndex = 0; // Top/Bottom icons index 0-7
+        let currentView = 'MAIN'; // MAIN, MINIGAME, STATS, BADGES, SLEEP
+        let minigameState = null;
+
+        // Icons layout mapping:
+        // 0: Feed, 1: Light, 2: Game, 3: Medicine
+        // 4: Clean, 5: Stats, 6: Discipline, 7: Attention (Read-only status)
+        const MENU_ICONS = [
+            'iconFeed', 'iconLight', 'iconGame', 'iconMed',
+            'iconClean', 'iconStats', 'iconDiscipline'
+        ];
+
+        // --- Hardware/Device Vibration ---
+        function triggerHaptic() {
+            if (navigator.vibrate) {
+                navigator.vibrate(15);
+            }
+        }
+
+        // --- LocalStorage Save / Load System ---
+        const SAVE_KEY = 'retro_tamagotchi_save_v1';
+
+        function saveGame() {
+            state.lastTick = Date.now();
+            try {
+                localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+            } catch(e) {
+                console.error("Failed to save state", e);
+            }
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem(SAVE_KEY);
+            if (saved) {
+                try {
+                    const loadedState = JSON.parse(saved);
+                    state = { ...INITIAL_STATE, ...loadedState };
+                    calculateOfflineProgress();
+                } catch(e) {
+                    console.error("Corrupted save file", e);
+                    state = { ...INITIAL_STATE };
+                }
+            }
+        }
+
+        function calculateOfflineProgress() {
+            if (state.stage === STAGES.DEAD || state.stage === STAGES.EGG) return;
+
+            const now = Date.now();
+            const elapsedSeconds = Math.floor((now - state.lastTick) / 1000);
+            
+            if (elapsedSeconds <= 0) return;
+
+            // Decay calculation for offline period (Scaled reasonably)
+            const decayFactor = Math.min(elapsedSeconds / 60, 180); // cap offline simulation at 3 hours max intensity
+
+            if (!state.isSleeping) {
+                state.hunger = Math.max(0, state.hunger - Math.floor(decayFactor * 1.2));
+                state.happiness = Math.max(0, state.happiness - Math.floor(decayFactor * 1.0));
+                state.energy = Math.max(0, state.energy - Math.floor(decayFactor * 0.8));
+            } else {
+                // Recover energy faster while sleeping
+                state.energy = Math.min(100, state.energy + Math.floor(decayFactor * 2.0));
+                state.hunger = Math.max(0, state.hunger - Math.floor(decayFactor * 0.4));
+            }
+
+            // Poop accumulation offline
+            if (state.hunger > 20 && Math.random() < (decayFactor * 0.05)) {
+                state.poopCount = Math.min(4, state.poopCount + 1);
+            }
+
+            // Sickness risk from neglect/poop offline
+            if (state.poopCount >= 2 || state.hunger < 15) {
+                if (Math.random() < 0.4) state.isSick = true;
+            }
+
+            // Check health degradation
+            if (state.isSick || state.hunger === 0 || state.poopCount >= 3) {
+                state.health = Math.max(0, state.health - Math.floor(decayFactor * 2));
+            }
+
+            // Check death
+            if (state.health <= 0) {
+                state.stage = STAGES.DEAD;
+            }
+
+            saveGame();
+        }
+
+        // --- Canvas Pixel Graphics Engine ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let animFrame = 0;
+
+        // Custom 8-bit Pixel Maps (16x16 Grid Representations)
+        const SPRITES = {
+            EGG: [
+                "....XXXXXX......",
+                "..XX......XX....",
+                ".X..X...X...X...",
+                "X...XX.XX....X..",
+                "X....XXX.....X..",
+                "X...XX.XX....X..",
+                "X..X...X...X.X..",
+                "X............X..",
+                "X...XXXXXX...X..",
+                ".X..........X...",
+                "..XX......XX....",
+                "....XXXXXX......"
+            ],
+            BABY: [
+                ".....XXXX......",
+                "...XX....XX....",
+                "..X..X..X..X...",
+                ".X...XXXX...X..",
+                ".X..X.XX.X..X..",
+                ".X..X.XX.X..X..",
+                ".X...XXXX...X..",
+                "..X........X...",
+                "...XX....XX....",
+                "....XXXXXX.....",
+                "...X......X....",
+                "..X........X..."
+            ],
+            CHILD: [
+                "....XXXXXX.....",
+                "..XX......XX...",
+                ".X..XX..XX..X..",
+                ".X..XX..XX..X..",
+                "X............X.",
+                "X...XXXXXX...X.",
+                "X..X......X..X.",
+                ".X..XXXXXX..X..",
+                "..XX......XX...",
+                "...X.X..X.X....",
+                "...X.X..X.X....",
+                "....X....X....."
+            ],
+            TEEN: [
+                "....XXXXXX.....",
+                "..XX......XX...",
+                ".X..X....X..X..",
+                ".X.XXX..XXX.X..",
+                "X..XXX..XXX..X.",
+                "X............X.",
+                "X....XXXX....X.",
+                ".X..X....X..X..",
+                "..XX.XXXX.XX...",
+                "....X....X.....",
+                "...X.X..X.X....",
+                "..XX.X..X.XX..."
+            ],
+            ADULT_GOOD: [ // Mametchi
+                "...XXXX.XXXX...",
+                "..X....X....X..",
+                ".X.XX.X.XX.X.X.",
+                ".X.XX.X.XX.X.X.",
+                ".X....X....X.X.",
+                "..XXXX.XXXX..X.",
+                ".....XXXX......",
+                "...XX....XX....",
+                "..X..X..X..X...",
+                "..X...XX...X...",
+                "...XX....XX....",
+                "....XXXXXX....."
+            ],
+            ADULT_NORMAL: [ // Kuchipatchi
+                ".....XXXX......",
+                "...XX....XX....",
+                "..X..X..X..X...",
+                ".X...XXXX...X..",
+                ".X.XXXXXXXX.X..",
+                ".X.X......X.X..",
+                ".X.XXXXXXXX.X..",
+                "..X........X...",
+                "...XX....XX....",
+                "....XXXXXX.....",
+                "...XX....XX....",
+                "..X........X..."
+            ],
+            ADULT_SECRET: [ // Oyajitchi
+                "....XXXXXX.....",
+                "..XX......XX...",
+                ".X.X.X..X.X.X..",
+                ".X.XXX..XXX.X..",
+                "X...XXXXXX...X.",
+                "X.....XX.....X.",
+                "X..XXXXXXXX..X.",
+                ".X..........X..",
+                "..XXXXXXXXXX...",
+                "....X....X.....",
+                "...XX....XX....",
+                "..X........X..."
+            ],
+            POOP: [
+                "......XX......",
+                ".....X..X.....",
+                "....X....X....",
+                "...X.XXXX.X...",
+                "..X.X....X.X..",
+                ".X.X.XXXX.X.X.",
+                ".XXXXXXXXXXXX."
+            ],
+            SICK: [
+                ".X...X.",
+                "..X.X..",
+                "...X...",
+                "..X.X..",
+                ".X...X."
+            ],
+            DEAD: [
+                "....XXXXXX.....",
+                "..XX......XX...",
+                ".X..X....X..X..",
+                ".X...X..X...X..",
+                "X.....XX.....X.",
+                "X....XXXX....X.",
+                ".X..X....X..X..",
+                "..XX......XX...",
+                "....XXXXXX.....",
+                "......XX.......",
+                "....XXXXXX.....",
+                "......XX......."
+            ],
+            FOOD: [
+                "....XXXX....",
+                "..XX....XX..",
+                ".X..XXXX..X.",
+                ".X.X....X.X.",
+                ".X.X....X.X.",
+                "..XX....XX..",
+                "....XXXX...."
+            ]
+        };
+
+        function drawPixelSprite(spriteArray, offsetX, offsetY, scale = 4, color = '#1e293b') {
+            ctx.fillStyle = color;
+            for (let r = 0; r < spriteArray.length; r++) {
+                for (let c = 0; c < spriteArray[r].length; c++) {
+                    if (spriteArray[r][c] === 'X') {
+                        ctx.fillRect(offsetX + c * scale, offsetY + r * scale, scale, scale);
+                    }
+                }
+            }
+        }
+
+        // Main Drawing Pipeline
+        function renderCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Night time background tint
+            const lcdContainer = document.getElementById('lcdContainer');
+            if (state.isSleeping) {
+                lcdContainer.classList.add('lcd-screen-night');
+            } else {
+                lcdContainer.classList.remove('lcd-screen-night');
+            }
+
+            // View rendering routers
+            if (currentView === 'STATS') {
+                renderStatsView();
+                return;
+            }
+
+            if (currentView === 'MINIGAME') {
+                renderMinigameView();
+                return;
+            }
+
+            // --- MAIN PET VIEW ---
+            
+            // Draw Poop(s)
+            if (state.poopCount > 0) {
+                for (let i = 0; i < state.poopCount; i++) {
+                    const posX = 10 + (i * 24);
+                    drawPixelSprite(SPRITES.POOP, posX, 95, 2, '#0f172a');
+                }
+            }
+
+            // Draw Sick skull marker
+            if (state.isSick) {
+                drawPixelSprite(SPRITES.SICK, 95, 25, 4, '#0f172a');
+            }
+
+            // Draw Sleeping Zzz's
+            if (state.isSleeping) {
+                ctx.font = '10px "Press Start 2P"';
+                ctx.fillStyle = '#1e293b';
+                const zOffset = (animFrame % 2 === 0) ? 0 : 3;
+                ctx.fillText('Z', 85, 45 - zOffset);
+                ctx.fillText('z', 98, 35 - zOffset);
+            }
+
+            // Pet Main Animation Coordinates
+            let bounceY = (animFrame % 2 === 0 && !state.isSleeping && state.stage !== STAGES.DEAD) ? -3 : 0;
+            let petX = 36;
+            let petY = 40 + bounceY;
+
+            // Determine Sprite per Stage
+            let currentSprite = SPRITES.EGG;
+            switch(state.stage) {
+                case STAGES.EGG: currentSprite = SPRITES.EGG; break;
+                case STAGES.BABY: currentSprite = SPRITES.BABY; break;
+                case STAGES.CHILD: currentSprite = SPRITES.CHILD; break;
+                case STAGES.TEEN: currentSprite = SPRITES.TEEN; break;
+                case STAGES.ADULT_GOOD: currentSprite = SPRITES.ADULT_GOOD; break;
+                case STAGES.ADULT_NORMAL: currentSprite = SPRITES.ADULT_NORMAL; break;
+                case STAGES.ADULT_SECRET: currentSprite = SPRITES.ADULT_SECRET; break;
+                case STAGES.DEAD: currentSprite = SPRITES.DEAD; break;
+            }
+
+            // Draw Main Pet
+            drawPixelSprite(currentSprite, petX, petY, 3, '#1e293b');
+
+            // Draw Eating animation if currently feeding
+            if (state.isEating) {
+                drawPixelSprite(SPRITES.FOOD, 12, 55, 2, '#1e293b');
+            }
+        }
+
+        function renderStatsView() {
+            ctx.font = '7px "Press Start 2P"';
+            ctx.fillStyle = '#0f172a';
+
+            ctx.fillText(`NAME: ${state.name}`, 8, 18);
+            ctx.fillText(`AGE : ${state.age}d  WT:${state.weight}lb`, 8, 32);
+            ctx.fillText(`STAGE: ${state.stage}`, 8, 46);
+
+            // Progress Bars
+            ctx.fillText(`HUNGER :`, 8, 62);
+            drawProgressBar(8, 66, state.hunger);
+
+            ctx.fillText(`HAPPY  :`, 8, 84);
+            drawProgressBar(8, 88, state.happiness);
+
+            ctx.fillText(`DISCIP :`, 8, 106);
+            drawProgressBar(8, 110, state.discipline);
+        }
+
+        function drawProgressBar(x, y, value) {
+            const width = 110;
+            const height = 8;
+            ctx.strokeRect(x, y, width, height);
+            const fillW = Math.floor((value / 100) * (width - 2));
+            ctx.fillRect(x + 1, y + 1, fillW, height - 2);
+        }
+
+        function renderMinigameView() {
+            ctx.font = '8px "Press Start 2P"';
+            ctx.fillStyle = '#0f172a';
+
+            ctx.fillText(`LEFT OR RIGHT?`, 10, 25);
+            ctx.fillText(`SCORE: ${minigameState.score}/3`, 25, 45);
+
+            if (minigameState.choice) {
+                ctx.fillText(`YOU: ${minigameState.choice}`, 20, 70);
+                ctx.fillText(`PET: ${minigameState.petChoice}`, 20, 85);
+                ctx.fillText(minigameState.result, 35, 105);
+            } else {
+                ctx.fillText(`[A] LEFT`, 15, 80);
+                ctx.fillText(`[C] RIGHT`, 15, 100);
+            }
+        }
+
+        // --- Menu Highlight & Navigation System ---
+        function updateMenuHighlights() {
+            MENU_ICONS.forEach((id, index) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (index === selectedMenuIndex && currentView === 'MAIN') {
+                    el.classList.remove('opacity-30');
+                    el.classList.add('opacity-100', 'bg-slate-900/20', 'ring-1', 'ring-slate-900');
+                } else {
+                    el.classList.add('opacity-30');
+                    el.classList.remove('opacity-100', 'bg-slate-900/20', 'ring-1', 'ring-slate-900');
+                }
+            });
+
+            // Attention Icon highlight when needy
+            const attEl = document.getElementById('iconAttention');
+            const isNeedy = state.hunger < 20 || state.happiness < 20 || state.isSick || state.poopCount > 0;
+            if (isNeedy && state.stage !== STAGES.DEAD) {
+                attEl.classList.remove('opacity-30');
+                attEl.classList.add('opacity-100', 'text-rose-900');
+            } else {
+                attEl.classList.add('opacity-30');
+                attEl.classList.remove('opacity-100', 'text-rose-900');
+            }
+        }
+
+        function showAlert(msg) {
+            const banner = document.getElementById('alertBanner');
+            banner.textContent = msg;
+            banner.classList.remove('hidden');
+            setTimeout(() => banner.classList.add('hidden'), 2200);
+        }
+
+        // --- Core Action Handling ---
+        function handleButtonA() { // SELECT / LEFT
+            audio.playBtnSound();
+            triggerHaptic();
+
+            if (state.stage === STAGES.DEAD) return;
+
+            if (currentView === 'MINIGAME' && !minigameState.choice) {
+                playMinigameStep('LEFT');
+                return;
+            }
+
+            if (currentView === 'STATS') {
+                currentView = 'MAIN';
+                return;
+            }
+
+            // Cycle Menu
+            selectedMenuIndex = (selectedMenuIndex + 1) % MENU_ICONS.length;
+            updateMenuHighlights();
+        }
+
+        function handleButtonB() { // EXECUTE / CENTER
+            audio.playBtnSound();
+            triggerHaptic();
+
+            if (state.stage === STAGES.EGG) {
+                hatchEgg();
+                return;
+            }
+
+            if (state.stage === STAGES.DEAD) return;
+
+            if (currentView === 'STATS') {
+                currentView = 'MAIN';
+                return;
+            }
+
+            if (currentView === 'MINIGAME') {
+                if (minigameState.choice) {
+                    // Reset step for next round or finish
+                    if (minigameState.round >= 3) {
+                        finishMinigame();
+                    } else {
+                        minigameState.choice = null;
+                    }
+                }
+                return;
+            }
+
+            // Execute Selected Menu Action
+            switch(selectedMenuIndex) {
+                case 0: // Feed
+                    feedPet();
+                    break;
+                case 1: // Light
+                    toggleSleep();
+                    break;
+                case 2: // Game
+                    startMinigame();
+                    break;
+                case 3: // Medicine
+                    curePet();
+                    break;
+                case 4: // Clean
+                    cleanPoop();
+                    break;
+                case 5: // Stats
+                    currentView = 'STATS';
+                    break;
+                case 6: // Discipline
+                    disciplinePet();
+                    break;
+            }
+        }
+
+        function handleButtonC() { // CANCEL / RIGHT
+            audio.playBtnSound();
+            triggerHaptic();
+
+            if (currentView === 'MINIGAME' && !minigameState.choice) {
+                playMinigameStep('RIGHT');
+                return;
+            }
+
+            // Return to Main screen
+            currentView = 'MAIN';
+        }
+
+        // --- Pet Interactions ---
+        function hatchEgg() {
+            state.stage = STAGES.BABY;
+            state.hatchedTime = Date.now();
+            audio.playEvolve();
+            showAlert("Egg Hatched!");
+            checkBadges();
+            saveGame();
+        }
+
+        function feedPet() {
+            if (state.isSleeping) {
+                showAlert("Pet is sleeping!");
+                return;
+            }
+            if (state.hunger >= 100) {
+                showAlert("Pet is full!");
+                return;
+            }
+
+            state.hunger = Math.min(100, state.hunger + 30);
+            state.weight += 1;
+            state.totalFeeds += 1;
+            state.isEating = true;
+            audio.playSuccess();
+            showAlert("Fed Meal (+30)");
+
+            setTimeout(() => {
+                state.isEating = false;
+            }, 1500);
+
+            saveGame();
+        }
+
+        function toggleSleep() {
+            state.isSleeping = !state.isSleeping;
+            showAlert(state.isSleeping ? "Lights Off Zzz..." : "Lights On!");
+            saveGame();
+        }
+
+        function cleanPoop() {
+            if (state.poopCount === 0) {
+                showAlert("Screen is clean!");
+                return;
+            }
+            state.poopCount = 0;
+            audio.playSuccess();
+            showAlert("Cleaned!");
+            saveGame();
+        }
+
+        function curePet() {
+            if (!state.isSick) {
+                showAlert("Pet is healthy!");
+                return;
+            }
+            state.isSick = false;
+            state.health = Math.min(100, state.health + 40);
+            audio.playSuccess();
+            showAlert("Cured Sickness!");
+            saveGame();
+        }
+
+        function disciplinePet() {
+            if (state.isSleeping) return;
+            state.discipline = Math.min(100, state.discipline + 25);
+            audio.playSuccess();
+            showAlert("Disciplined (+25)");
+            saveGame();
+        }
+
+        // --- Minigame System ---
+        function startMinigame() {
+            if (state.isSleeping || state.energy < 15) {
+                showAlert("Too tired to play!");
+                return;
+            }
+            currentView = 'MINIGAME';
+            minigameState = {
+                round: 1,
+                score: 0,
+                choice: null,
+                petChoice: null,
+                result: ''
+            };
+        }
+
+        function playMinigameStep(playerChoice) {
+            const options = ['LEFT', 'RIGHT'];
+            const petChoice = options[Math.floor(Math.random() * options.length)];
+            const win = (playerChoice === petChoice);
+
+            if (win) {
+                minigameState.score += 1;
+                minigameState.result = 'WIN!';
+                audio.playSuccess();
+            } else {
+                minigameState.result = 'MISS!';
+                audio.playFail();
+            }
+
+            minigameState.choice = playerChoice;
+            minigameState.petChoice = petChoice;
+        }
+
+        function finishMinigame() {
+            state.totalGamesPlayed += 1;
+            state.energy = Math.max(0, state.energy - 10);
+
+            if (minigameState.score >= 2) {
+                state.happiness = Math.min(100, state.happiness + 35);
+                state.weight = Math.max(1, state.weight - 1);
+                showAlert("Game Clear! (+Happy)");
+            } else {
+                state.happiness = Math.min(100, state.happiness + 10);
+                showAlert("Good Try!");
+            }
+
+            currentView = 'MAIN';
+            checkBadges();
+            saveGame();
+        }
+
+        // --- Evolution & Growth Engine ---
+        function checkEvolution() {
+            if (state.stage === STAGES.EGG || state.stage === STAGES.DEAD) return;
+
+            // Age progression: 1 day = 30 minutes real time (adjusted with speed)
+            const ageDays = Math.floor((Date.now() - (state.hatchedTime || Date.now())) / (1000 * 60 * 30));
+            state.age = ageDays;
+
+            let nextStage = null;
+
+            // Evolution tree check
+            if (state.stage === STAGES.BABY && state.age >= 1) {
+                nextStage = STAGES.CHILD;
+            } else if (state.stage === STAGES.CHILD && state.age >= 3) {
+                nextStage = STAGES.TEEN;
+            } else if (state.stage === STAGES.TEEN && state.age >= 6) {
+                // Branching adult paths based on care quality & discipline
+                if (state.discipline >= 80 && state.careMistakes === 0) {
+                    nextStage = STAGES.ADULT_SECRET; // Secret Oyajitchi
+                } else if (state.discipline >= 40) {
+                    nextStage = STAGES.ADULT_GOOD; // Mametchi
+                } else {
+                    nextStage = STAGES.ADULT_NORMAL; // Kuchipatchi
+                }
+            }
+
+            if (nextStage && nextStage !== state.stage) {
+                state.stage = nextStage;
+                audio.playEvolve();
+                showAlert(`Evolved to ${nextStage}!`);
+                checkBadges();
+                saveGame();
+            }
+        }
+
+        // --- Badges & Achievements System ---
+        const ALL_BADGES = [
+            { id: 'HATCH', title: 'Newborn Parent', desc: 'Hatched your first egg' },
+            { id: 'TEEN', title: 'Growing Up', desc: 'Reached Teenager stage' },
+            { id: 'ADULT', title: 'Full Grown', desc: 'Evolved into an Adult' },
+            { id: 'SECRET', title: 'Master Caretaker', desc: 'Unlocked Secret Adult evolution' },
+            { id: 'GAMER', title: 'Playful', desc: 'Played 5 minigames' }
+        ];
+
+        function checkBadges() {
+            const addBadge = (id) => {
+                if (!state.badges.includes(id)) {
+                    state.badges.push(id);
+                    showAlert("🏆 New Badge Unlocked!");
+                }
+            };
+
+            if (state.stage !== STAGES.EGG) addBadge('HATCH');
+            if (state.stage === STAGES.TEEN) addBadge('TEEN');
+            if ([STAGES.ADULT_GOOD, STAGES.ADULT_NORMAL, STAGES.ADULT_SECRET].includes(state.stage)) addBadge('ADULT');
+            if (state.stage === STAGES.ADULT_SECRET) addBadge('SECRET');
+            if (state.totalGamesPlayed >= 5) addBadge('GAMER');
+        }
+
+        // --- Game Tick Loop ---
+        function gameTick() {
+            if (speedMultiplier === 0) return; // Paused
+
+            // Sprite Animation Toggle
+            animFrame++;
+
+            if (state.stage !== STAGES.EGG && state.stage !== STAGES.DEAD) {
+                // Regular Stats Decay
+                if (!state.isSleeping) {
+                    state.hunger = Math.max(0, state.hunger - (0.4 * speedMultiplier));
+                    state.happiness = Math.max(0, state.happiness - (0.3 * speedMultiplier));
+                    state.energy = Math.max(0, state.energy - (0.2 * speedMultiplier));
+                } else {
+                    // Sleep Recovery
+                    state.energy = Math.min(100, state.energy + (1.5 * speedMultiplier));
+                    state.hunger = Math.max(0, state.hunger - (0.1 * speedMultiplier));
+                }
+
+                // Random Poop Generation
+                if (Math.random() < (0.02 * speedMultiplier) && state.poopCount < 4) {
+                    state.poopCount += 1;
+                }
+
+                // Sickness Check
+                if (state.poopCount >= 3 || state.hunger < 10) {
+                    if (Math.random() < 0.05) state.isSick = true;
+                }
+
+                // Health Penalty
+                if (state.isSick || state.hunger === 0 || state.happiness === 0) {
+                    state.health = Math.max(0, state.health - (1.0 * speedMultiplier));
+                    state.careMistakes += 1;
+                }
+
+                // Death Condition
+                if (state.health <= 0) {
+                    state.stage = STAGES.DEAD;
+                    audio.playFail();
+                    showAlert("Your pet passed away...");
+                }
+
+                checkEvolution();
+            }
+
+            updateMenuHighlights();
+            renderCanvas();
+            saveGame();
+        }
+
+        // --- UI Modal Window Controller ---
+        const modal = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        function openModal(title, htmlContent) {
+            modalTitle.firstElementChild.textContent = title;
+            modalBody.innerHTML = htmlContent;
+            modal.classList.remove('hidden');
+        }
+
+        document.getElementById('modalClose').addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // Modals triggers
+        document.getElementById('badgesBtn').addEventListener('click', () => {
+            let html = '<div class="space-y-2">';
+            ALL_BADGES.forEach(b => {
+                const unlocked = state.badges.includes(b.id);
+                html += `
+                    <div class="p-2 rounded border ${unlocked ? 'border-amber-500 bg-amber-500/10' : 'border-slate-700 opacity-40'}">
+                        <div class="font-bold ${unlocked ? 'text-amber-400' : 'text-slate-400'}">${unlocked ? '🏆' : '🔒'} ${b.title}</div>
+                        <div class="text-[8px] text-slate-300 mt-1">${b.desc}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            openModal('BADGES & ACHIEVEMENTS', html);
+        });
+
+        document.getElementById('renameBtn').addEventListener('click', () => {
+            const currentName = state.name;
+            const newName = prompt("Enter new pet name:", currentName);
+            if (newName && newName.trim() !== '') {
+                state.name = newName.trim().substring(0, 8);
+                showAlert(`Renamed to ${state.name}`);
+                saveGame();
+            }
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (confirm("Reset pet progress and start new egg?")) {
+                localStorage.removeItem(SAVE_KEY);
+                state = { ...INITIAL_STATE, generation: state.generation + 1 };
+                showAlert("Reset Complete!");
+                saveGame();
+            }
+        });
+
+        // --- Hardware Top Controls ---
+        const soundBtn = document.getElementById('soundToggleBtn');
+        soundBtn.addEventListener('click', () => {
+            audio.enabled = !audio.enabled;
+            soundBtn.textContent = audio.enabled ? '🔊' : '🔇';
+        });
+
+        const speedBtn = document.getElementById('speedBtn');
+        const speedBadge = document.getElementById('speedBadge');
+        speedBtn.addEventListener('click', () => {
+            if (speedMultiplier === 1) {
+                speedMultiplier = 2;
+                speedBtn.textContent = '2x';
+                speedBadge.classList.remove('hidden');
+            } else if (speedMultiplier === 2) {
+                speedMultiplier = 5;
+                speedBtn.textContent = '5x';
+                speedBadge.classList.remove('hidden');
+            } else {
+                speedMultiplier = 1;
+                speedBtn.textContent = '1x';
+                speedBadge.classList.add('hidden');
+            }
+        });
+
+        // Event Binding Physical Buttons
+        document.getElementById('btnA').addEventListener('click', handleButtonA);
+        document.getElementById('btnB').addEventListener('click', handleButtonB);
+        document.getElementById('btnC').addEventListener('click', handleButtonC);
+
+        // Keyboard Support for Desktop Testing
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') handleButtonA();
+            if (e.key === 's' || e.key === 'S' || e.key === 'Enter') handleButtonB();
+            if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') handleButtonC();
+        });
+
+        // --- Initialization ---
+        window.onload = function() {
+            loadGame();
+            updateMenuHighlights();
+            
+            // Start Canvas animation loop (Fast 300ms sprite flip)
+            setInterval(() => {
+                animFrame++;
+                renderCanvas();
+            }, 300);
+
+            // Game Logic Tick (Every 3 seconds)
+            setInterval(gameTick, 3000);
+        };
+    </script>
+</body>
+</html>
